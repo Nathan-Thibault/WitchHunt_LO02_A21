@@ -2,33 +2,38 @@ package fr.utt.lo02.witchhunt.cli;
 
 import fr.utt.lo02.witchhunt.cli.commands.AbstractCommand;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
-import java.util.Locale;
-import java.util.Scanner;
 
 public class CommandListener extends Thread{
 
-    private final Scanner scanner;
+    private final BufferedReader bufferedReader;
     private boolean listening;
 
     public CommandListener(InputStream inputStream){
-        this.scanner = new Scanner(inputStream);
+        this.bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         listening = true;
     }
 
     @Override
     public void run(){
-        while(listening){
-            if(scanner.hasNextLine()){
-                String input = scanner.nextLine();
-                if(!input.equals("")){
-                    readInput(input);
+        try {
+            while (listening) {
+                if (bufferedReader.ready()){
+                    String input = bufferedReader.readLine();
+                    if(input != null){
+                        readInput(input);
+                    }
                 }
             }
+            bufferedReader.close();
+        }catch (IOException e){
+            e.printStackTrace();
         }
-        scanner.close();
     }
 
     public void stopListening() {
