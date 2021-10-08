@@ -5,7 +5,6 @@ import fr.utt.lo02.witchhunt.cli.commands.AbstractCommand;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
-import java.util.Locale;
 import java.util.Scanner;
 
 public class CommandListener extends Thread{
@@ -24,6 +23,7 @@ public class CommandListener extends Thread{
             if(scanner.hasNextLine()){
                 String input = scanner.nextLine();
                 if(!input.equals("")){
+                    Utils.resetScreen();
                     readInput(input);
                 }
             }
@@ -46,11 +46,11 @@ public class CommandListener extends Thread{
             AbstractCommand command = commandClass.getDeclaredConstructor().newInstance();
 
             if(!command.run(args)){
-                System.err.println("La commande n'a pas pu être éxecutée.");
+                Utils.errorOutput("La commande n'a pas pu être executée");
                 command.printUsage();
             }
         } catch (ClassNotFoundException e) {
-            System.err.println("Commande non reconnue");
+            Utils.errorOutput("Commande non reconnue");
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
