@@ -4,10 +4,10 @@ import java.io.IOException;
 
 public class Utils {
 
-    private static boolean windowsConsole;
+    private static boolean windowsConsole = true;
 
-    public static void setRunningOnWindows(){
-        windowsConsole = (System.console() != null && System.getProperty("os.name").contains("Windows"));
+    public static void setWindowsConsole(boolean bool){
+        windowsConsole = bool;
     }
 
     public static void resetScreen(){
