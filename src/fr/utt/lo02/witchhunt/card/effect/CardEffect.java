@@ -1,5 +1,8 @@
 package fr.utt.lo02.witchhunt.card.effect;
 
+import fr.utt.lo02.witchhunt.card.effect.action.Action;
+import fr.utt.lo02.witchhunt.card.effect.condition.Condition;
+
 import java.util.ArrayList;
 import java.util.Objects;
 

@@ -1,4 +1,4 @@
-package fr.utt.lo02.witchhunt.card.effect;
+package fr.utt.lo02.witchhunt.card.effect.condition;
 
 public abstract class Condition {
 
