@@ -8,5 +8,5 @@ public abstract class Action {
         this.description = description;
     }
 
-    public abstract void execute();
+    public abstract void execute(/*Player caller*/);
 }

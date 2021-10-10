@@ -36,8 +36,16 @@ public final class CardEffect {
         }
     }
 
-    public void play(){
-        //TODO
+    public void play(/*Player caller TODO: create Player*/){
+        for (Condition condition: conditions) {
+            if(!condition.verify()){
+                //TODO: notify caller that the condition isn't verified
+                return;
+            }
+        }
+        for (Action action: actions) {
+            action.execute(/*caller*/);
+        }
     }
 
     public EffectType getType(){
