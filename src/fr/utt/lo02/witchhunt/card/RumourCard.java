@@ -5,21 +5,12 @@ import fr.utt.lo02.witchhunt.card.effect.EffectType;
 
 public final class RumourCard extends Card {
 
-    private final String name;
     private final CardEffect witchEffect;
     private final CardEffect huntEffect;
     private final String cantBeChosenBy;
 
-    public RumourCard(String name, CardEffect witchEffect, CardEffect huntEffect, String cantBeChosenBy) {
+    public RumourCard(CardEffect witchEffect, CardEffect huntEffect, String cantBeChosenBy) {
         super(false);
-
-        if (name == null) {
-            throw new NullPointerException("RumourCard constructor: name can't be null.");
-        }  else if (name.isBlank()) {
-            throw new IllegalArgumentException("RumourCard constructor: name can't be blank.");
-        }  else {
-            this.name = name;
-        }
 
         if (witchEffect == null) {
             throw new NullPointerException("RumourCard constructor: witchEffect can't be null.");
