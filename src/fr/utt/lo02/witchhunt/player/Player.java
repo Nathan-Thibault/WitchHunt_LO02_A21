@@ -10,7 +10,7 @@ public abstract class Player {
 
     protected int score;
     protected IdentityCard identityCard;
-    protected ArrayList<RumourCard> hand;
+    protected final ArrayList<RumourCard> hand;
 
     public Player(ArrayList<RumourCard> hand){
         if(hand == null){
@@ -28,13 +28,17 @@ public abstract class Player {
         identityCard.reveal();
     }
 
+    public void setIdentity(Identity identity){
+        identityCard = new IdentityCard(identity);
+    }
+
     public ArrayList<RumourCard> getHand(){
         return hand;
     }
 
-    public abstract Player accuse();
+    public abstract void playTurn();
 
-    public abstract RumourCard selectCardFromHand();
+    public abstract void respondAccusation();
 
-    public abstract void chooseIdentity(Identity identity);
+    public abstract void chooseIdentity();
 }

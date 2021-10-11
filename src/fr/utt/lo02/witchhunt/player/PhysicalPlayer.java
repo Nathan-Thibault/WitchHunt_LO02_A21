@@ -1,6 +1,5 @@
 package fr.utt.lo02.witchhunt.player;
 
-import fr.utt.lo02.witchhunt.Identity;
 import fr.utt.lo02.witchhunt.card.RumourCard;
 
 import java.util.ArrayList;
@@ -12,19 +11,17 @@ public class PhysicalPlayer extends Player{
     }
 
     @Override
-    public Player accuse() {
+    public void playTurn() {
         //TODO
-        return null;
     }
 
     @Override
-    public RumourCard selectCardFromHand() {
+    public void respondAccusation() {
         //TODO
-        return null;
     }
 
     @Override
-    public void chooseIdentity(Identity identity) {
+    public void chooseIdentity() {
         //TODO
     }
 }

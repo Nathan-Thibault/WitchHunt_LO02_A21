@@ -1,6 +1,5 @@
 package fr.utt.lo02.witchhunt.player;
 
-import fr.utt.lo02.witchhunt.Identity;
 import fr.utt.lo02.witchhunt.card.RumourCard;
 import fr.utt.lo02.witchhunt.player.strategy.IdentityStrategy;
 import fr.utt.lo02.witchhunt.player.strategy.RespondStrategy;
@@ -23,17 +22,17 @@ public class ArtificialPlayer extends Player{
     }
 
     @Override
-    public Player accuse() {
-        return null;
+    public void playTurn() {
+        turnStrategy.playTurn();
     }
 
     @Override
-    public RumourCard selectCardFromHand() {
-        return null;
+    public void respondAccusation() {
+        respondStrategy.respondAccusation();
     }
 
     @Override
-    public void chooseIdentity(Identity identity) {
-
+    public void chooseIdentity() {
+        setIdentity(identityStrategy.chooseIdentity());
     }
 }
