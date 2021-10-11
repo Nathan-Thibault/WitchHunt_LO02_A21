@@ -1,5 +1,10 @@
 package fr.utt.lo02.witchhunt.player;
 
+import fr.utt.lo02.witchhunt.card.CardManager;
+import fr.utt.lo02.witchhunt.player.strategy.RespondStrategy;
+import fr.utt.lo02.witchhunt.player.strategy.TurnStrategy;
+import fr.utt.lo02.witchhunt.player.strategy.identity.IdentityStrategy;
+
 import java.util.HashMap;
 import java.util.Set;
 
@@ -22,19 +27,12 @@ public class PlayerManager {
     }
 
     public void addPhysicalPlayer(String name){
-        //TODO: add ay to distribute cards
-        //players.put(name, new PhysicalPlayer());
+        players.put(name, new PhysicalPlayer(CardManager.getInstance().dealHand()));
     }
 
-    public void createArtificialPlayers(int amount){
-        for (int i = 0; i < amount; i++) {
-            createArtificialPlayer();
-        }
-    }
-
-    public void createArtificialPlayer(){
-        //TODO: create ArtificialPlayer
-        //players.put(artificialPlayerName.concat(String.valueOf(artificialPlayerCount)), new ArtificialPlayer());
+    public void createArtificialPlayer(TurnStrategy turnStrategy, RespondStrategy respondStrategy, IdentityStrategy identityStrategy){
+        players.put(artificialPlayerName.concat(String.valueOf(artificialPlayerCount)),
+                new ArtificialPlayer(CardManager.getInstance().dealHand(), turnStrategy, respondStrategy, identityStrategy));
         artificialPlayerCount++;
     }
 

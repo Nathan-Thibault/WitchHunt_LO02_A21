@@ -1,7 +1,7 @@
 package fr.utt.lo02.witchhunt.player;
 
 import fr.utt.lo02.witchhunt.card.RumourCard;
-import fr.utt.lo02.witchhunt.player.strategy.IdentityStrategy;
+import fr.utt.lo02.witchhunt.player.strategy.identity.IdentityStrategy;
 import fr.utt.lo02.witchhunt.player.strategy.RespondStrategy;
 import fr.utt.lo02.witchhunt.player.strategy.TurnStrategy;
 
