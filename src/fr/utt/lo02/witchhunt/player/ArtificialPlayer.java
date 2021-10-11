@@ -2,13 +2,13 @@ package fr.utt.lo02.witchhunt.player;
 
 import fr.utt.lo02.witchhunt.card.RumourCard;
 import fr.utt.lo02.witchhunt.player.strategy.identity.IdentityStrategy;
-import fr.utt.lo02.witchhunt.player.strategy.RespondStrategy;
-import fr.utt.lo02.witchhunt.player.strategy.TurnStrategy;
+import fr.utt.lo02.witchhunt.player.strategy.respond.RespondStrategy;
+import fr.utt.lo02.witchhunt.player.strategy.turn.TurnStrategy;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class ArtificialPlayer extends Player{
+public final class ArtificialPlayer extends Player{
 
     private TurnStrategy turnStrategy;
     private RespondStrategy respondStrategy;
@@ -28,7 +28,7 @@ public class ArtificialPlayer extends Player{
 
     @Override
     public void respondAccusation() {
-        respondStrategy.respondAccusation();
+        respondStrategy.respondAccusation(this);
     }
 
     @Override

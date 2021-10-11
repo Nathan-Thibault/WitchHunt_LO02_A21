@@ -1,8 +1,8 @@
 package fr.utt.lo02.witchhunt.player;
 
 import fr.utt.lo02.witchhunt.card.CardManager;
-import fr.utt.lo02.witchhunt.player.strategy.RespondStrategy;
-import fr.utt.lo02.witchhunt.player.strategy.TurnStrategy;
+import fr.utt.lo02.witchhunt.player.strategy.respond.RespondStrategy;
+import fr.utt.lo02.witchhunt.player.strategy.turn.TurnStrategy;
 import fr.utt.lo02.witchhunt.player.strategy.identity.IdentityStrategy;
 
 import java.util.HashMap;

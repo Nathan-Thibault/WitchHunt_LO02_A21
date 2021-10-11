@@ -17,4 +17,8 @@ public final class IdentityCard extends Card{
     public void reveal(){
         revealed = true;
     }
+
+    public Identity getIdentity(){
+        return identity;
+    }
 }
