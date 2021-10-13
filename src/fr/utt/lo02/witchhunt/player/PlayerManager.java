@@ -55,4 +55,15 @@ public class PlayerManager {
 
         return unrevealedPlayers;
     }
+
+    public ArrayList<String> getPlayersWithCards(){
+        ArrayList<String> playersWithCards = new ArrayList<>();
+
+        for (String playerName: players.keySet()) {
+            if(!getByName(playerName).getHand().isEmpty())
+                playersWithCards.add(playerName);
+        }
+
+        return playersWithCards;
+    }
 }
