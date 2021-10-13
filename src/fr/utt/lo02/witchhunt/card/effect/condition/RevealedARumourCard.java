@@ -1,6 +1,6 @@
 package fr.utt.lo02.witchhunt.card.effect.condition;
 
-import fr.utt.lo02.witchhunt.card.Card;
+import fr.utt.lo02.witchhunt.card.CardManager;
 import fr.utt.lo02.witchhunt.player.Player;
 
 public final class RevealedARumourCard extends Condition{
@@ -11,8 +11,8 @@ public final class RevealedARumourCard extends Condition{
 
     @Override
     public boolean verify(Player caller) {
-        for (Card card: caller.getHand()) {
-            if (card.isRevealed()) return true;
+        for (String cardName: caller.getHand()) {
+            if (CardManager.getInstance().getByName(cardName).isRevealed()) return true;
         }
         return false;
     }

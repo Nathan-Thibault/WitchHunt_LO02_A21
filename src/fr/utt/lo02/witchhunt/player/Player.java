@@ -10,9 +10,9 @@ public abstract class Player {
 
     protected int score;
     protected IdentityCard identityCard;
-    protected final ArrayList<RumourCard> hand;
+    protected final ArrayList<String> hand;
 
-    public Player(ArrayList<RumourCard> hand){
+    public Player(ArrayList<String> hand){
         if(hand == null){
             throw new NullPointerException("Player constructor: hand can't be null");
         } else if (hand.isEmpty()){
@@ -36,7 +36,7 @@ public abstract class Player {
         return identityCard;
     }
 
-    public ArrayList<RumourCard> getHand(){
+    public ArrayList<String> getHand(){
         return hand;
     }
 
