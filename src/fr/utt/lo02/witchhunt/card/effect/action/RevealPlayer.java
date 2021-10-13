@@ -11,7 +11,7 @@ public final class RevealPlayer extends Action{
     }
 
     @Override
-    public void execute(Player caller) {
+    public boolean execute(Player caller) {
         PlayerManager pManager = PlayerManager.getInstance();
         Player target = pManager.getByName(caller.choosePlayerFrom(pManager.getUnrevealedPlayers()));
 
@@ -23,5 +23,6 @@ public final class RevealPlayer extends Action{
             caller.addToScore(-2);
             //TODO: target take next turn
         }
+        return true;
     }
 }

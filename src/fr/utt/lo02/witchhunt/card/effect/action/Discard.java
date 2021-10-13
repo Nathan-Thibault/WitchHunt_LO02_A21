@@ -10,9 +10,14 @@ public class Discard extends Action{
     }
 
     @Override
-    public void execute(Player caller) {
-        String cardName = caller.chooseCardFrom(caller.getHand());
-
-        CardManager.getInstance().discard(cardName);
+    public boolean execute(Player caller) {
+        if(caller.getHand().isEmpty()){
+            //TODO: can't execute this action -> can't play card
+            return false;
+        } else {
+            String cardName = caller.chooseCardFrom(caller.getHand());
+            CardManager.getInstance().discard(cardName);
+            return true;
+        }
     }
 }

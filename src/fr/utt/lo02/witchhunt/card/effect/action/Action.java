@@ -10,5 +10,5 @@ public abstract class Action {
         this.description = description;
     }
 
-    public abstract void execute(Player caller);
+    public abstract boolean execute(Player caller);
 }
