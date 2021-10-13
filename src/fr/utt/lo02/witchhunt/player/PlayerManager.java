@@ -5,6 +5,7 @@ import fr.utt.lo02.witchhunt.player.strategy.respond.RespondStrategy;
 import fr.utt.lo02.witchhunt.player.strategy.turn.TurnStrategy;
 import fr.utt.lo02.witchhunt.player.strategy.identity.IdentityStrategy;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -19,7 +20,7 @@ public class PlayerManager {
         artificialPlayerCount = 0;
     }
 
-    public PlayerManager getInstance(){
+    public static PlayerManager getInstance(){
         if (instance == null){
             instance = new PlayerManager();
         }
@@ -40,7 +41,18 @@ public class PlayerManager {
         return players.get(name);
     }
 
-    public Set<String> getPlayersNames(){
-        return players.keySet();
+    public ArrayList<String> getAllPlayers(){
+        return new ArrayList<>(players.keySet());
+    }
+
+    public ArrayList<String> getUnrevealedPlayers(){
+        ArrayList<String> unrevealedPlayers = new ArrayList<>();
+
+        for (String playerName: players.keySet()) {
+            if(getByName(playerName).getIdentityCard().isRevealed())
+                unrevealedPlayers.add(playerName);
+        }
+
+        return unrevealedPlayers;
     }
 }

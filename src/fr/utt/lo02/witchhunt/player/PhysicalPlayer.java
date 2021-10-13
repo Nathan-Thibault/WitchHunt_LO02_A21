@@ -24,4 +24,16 @@ public class PhysicalPlayer extends Player{
     public void chooseIdentity() {
         //TODO
     }
+
+    @Override
+    public RumourCard chooseCardFrom(ArrayList<String> listOfCardNames) {
+        //TODO
+        return null;
+    }
+
+    @Override
+    public Player choosePlayer(boolean unreaveled) {
+        //TODO
+        return null;
+    }
 }
