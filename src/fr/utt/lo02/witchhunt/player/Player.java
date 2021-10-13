@@ -52,5 +52,5 @@ public abstract class Player {
 
     public abstract String chooseCardFrom(ArrayList<String> listOfCardNames);
 
-    public abstract Player choosePlayer(boolean unrevealed);
+    public abstract String choosePlayerFrom(ArrayList<String> listOfPlayerNames);
 }

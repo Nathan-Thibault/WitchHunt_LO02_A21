@@ -43,16 +43,8 @@ public final class ArtificialPlayer extends Player{
     }
 
     @Override
-    public Player choosePlayer(boolean unreaveled) {
+    public String choosePlayerFrom(ArrayList<String> listOfPlayerNames) {
         //TODO create strategies to choose a player
-        ArrayList<String> playerNames;
-
-        if (unreaveled){
-            playerNames = PlayerManager.getInstance().getUnrevealedPlayers();
-        } else {
-            playerNames = PlayerManager.getInstance().getAllPlayers();
-        }
-
-        return PlayerManager.getInstance().getByName(Utils.randomFromList(playerNames));
+        return Utils.randomFromList(listOfPlayerNames);
     }
 }

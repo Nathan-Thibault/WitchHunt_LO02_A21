@@ -32,7 +32,7 @@ public class PhysicalPlayer extends Player{
     }
 
     @Override
-    public Player choosePlayer(boolean unreaveled) {
+    public String choosePlayerFrom(ArrayList<String> listOfPlayerNames) {
         //TODO
         return null;
     }
