@@ -40,6 +40,10 @@ public abstract class Player {
         return hand;
     }
 
+    public void addToScore(int addend){
+        score += addend;
+    }
+
     public abstract void playTurn();
 
     public abstract void respondAccusation();
