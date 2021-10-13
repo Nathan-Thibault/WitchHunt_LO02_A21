@@ -1,5 +1,7 @@
 package fr.utt.lo02.witchhunt.card;
 
+import fr.utt.lo02.witchhunt.Utils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -43,7 +45,7 @@ public final class CardManager {
 
         //While there isn't enough cards in hand, take a random card from cardsToDeal and add it to the hand
         while(hand.size() < numberOfCardsPerPlayer){
-            String cardName = cardsToDeal.get(random.nextInt(cardsToDeal.size()));
+            String cardName = Utils.randomFromList(cardsToDeal);
             hand.add(cardName);
             cardsToDeal.remove(cardName);
         }
@@ -63,7 +65,7 @@ public final class CardManager {
         //Discard cards until there is an integer amount of cards to deal per player
         int numberOfPlayers = 6;//TODO: change numberOfPlayers when RoundManager will be created
         while(cardsToDeal.size() % numberOfPlayers != 0){
-            String cardName = cardsToDeal.get(new Random().nextInt(cardsToDeal.size()));
+            String cardName = Utils.randomFromList(cardsToDeal);
             discard(cardName);
             cardsToDeal.remove(cardName);
         }
