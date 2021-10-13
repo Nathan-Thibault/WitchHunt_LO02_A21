@@ -1,5 +1,7 @@
 package fr.utt.lo02.witchhunt.card.effect.action;
 
+import fr.utt.lo02.witchhunt.player.Player;
+
 public abstract class Action {
 
     protected String description;
@@ -8,5 +10,5 @@ public abstract class Action {
         this.description = description;
     }
 
-    public abstract void execute(/*Player caller*/);
+    public abstract void execute(Player caller);
 }

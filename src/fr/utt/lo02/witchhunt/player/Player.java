@@ -32,8 +32,8 @@ public abstract class Player {
         identityCard = new IdentityCard(identity);
     }
 
-    public Identity getIdentity(){
-        return identityCard.getIdentity();
+    public IdentityCard getIdentityCard(){
+        return identityCard;
     }
 
     public ArrayList<RumourCard> getHand(){

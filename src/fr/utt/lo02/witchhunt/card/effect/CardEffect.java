@@ -2,6 +2,7 @@ package fr.utt.lo02.witchhunt.card.effect;
 
 import fr.utt.lo02.witchhunt.card.effect.action.Action;
 import fr.utt.lo02.witchhunt.card.effect.condition.Condition;
+import fr.utt.lo02.witchhunt.player.Player;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -36,15 +37,15 @@ public final class CardEffect {
         }
     }
 
-    public void play(/*Player caller TODO: create Player*/){
+    public void play(Player caller){
         for (Condition condition: conditions) {
-            if(!condition.verify()){
+            if(!condition.verify(caller)){
                 //TODO: notify caller that the condition isn't verified
                 return;
             }
         }
         for (Action action: actions) {
-            action.execute(/*caller*/);
+            action.execute(caller);
         }
     }
 
