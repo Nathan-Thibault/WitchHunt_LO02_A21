@@ -50,7 +50,7 @@ public abstract class Player {
 
     public abstract void chooseIdentity();
 
-    public abstract RumourCard chooseCardFrom(ArrayList<String> listOfCardNames);
+    public abstract String chooseCardFrom(ArrayList<String> listOfCardNames);
 
     public abstract Player choosePlayer(boolean unrevealed);
 }

@@ -39,10 +39,9 @@ public final class ArtificialPlayer extends Player{
     }
 
     @Override
-    public RumourCard chooseCardFrom(ArrayList<String> listOfCardNames) {
+    public String chooseCardFrom(ArrayList<String> listOfCardNames) {
         //TODO create strategies to choose a card
-        String cardName = listOfCardNames.get(new Random().nextInt(listOfCardNames.size()));
-        return CardManager.getInstance().getByName(cardName);
+        return listOfCardNames.get(new Random().nextInt(listOfCardNames.size()));
     }
 
     @Override

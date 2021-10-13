@@ -26,7 +26,7 @@ public class PhysicalPlayer extends Player{
     }
 
     @Override
-    public RumourCard chooseCardFrom(ArrayList<String> listOfCardNames) {
+    public String chooseCardFrom(ArrayList<String> listOfCardNames) {
         //TODO
         return null;
     }
