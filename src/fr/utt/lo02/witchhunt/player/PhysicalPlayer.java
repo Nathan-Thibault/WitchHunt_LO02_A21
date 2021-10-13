@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class PhysicalPlayer extends Player{
 
-    public PhysicalPlayer(ArrayList<RumourCard> hand){
+    public PhysicalPlayer(ArrayList<String> hand){
         super(hand);
     }
 

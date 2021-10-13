@@ -37,14 +37,14 @@ public final class CardManager {
         getByName(name).reveal();
     }
 
-    public ArrayList<RumourCard> dealHand(){
+    public ArrayList<String> dealHand(){
         Random random = new Random();
-        ArrayList<RumourCard> hand = new ArrayList<>();
+        ArrayList<String> hand = new ArrayList<>();
 
         //While there isn't enough cards in hand, take a random card from cardsToDeal and add it to the hand
         while(hand.size() < numberOfCardsPerPlayer){
             String cardName = cardsToDeal.get(random.nextInt(cardsToDeal.size()));
-            hand.add(getByName(cardName));
+            hand.add(cardName);
             cardsToDeal.remove(cardName);
         }
 
