@@ -42,7 +42,7 @@ public final class ArtificialPlayer extends Player{
     @Override
     public String chooseCardFrom(ArrayList<String> listOfCardNames) {
         //TODO create strategies to choose a card
-        return listOfCardNames.get(new Random().nextInt(listOfCardNames.size()));
+        return  Utils.randomFromList(listOfCardNames);
     }
 
     @Override
@@ -56,7 +56,6 @@ public final class ArtificialPlayer extends Player{
             playerNames = PlayerManager.getInstance().getAllPlayers();
         }
 
-        String playerName = playerNames.get(new Random().nextInt(playerNames.size()));
-        return PlayerManager.getInstance().getByName(playerName);
+        return PlayerManager.getInstance().getByName(Utils.randomFromList(playerNames));
     }
 }
