@@ -13,11 +13,6 @@ public final class IdentityCard extends Card{
         this.identity = Objects.requireNonNull(identity, "IdentityCard constructor: identity can't be null");
     }
 
-    @Override
-    public void reveal(){
-        revealed = true;
-    }
-
     public Identity getIdentity(){
         return identity;
     }
