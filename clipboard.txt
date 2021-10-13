@@ -1,5 +1,4 @@
 LOOK("Before their turn, secretly\nlook at their identity"),
-MAKE_DISCARD("The player who accused you discards\na random card from their hand."),
 MAKE_REVEAL_OR_DISCARD("Choose a player. They must reveal their\nidentity or discard a card from their hand."),
 MUST_ACCUSE("On their turn they must accuse a\nplayer other than you, if possible."),
 NEXT("Choose next player."),
