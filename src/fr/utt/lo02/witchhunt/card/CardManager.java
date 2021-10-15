@@ -1,10 +1,10 @@
 package fr.utt.lo02.witchhunt.card;
 
+import com.sun.jdi.ClassNotPreparedException;
 import fr.utt.lo02.witchhunt.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
 
 public final class CardManager {
 
@@ -20,7 +20,6 @@ public final class CardManager {
 //        rumourCards.put("", new RumourCard(
 //                new CardEffect(EffectType.WITCH, new ArrayList<Action>(), null),
 //                new CardEffect(EffectType.HUNT, new ArrayList<Action>(), null), null));
-        resetDealSystem();
     }
 
     public static CardManager getInstance() {
@@ -34,24 +33,26 @@ public final class CardManager {
         return allRumourCards.get(name);
     }
 
-    public void discard(String name){
+    public void discard(String name) {
         discardedCards.add(name);
         getByName(name).reveal();
     }
 
-    public ArrayList<String> dealHand(){
-        Random random = new Random();
+    public ArrayList<String> dealHand() {
+        if (cardsToDeal == null)
+            throw new ClassNotPreparedException("CardManager dealHand: deal system not reset, cannot deal hand");
+
         ArrayList<String> hand = new ArrayList<>();
 
         //While there isn't enough cards in hand, take a random card from cardsToDeal and add it to the hand
-        while(hand.size() < numberOfCardsPerPlayer){
+        while (hand.size() < numberOfCardsPerPlayer) {
             String cardName = Utils.randomFromList(cardsToDeal);
             hand.add(cardName);
             cardsToDeal.remove(cardName);
         }
 
         //All cards have been dealt
-        if(cardsToDeal.size() == 0){
+        if (cardsToDeal.size() == 0) {
             cardsToDeal = null;
             numberOfCardsPerPlayer = 0;
         }
@@ -59,12 +60,12 @@ public final class CardManager {
         return hand;
     }
 
-    public void resetDealSystem(){
+    public void resetDealSystem() {
         cardsToDeal = new ArrayList<>(allRumourCards.keySet());
 
         //Discard cards until there is an integer amount of cards to deal per player
         int numberOfPlayers = 6;//TODO: change numberOfPlayers when RoundManager will be created
-        while(cardsToDeal.size() % numberOfPlayers != 0){
+        while (cardsToDeal.size() % numberOfPlayers != 0) {
             String cardName = Utils.randomFromList(cardsToDeal);
             discard(cardName);
             cardsToDeal.remove(cardName);
