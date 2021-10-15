@@ -10,16 +10,23 @@ import java.util.Scanner;
 
 public class CommandListener extends Thread{
 
+    private static CommandListener instance;
     private final Scanner scanner;
     private boolean listening;
 
-    public CommandListener(InputStream inputStream){
+    private CommandListener(InputStream inputStream){
         this.scanner = new Scanner(inputStream);
-        listening = true;
+    }
+
+    public static CommandListener getInstance() {
+        if(instance == null)
+            instance = new CommandListener(System.in);
+        return instance;
     }
 
     @Override
     public void run(){
+        listening = true;
         while(listening){
             if(scanner.hasNextLine()){
                 String input = scanner.nextLine();
@@ -38,7 +45,7 @@ public class CommandListener extends Thread{
 
     public static void readInput(String input){
         String[] args = input.split(" ");
-        String commandName = args[0].substring(0,1).toUpperCase() + args[0].substring(1).toLowerCase();//capitalize first letter only
+        String commandName = args[0].substring(0,1).toUpperCase().concat(args[0].substring(1).toLowerCase());//capitalize first letter only
         args = Arrays.copyOfRange(args, 1, args.length);//remove command name from args
 
         try{
