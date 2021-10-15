@@ -2,6 +2,7 @@ package fr.utt.lo02.witchhunt.card;
 
 import fr.utt.lo02.witchhunt.card.effect.CardEffect;
 import fr.utt.lo02.witchhunt.card.effect.EffectType;
+import fr.utt.lo02.witchhunt.player.Player;
 
 public final class RumourCard extends Card {
 
@@ -36,10 +37,10 @@ public final class RumourCard extends Card {
         revealed = true;
     }
 
-    public void playEffect(EffectType type){
+    public void playEffect(EffectType type, Player caller){
         switch (type){
-            case WITCH -> witchEffect.play();
-            case HUNT -> huntEffect.play();
+            case WITCH -> witchEffect.play(caller);
+            case HUNT -> huntEffect.play(caller);
             default -> throw new IllegalArgumentException("RumourCard playEffect: type unknown");
         }
     }
