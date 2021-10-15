@@ -6,6 +6,7 @@ import fr.utt.lo02.witchhunt.player.strategy.identity.IdentityStrategy;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public final class PlayerManager {
 
@@ -46,9 +47,9 @@ public final class PlayerManager {
     public ArrayList<String> getUnrevealedPlayers(){
         ArrayList<String> unrevealedPlayers = new ArrayList<>();
 
-        for (String playerName: players.keySet()) {
-            if(getByName(playerName).getIdentityCard().isRevealed())
-                unrevealedPlayers.add(playerName);
+        for (Map.Entry<String, Player> entry: players.entrySet()) {
+            if(entry.getValue().getIdentityCard().isRevealed())
+                unrevealedPlayers.add(entry.getKey());
         }
 
         return unrevealedPlayers;
@@ -57,11 +58,18 @@ public final class PlayerManager {
     public ArrayList<String> getPlayersWithCards(){
         ArrayList<String> playersWithCards = new ArrayList<>();
 
-        for (String playerName: players.keySet()) {
-            if(!getByName(playerName).getHand().isEmpty())
-                playersWithCards.add(playerName);
+        for (Map.Entry<String, Player> entry: players.entrySet()) {
+            if(!entry.getValue().getHand().isEmpty())
+                playersWithCards.add(entry.getKey());
         }
 
         return playersWithCards;
+    }
+
+    public void resetAll(){
+        for (Player p : players.values()){
+            p.resetHand();
+            p.resetScore();
+        }
     }
 }

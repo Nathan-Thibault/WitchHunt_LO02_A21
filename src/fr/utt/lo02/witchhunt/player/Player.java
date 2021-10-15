@@ -41,6 +41,10 @@ public abstract class Player {
         score += addend;
     }
 
+    public void resetScore(){
+        score = 0;
+    }
+
     public abstract void playTurn();
 
     public abstract void respondAccusation();
