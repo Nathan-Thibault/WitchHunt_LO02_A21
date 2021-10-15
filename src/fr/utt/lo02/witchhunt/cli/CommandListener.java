@@ -1,5 +1,6 @@
 package fr.utt.lo02.witchhunt.cli;
 
+import fr.utt.lo02.witchhunt.Utils;
 import fr.utt.lo02.witchhunt.cli.commands.AbstractCommand;
 
 import java.io.InputStream;
@@ -46,11 +47,11 @@ public class CommandListener extends Thread{
             AbstractCommand command = commandClass.getDeclaredConstructor().newInstance();
 
             if(!command.run(args)){
-                Utils.errorOutput("La commande n'a pas pu être executée");
+                System.err.println("La commande n'a pas pu être executée");
                 command.printUsage();
             }
         } catch (ClassNotFoundException e) {
-            Utils.errorOutput("Commande non reconnue");
+            System.err.println("Commande non reconnue");
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
