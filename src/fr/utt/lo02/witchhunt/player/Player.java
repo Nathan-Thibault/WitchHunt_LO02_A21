@@ -1,8 +1,8 @@
 package fr.utt.lo02.witchhunt.player;
 
 import fr.utt.lo02.witchhunt.Identity;
+import fr.utt.lo02.witchhunt.card.CardManager;
 import fr.utt.lo02.witchhunt.card.IdentityCard;
-import fr.utt.lo02.witchhunt.card.RumourCard;
 
 import java.util.ArrayList;
 
@@ -10,16 +10,9 @@ public abstract class Player {
 
     protected int score;
     protected IdentityCard identityCard;
-    protected final ArrayList<String> hand;
+    protected ArrayList<String> hand;
 
-    public Player(ArrayList<String> hand){
-        if(hand == null){
-            throw new NullPointerException("Player constructor: hand can't be null");
-        } else if (hand.isEmpty()){
-            throw new IllegalArgumentException("Player constructor: hand can't be empty");
-        } else {
-            this.hand = hand;
-        }
+    public Player(){
         identityCard = null;
         score = 0;
     }
@@ -38,6 +31,10 @@ public abstract class Player {
 
     public ArrayList<String> getHand(){
         return hand;
+    }
+
+    public void resetHand(){
+        hand = CardManager.getInstance().dealHand();
     }
 
     public void addToScore(int addend){

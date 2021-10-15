@@ -1,15 +1,13 @@
 package fr.utt.lo02.witchhunt.player;
 
-import fr.utt.lo02.witchhunt.card.CardManager;
 import fr.utt.lo02.witchhunt.player.strategy.respond.RespondStrategy;
 import fr.utt.lo02.witchhunt.player.strategy.turn.TurnStrategy;
 import fr.utt.lo02.witchhunt.player.strategy.identity.IdentityStrategy;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 
-public class PlayerManager {
+public final class PlayerManager {
 
     private static PlayerManager instance;
     private final HashMap<String, Player> players = new HashMap<>();
@@ -28,12 +26,12 @@ public class PlayerManager {
     }
 
     public void addPhysicalPlayer(String name){
-        players.put(name, new PhysicalPlayer(CardManager.getInstance().dealHand()));
+        players.put(name, new PhysicalPlayer());
     }
 
     public void createArtificialPlayer(TurnStrategy turnStrategy, RespondStrategy respondStrategy, IdentityStrategy identityStrategy){
         players.put(artificialPlayerName.concat(String.valueOf(artificialPlayerCount)),
-                new ArtificialPlayer(CardManager.getInstance().dealHand(), turnStrategy, respondStrategy, identityStrategy));
+                new ArtificialPlayer(turnStrategy, respondStrategy, identityStrategy));
         artificialPlayerCount++;
     }
 

@@ -14,8 +14,8 @@ public final class ArtificialPlayer extends Player{
     private RespondStrategy respondStrategy;
     private IdentityStrategy identityStrategy;
 
-    public ArtificialPlayer(ArrayList<String> hand, TurnStrategy turnStrategy, RespondStrategy respondStrategy, IdentityStrategy identityStrategy){
-        super(hand);
+    public ArtificialPlayer(TurnStrategy turnStrategy, RespondStrategy respondStrategy, IdentityStrategy identityStrategy){
+        super();
         this.turnStrategy = Objects.requireNonNull(turnStrategy, "ArtificialPlayer constructor: turnStrategy can't be null");
         this.respondStrategy = Objects.requireNonNull(respondStrategy, "ArtificialPlayer constructor: respondStrategy can't be null");
         this.identityStrategy = Objects.requireNonNull(identityStrategy, "ArtificialPlayer constructor: identityStrategy can't be null");

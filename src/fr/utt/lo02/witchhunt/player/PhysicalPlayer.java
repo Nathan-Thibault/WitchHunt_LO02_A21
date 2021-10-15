@@ -1,13 +1,11 @@
 package fr.utt.lo02.witchhunt.player;
 
-import fr.utt.lo02.witchhunt.card.RumourCard;
-
 import java.util.ArrayList;
 
-public class PhysicalPlayer extends Player{
+public final class PhysicalPlayer extends Player{
 
-    public PhysicalPlayer(ArrayList<String> hand){
-        super(hand);
+    public PhysicalPlayer(){
+        super();
     }
 
     @Override
