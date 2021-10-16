@@ -44,6 +44,14 @@ public final class PlayerManager {
         return players.get(name);
     }
 
+    public String getByPlayer(Player player) throws NullPointerException{
+        for (Map.Entry<String, Player> entry: players.entrySet()) {
+            if(entry.getValue().equals(player))
+                return entry.getKey();
+        }
+        throw new NullPointerException("PlayerManager getByPlayer: couldn't find an entry that matches with the given player");
+    }
+
     public ArrayList<String> getAllPlayers(){
         return new ArrayList<>(players.keySet());
     }
