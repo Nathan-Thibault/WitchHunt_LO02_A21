@@ -10,5 +10,9 @@ public abstract class Condition {
         this.description = description;
     }
 
+    public String getDescription(){
+        return description;
+    }
+
     public abstract boolean verify(Player caller);
 }

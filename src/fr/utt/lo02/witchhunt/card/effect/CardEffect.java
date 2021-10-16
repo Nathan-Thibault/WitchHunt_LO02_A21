@@ -3,6 +3,7 @@ package fr.utt.lo02.witchhunt.card.effect;
 import fr.utt.lo02.witchhunt.RoundManager;
 import fr.utt.lo02.witchhunt.card.effect.action.Action;
 import fr.utt.lo02.witchhunt.card.effect.condition.Condition;
+import fr.utt.lo02.witchhunt.player.PhysicalPlayer;
 import fr.utt.lo02.witchhunt.player.Player;
 
 import java.util.ArrayList;
@@ -40,19 +41,23 @@ public final class CardEffect {
         }
     }
 
-    public void play(Player caller){
+    public boolean play(Player caller){
         for (Condition condition: conditions) {
             if(!condition.verify(caller)){
-                //TODO: notify caller that the condition isn't verified
-                return;
+                if(caller instanceof PhysicalPlayer)
+                    System.out.println("This effect can't be played :\n".concat(condition.getDescription()));
+                return false;
             }
         }
         for (Action action: actions) {
             if(!action.execute(caller, this)){
-                //TODO: notify caller that the action can't be played
+                if(caller instanceof PhysicalPlayer)
+                    System.out.println("This effect can't be played :\n".concat(action.cantExecute()));
+                return false;
             }
         }
-        RoundManager.getInstance().next();
+
+        return true;
     }
 
     public void setTarget(String playerName){
