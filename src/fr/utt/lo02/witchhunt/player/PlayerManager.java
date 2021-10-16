@@ -1,5 +1,6 @@
 package fr.utt.lo02.witchhunt.player;
 
+import fr.utt.lo02.witchhunt.card.CardManager;
 import fr.utt.lo02.witchhunt.player.strategy.respond.RespondStrategy;
 import fr.utt.lo02.witchhunt.player.strategy.turn.TurnStrategy;
 import fr.utt.lo02.witchhunt.player.strategy.identity.IdentityStrategy;
@@ -19,77 +20,86 @@ public final class PlayerManager {
 
     private ArrayList<String> inGamePlayers = new ArrayList<>();
 
-    private PlayerManager(){
+    private PlayerManager() {
         artificialPlayerCount = 0;
     }
 
-    public static PlayerManager getInstance(){
-        if (instance == null){
+    public static PlayerManager getInstance() {
+        if (instance == null) {
             instance = new PlayerManager();
         }
         return instance;
     }
 
-    public void addPhysicalPlayer(String name){
+    public void addPhysicalPlayer(String name) {
         players.put(name, new PhysicalPlayer());
     }
 
-    public void createArtificialPlayer(TurnStrategy turnStrategy, RespondStrategy respondStrategy, IdentityStrategy identityStrategy){
+    public void createArtificialPlayer(TurnStrategy turnStrategy, RespondStrategy respondStrategy, IdentityStrategy identityStrategy) {
         players.put(artificialPlayerName.concat(String.valueOf(artificialPlayerCount)),
                 new ArtificialPlayer(turnStrategy, respondStrategy, identityStrategy));
         artificialPlayerCount++;
     }
 
-    public Player getByName(String name){
+    public Player getByName(String name) {
         return players.get(name);
     }
 
-    public String getByPlayer(Player player) throws NullPointerException{
-        for (Map.Entry<String, Player> entry: players.entrySet()) {
-            if(entry.getValue().equals(player))
+    public String getByPlayer(Player player) throws NullPointerException {
+        for (Map.Entry<String, Player> entry : players.entrySet()) {
+            if (entry.getValue().equals(player))
                 return entry.getKey();
         }
         throw new NullPointerException("PlayerManager getByPlayer: couldn't find an entry that matches with the given player");
     }
 
-    public ArrayList<String> getAllPlayers(){
+    public ArrayList<String> getAllPlayers() {
         return new ArrayList<>(players.keySet());
     }
 
-    public ArrayList<String> getInGamePlayers(){
+    public ArrayList<String> getInGamePlayers() {
         return inGamePlayers;
     }
 
-    public ArrayList<String> getUnrevealedPlayers(){
+    public ArrayList<String> getUnrevealedPlayers() {
         ArrayList<String> unrevealedPlayers = new ArrayList<>();
 
-        for (Map.Entry<String, Player> entry: players.entrySet()) {
-            if(entry.getValue().getIdentityCard().isRevealed())
+        for (Map.Entry<String, Player> entry : players.entrySet()) {
+            if (entry.getValue().getIdentityCard().isRevealed())
                 unrevealedPlayers.add(entry.getKey());
         }
 
         return unrevealedPlayers;
     }
 
-    public ArrayList<String> getPlayersWithCards(){
+    public ArrayList<String> getPlayersWithUnrevealedCards() {
         ArrayList<String> playersWithCards = new ArrayList<>();
 
-        for (String player: getInGamePlayers()) {
-            if(!getByName(player).getHand().isEmpty())
-                playersWithCards.add(player);
+        //loop through players, if a player has at least one unrevealed card in hand he's added to the list
+        for (String player : getInGamePlayers()) {
+            if (!getByName(player).getHand().isEmpty()) {
+                CardManager cManager = CardManager.getInstance();
+
+                for (String card : getByName(player).getHand()) {
+                    if (!cManager.getByName(card).isRevealed()) {
+                        playersWithCards.add(player);
+                        break;
+                    }
+                }
+            }
         }
 
         return playersWithCards;
     }
 
-    public void eliminate(String playerName){
+    public void eliminate(String playerName) {
         inGamePlayers.remove(playerName);
     }
 
-    public void resetAll(){
+    public void resetAll() {
         inGamePlayers = new ArrayList<>(players.keySet());
 
-        for (Player p : players.values()){
+        for (Player p : players.values()) {
             p.resetHand();
             p.resetScore();
         }
