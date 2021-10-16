@@ -16,6 +16,11 @@ public final class TakeAnyRevealed extends Action{
     public boolean execute(Player caller, CardEffect effect) {
         ArrayList<String> revealedCards = CardManager.getInstance().getRevealedNonDiscardedCards();
 
+        //remove caller cards since he has to chose from another player
+        for(String card : caller.getHand()){
+            revealedCards.remove(card);
+        }
+
         if(revealedCards.isEmpty()){
             return false;
         }else{
