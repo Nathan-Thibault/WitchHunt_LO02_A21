@@ -20,4 +20,9 @@ public final class RandomlyTakeCardFrom extends Action{
 
         return true;
     }
+
+    @Override
+    public String cantExecute() {
+        return null;
+    }
 }

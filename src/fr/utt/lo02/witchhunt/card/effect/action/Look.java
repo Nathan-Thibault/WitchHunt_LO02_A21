@@ -17,4 +17,9 @@ public final class Look extends Action{
         //TODO : tell caller the identity of it's target
         return false;
     }
+
+    @Override
+    public String cantExecute() {
+        return null;
+    }
 }

@@ -23,12 +23,16 @@ public final class TakeBackRevealed extends Action{
         }
 
         if(revealedCards.isEmpty()){
-            //TODO: can't execute this action -> can't play card
             return false;
         } else {
             String card = caller.chooseCardFrom(revealedCards);
             cManager.getByName(card).setRevealed(false);
             return true;
         }
+    }
+
+    @Override
+    public String cantExecute() {
+        return "You have no revealed cards.";
     }
 }

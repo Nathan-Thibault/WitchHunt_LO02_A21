@@ -15,7 +15,6 @@ public final class Reveal extends Action{
     @Override
     public boolean execute(Player caller, CardEffect effect) {
         if(caller.getIdentityCard().isRevealed()){
-            //TODO: can't execute this action -> can't play card
             return false;
         } else {
             String callerName = PlayerManager.getInstance().getByPlayer(caller);
@@ -28,5 +27,10 @@ public final class Reveal extends Action{
             }
             return true;
         }
+    }
+
+    @Override
+    public String cantExecute() {
+        return "You're identity is already revealed.";
     }
 }

@@ -17,7 +17,6 @@ public final class TakeAnyRevealed extends Action{
         ArrayList<String> revealedCards = CardManager.getInstance().getRevealedNonDiscardedCards();
 
         if(revealedCards.isEmpty()){
-            //TODO: can't execute this action -> can't play card
             return false;
         }else{
             String card = caller.chooseCardFrom(revealedCards);
@@ -25,5 +24,10 @@ public final class TakeAnyRevealed extends Action{
             caller.getHand().add(card);
             return true;
         }
+    }
+
+    @Override
+    public String cantExecute() {
+        return "There isn't any revealed cards to choose.";
     }
 }

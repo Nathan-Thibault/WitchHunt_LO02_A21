@@ -17,10 +17,9 @@ public final class MakeDiscard extends Action{
     @Override
     public boolean execute(Player caller, CardEffect effect) {
         PlayerManager pManager = PlayerManager.getInstance();
-        ArrayList<String> playersWithCards = pManager.getPlayersWithCards();
+        ArrayList<String> playersWithCards = pManager.getPlayersWithUnrevealedCards();
 
         if(playersWithCards.isEmpty()){
-            //TODO: can't execute this action -> can't play card
             return false;
         } else {
             String target = caller.choosePlayerFrom(playersWithCards);
@@ -28,5 +27,10 @@ public final class MakeDiscard extends Action{
             CardManager.getInstance().discard(Utils.randomFromList(pManager.getByName(target).getHand()));
             return true;
         }
+    }
+
+    @Override
+    public String cantExecute() {
+        return "There is no players with cards in hand to choose.";
     }
 }

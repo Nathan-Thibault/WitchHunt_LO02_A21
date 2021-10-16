@@ -16,4 +16,9 @@ public final class TakeTurn extends Action{
         RoundManager.getInstance().setIndexAtPlayer(PlayerManager.getInstance().getByPlayer(caller));
         return true;
     }
+
+    @Override
+    public String cantExecute() {
+        return null;
+    }
 }

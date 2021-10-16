@@ -12,4 +12,6 @@ public abstract class Action {
     }
 
     public abstract boolean execute(Player caller, CardEffect effect);
+
+    public abstract String cantExecute();
 }

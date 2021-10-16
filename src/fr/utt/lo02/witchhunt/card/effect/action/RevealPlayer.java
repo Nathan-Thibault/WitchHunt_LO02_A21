@@ -26,4 +26,9 @@ public final class RevealPlayer extends Action{
         }
         return true;
     }
+
+    @Override
+    public String cantExecute() {
+        return null;
+    }
 }

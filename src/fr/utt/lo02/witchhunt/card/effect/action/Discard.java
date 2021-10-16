@@ -13,12 +13,16 @@ public final class Discard extends Action{
     @Override
     public boolean execute(Player caller, CardEffect effect) {
         if(caller.getHand().isEmpty()){
-            //TODO: can't execute this action -> can't play card
             return false;
         } else {
             String cardName = caller.chooseCardFrom(caller.getHand());
             CardManager.getInstance().discard(cardName);
             return true;
         }
+    }
+
+    @Override
+    public String cantExecute() {
+        return "You have no card in hand.";
     }
 }

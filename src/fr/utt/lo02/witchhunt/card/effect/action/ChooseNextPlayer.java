@@ -30,4 +30,9 @@ public final class ChooseNextPlayer extends Action{
         RoundManager.getInstance().setIndexAtPlayer(target);
         return true;
     }
+
+    @Override
+    public String cantExecute() {
+        return "There is no players with cards in hand to choose.";
+    }
 }
