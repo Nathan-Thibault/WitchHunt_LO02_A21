@@ -20,7 +20,7 @@ public final class Reveal extends Action{
         } else {
             String callerName = PlayerManager.getInstance().getByPlayer(caller);
 
-            caller.getIdentityCard().reveal();
+            caller.getIdentityCard().setRevealed(true);
             if(caller.getIdentityCard().getIdentity().equals(Identity.VILLAGER)) {
                 RoundManager.getInstance().setIndexAtPlayer(callerName);
             } else {
