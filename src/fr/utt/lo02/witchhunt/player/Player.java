@@ -10,38 +10,54 @@ public abstract class Player {
 
     protected int score;
     protected IdentityCard identityCard;
-    protected ArrayList<String> hand;
+    protected ArrayList<String> ownedCards;
 
-    public Player(){
+    public Player() {
         identityCard = null;
         score = 0;
     }
 
-    public void revealIdentity(){
+    public void revealIdentity() {
         identityCard.setRevealed(true);
     }
 
-    public void setIdentity(Identity identity){
+    public void setIdentity(Identity identity) {
         identityCard = new IdentityCard(identity);
     }
 
-    public IdentityCard getIdentityCard(){
+    public IdentityCard getIdentityCard() {
         return identityCard;
     }
 
-    public ArrayList<String> getHand(){
+    public ArrayList<String> getHand() {
+        CardManager cManager = CardManager.getInstance();
+
+        ArrayList<String> hand = new ArrayList<>();
+        for (String card : ownedCards) {
+            if (!cManager.getByName(card).isRevealed())
+                hand.add(card);
+        }
+
         return hand;
     }
 
-    public void resetHand(){
-        hand = CardManager.getInstance().dealHand();
+    public ArrayList<String> getOwnedCards() {
+        return ownedCards;
     }
 
-    public void addToScore(int addend){
+    public void removeFromOwned(String cardName){
+        ownedCards.remove(cardName);
+    }
+
+    public void resetHand() {
+        ownedCards = CardManager.getInstance().dealHand();
+    }
+
+    public void addToScore(int addend) {
         score += addend;
     }
 
-    public void resetScore(){
+    public void resetScore() {
         score = 0;
     }
 

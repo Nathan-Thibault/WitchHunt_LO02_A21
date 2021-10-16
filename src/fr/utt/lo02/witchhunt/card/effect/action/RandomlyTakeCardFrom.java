@@ -16,7 +16,8 @@ public final class RandomlyTakeCardFrom extends Action{
         Player target = PlayerManager.getInstance().getByName(effect.getTarget());
 
         String card = Utils.randomFromList(target.getHand());
-        caller.getHand().add(card);
+        target.removeFromOwned(card);
+        caller.getOwnedCards().add(card);
 
         return true;
     }

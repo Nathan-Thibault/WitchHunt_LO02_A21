@@ -17,7 +17,7 @@ public final class TakeAnyRevealed extends Action{
         ArrayList<String> revealedCards = CardManager.getInstance().getRevealedNonDiscardedCards();
 
         //remove caller cards since he has to chose from another player
-        for(String card : caller.getHand()){
+        for(String card : caller.getOwnedCards()){
             revealedCards.remove(card);
         }
 
@@ -26,7 +26,7 @@ public final class TakeAnyRevealed extends Action{
         }else{
             String card = caller.chooseCardFrom(revealedCards);
             CardManager.getInstance().takeFromDiscarded(card);
-            caller.getHand().add(card);
+            caller.getOwnedCards().add(card);
             return true;
         }
     }

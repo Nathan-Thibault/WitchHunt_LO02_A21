@@ -75,17 +75,9 @@ public final class PlayerManager {
     public ArrayList<String> getPlayersWithUnrevealedCards() {
         ArrayList<String> playersWithCards = new ArrayList<>();
 
-        //loop through players, if a player has at least one unrevealed card in hand he's added to the list
         for (String player : getInGamePlayers()) {
             if (!getByName(player).getHand().isEmpty()) {
-                CardManager cManager = CardManager.getInstance();
-
-                for (String card : getByName(player).getHand()) {
-                    if (!cManager.getByName(card).isRevealed()) {
-                        playersWithCards.add(player);
-                        break;
-                    }
-                }
+                playersWithCards.add(player);
             }
         }
 

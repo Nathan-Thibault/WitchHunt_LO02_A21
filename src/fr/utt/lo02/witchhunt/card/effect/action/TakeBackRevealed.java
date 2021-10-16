@@ -16,11 +16,8 @@ public final class TakeBackRevealed extends Action{
     public boolean execute(Player caller, CardEffect effect) {
         CardManager cManager = CardManager.getInstance();
 
-        ArrayList<String> revealedCards = new ArrayList<>();
-        for (String card: caller.getHand()) {
-            if(cManager.getByName(card).isRevealed())
-                revealedCards.add(card);
-        }
+        ArrayList<String> revealedCards = caller.getOwnedCards();
+        revealedCards.removeAll(caller.getHand());
 
         if(revealedCards.isEmpty()){
             return false;
