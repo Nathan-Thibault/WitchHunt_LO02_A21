@@ -16,7 +16,7 @@ public final class RevealPlayer extends Action{
         PlayerManager pManager = PlayerManager.getInstance();
         Player target = pManager.getByName(caller.choosePlayerFrom(pManager.getUnrevealedPlayers()));
 
-        target.getIdentityCard().reveal();
+        target.getIdentityCard().setRevealed(true);
         if(target.getIdentityCard().getIdentity().equals(Identity.WITCH)){
             caller.addToScore(2);
             //TODO: caller take next turn

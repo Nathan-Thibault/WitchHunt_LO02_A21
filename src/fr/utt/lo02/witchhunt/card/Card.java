@@ -7,11 +7,11 @@ public abstract class Card {
         this.revealed = revealed;
     }
 
-    public void reveal(){
-        revealed = true;
-    }
-
     public boolean isRevealed(){
         return revealed;
+    }
+
+    public void setRevealed(boolean revealed){
+        this.revealed = revealed;
     }
 }

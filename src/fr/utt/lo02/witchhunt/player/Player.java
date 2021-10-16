@@ -18,7 +18,7 @@ public abstract class Player {
     }
 
     public void revealIdentity(){
-        identityCard.reveal();
+        identityCard.setRevealed(true);
     }
 
     public void setIdentity(Identity identity){

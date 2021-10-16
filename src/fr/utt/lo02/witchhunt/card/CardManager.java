@@ -35,7 +35,7 @@ public final class CardManager {
 
     public void discard(String name) {
         discardedCards.add(name);
-        getByName(name).reveal();
+        getByName(name).setRevealed(true);
     }
 
     public ArrayList<String> dealHand() {

@@ -32,11 +32,6 @@ public final class RumourCard extends Card {
         this.cantBeChosenBy = cantBeChosenBy;
     }
 
-    @Override
-    public void reveal() {
-        revealed = true;
-    }
-
     public void playEffect(EffectType type, Player caller){
         switch (type){
             case WITCH -> witchEffect.play(caller);
