@@ -2,6 +2,7 @@ package fr.utt.lo02.witchhunt.card.effect.action;
 
 import fr.utt.lo02.witchhunt.Utils;
 import fr.utt.lo02.witchhunt.card.CardManager;
+import fr.utt.lo02.witchhunt.card.effect.CardEffect;
 import fr.utt.lo02.witchhunt.player.Player;
 import fr.utt.lo02.witchhunt.player.PlayerManager;
 
@@ -14,9 +15,10 @@ public final class MakeDiscard extends Action{
     }
 
     @Override
-    public boolean execute(Player caller) {
+    public boolean execute(Player caller, CardEffect effect) {
         PlayerManager pManager = PlayerManager.getInstance();
         ArrayList<String> playersWithCards = pManager.getPlayersWithCards();
+
         if(playersWithCards.isEmpty()){
             //TODO: can't execute this action -> can't play card
             return false;

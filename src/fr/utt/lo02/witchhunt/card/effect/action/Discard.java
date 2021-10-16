@@ -1,6 +1,7 @@
 package fr.utt.lo02.witchhunt.card.effect.action;
 
 import fr.utt.lo02.witchhunt.card.CardManager;
+import fr.utt.lo02.witchhunt.card.effect.CardEffect;
 import fr.utt.lo02.witchhunt.player.Player;
 
 public final class Discard extends Action{
@@ -10,7 +11,7 @@ public final class Discard extends Action{
     }
 
     @Override
-    public boolean execute(Player caller) {
+    public boolean execute(Player caller, CardEffect effect) {
         if(caller.getHand().isEmpty()){
             //TODO: can't execute this action -> can't play card
             return false;

@@ -1,5 +1,6 @@
 package fr.utt.lo02.witchhunt.card.effect.action;
 
+import fr.utt.lo02.witchhunt.card.effect.CardEffect;
 import fr.utt.lo02.witchhunt.player.Player;
 
 public abstract class Action {
@@ -10,5 +11,5 @@ public abstract class Action {
         this.description = description;
     }
 
-    public abstract boolean execute(Player caller);
+    public abstract boolean execute(Player caller, CardEffect effect);
 }

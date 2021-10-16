@@ -1,5 +1,6 @@
 package fr.utt.lo02.witchhunt.card.effect;
 
+import fr.utt.lo02.witchhunt.RoundManager;
 import fr.utt.lo02.witchhunt.card.effect.action.Action;
 import fr.utt.lo02.witchhunt.card.effect.condition.Condition;
 import fr.utt.lo02.witchhunt.player.Player;
@@ -13,7 +14,9 @@ public final class CardEffect {
     private final ArrayList<Action> actions;
     private final ArrayList<Condition> conditions;
 
-    public CardEffect(EffectType type, ArrayList<Action> actions, ArrayList<Condition> conditions){
+    private String targetName;
+
+    public CardEffect(EffectType type, ArrayList<Action> actions, ArrayList<Condition> conditions) throws NullPointerException, IllegalArgumentException{
         this.type = Objects.requireNonNull(type, "CardEffect constructor: type can't be null.");
 
         int MIN_NUMBER_OF_ACTIONS = 1;
@@ -45,8 +48,19 @@ public final class CardEffect {
             }
         }
         for (Action action: actions) {
-            action.execute(caller);
+            if(!action.execute(caller, this)){
+                //TODO: notify caller that the action can't be played
+            }
         }
+        RoundManager.getInstance().next();
+    }
+
+    public void setTarget(String playerName){
+        targetName = playerName;
+    }
+
+    public String getTarget(){
+        return targetName;
     }
 
     public EffectType getType(){
