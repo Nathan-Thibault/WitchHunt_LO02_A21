@@ -53,6 +53,14 @@ public final class PlayerManager {
         throw new NullPointerException("PlayerManager getByPlayer: couldn't find an entry that matches with the given player");
     }
 
+    public Player getOwnerOf(String cardName) {
+        for (Player player : players.values()) {
+            if (player.getOwnedCards().contains(cardName))
+                return player;
+        }
+        return null;
+    }
+
     public ArrayList<String> getAllPlayers() {
         return new ArrayList<>(players.keySet());
     }
