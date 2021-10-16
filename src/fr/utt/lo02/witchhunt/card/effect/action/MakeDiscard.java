@@ -25,7 +25,7 @@ public final class MakeDiscard extends Action{
             String target = caller.choosePlayerFrom(playersWithCards);
             //discard random card from target's hand
             String card = Utils.randomFromList(pManager.getByName(target).getHand());
-            pManager.getByName(target).removeFromOwned(card);
+            pManager.getByName(target).getOwnedCards().remove(card);
             CardManager.getInstance().discard(card);
             return true;
         }

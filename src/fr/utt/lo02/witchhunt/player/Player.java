@@ -45,10 +45,6 @@ public abstract class Player {
         return ownedCards;
     }
 
-    public void removeFromOwned(String cardName){
-        ownedCards.remove(cardName);
-    }
-
     public void resetHand() {
         ownedCards = CardManager.getInstance().dealHand();
     }
