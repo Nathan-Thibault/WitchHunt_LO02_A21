@@ -16,6 +16,7 @@ public final class Discard extends Action{
             return false;
         } else {
             String cardName = caller.chooseCardFrom(caller.getHand());
+            caller.getOwnedCards().remove(cardName);
             CardManager.getInstance().discard(cardName);
             return true;
         }

@@ -3,8 +3,10 @@ package fr.utt.lo02.witchhunt.card.effect.action;
 import fr.utt.lo02.witchhunt.card.CardManager;
 import fr.utt.lo02.witchhunt.card.effect.CardEffect;
 import fr.utt.lo02.witchhunt.player.Player;
+import fr.utt.lo02.witchhunt.player.PlayerManager;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public final class TakeAnyRevealed extends Action{
 
@@ -25,7 +27,9 @@ public final class TakeAnyRevealed extends Action{
             return false;
         }else{
             String card = caller.chooseCardFrom(revealedCards);
-            CardManager.getInstance().takeFromDiscarded(card);
+            Player owner = Objects.requireNonNull(PlayerManager.getInstance().getOwnerOf(card));
+
+            owner.getOwnedCards().remove(card);
             caller.getOwnedCards().add(card);
             return true;
         }
