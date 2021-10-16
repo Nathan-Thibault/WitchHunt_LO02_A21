@@ -5,6 +5,7 @@ import fr.utt.lo02.witchhunt.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public final class CardManager {
 
@@ -36,6 +37,11 @@ public final class CardManager {
     public void discard(String name) {
         discardedCards.add(name);
         getByName(name).setRevealed(true);
+    }
+
+    public void takeFromDiscarded(String name){
+        discardedCards.remove(name);
+        getByName(name).setRevealed(false);
     }
 
     public ArrayList<String> dealHand() {
@@ -71,5 +77,20 @@ public final class CardManager {
             cardsToDeal.remove(cardName);
         }
         numberOfCardsPerPlayer = cardsToDeal.size() / numberOfPlayers;
+    }
+
+    public ArrayList<String> getRevealedNonDiscardedCards() {
+        ArrayList<String> revealedCards = new ArrayList<>();
+
+        for (Map.Entry<String, RumourCard> entry : allRumourCards.entrySet()) {
+            if(!discardedCards.contains(entry.getKey()) && entry.getValue().isRevealed())
+                revealedCards.add(entry.getKey());
+        }
+
+        return revealedCards;
+    }
+
+    public ArrayList<String> getDiscardedCards() {
+        return discardedCards;
     }
 }
