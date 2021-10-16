@@ -32,10 +32,14 @@ public final class RumourCard extends Card {
         this.cantBeChosenBy = cantBeChosenBy;
     }
 
-    public void playEffect(EffectType type, Player caller){
+    public boolean playEffect(EffectType type, Player caller) throws IllegalArgumentException{
         switch (type){
-            case WITCH -> witchEffect.play(caller);
-            case HUNT -> huntEffect.play(caller);
+            case WITCH -> {
+                return witchEffect.play(caller);
+            }
+            case HUNT -> {
+                return huntEffect.play(caller);
+            }
             default -> throw new IllegalArgumentException("RumourCard playEffect: type unknown");
         }
     }
