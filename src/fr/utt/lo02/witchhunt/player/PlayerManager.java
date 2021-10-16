@@ -11,9 +11,13 @@ import java.util.Map;
 public final class PlayerManager {
 
     private static PlayerManager instance;
+
     private final HashMap<String, Player> players = new HashMap<>();
+
     private final String artificialPlayerName = "AI";
     private int artificialPlayerCount;
+
+    private ArrayList<String> inGamePlayers = new ArrayList<>();
 
     private PlayerManager(){
         artificialPlayerCount = 0;
@@ -44,6 +48,10 @@ public final class PlayerManager {
         return new ArrayList<>(players.keySet());
     }
 
+    public ArrayList<String> getInGamePlayers(){
+        return inGamePlayers;
+    }
+
     public ArrayList<String> getUnrevealedPlayers(){
         ArrayList<String> unrevealedPlayers = new ArrayList<>();
 
@@ -58,15 +66,21 @@ public final class PlayerManager {
     public ArrayList<String> getPlayersWithCards(){
         ArrayList<String> playersWithCards = new ArrayList<>();
 
-        for (Map.Entry<String, Player> entry: players.entrySet()) {
-            if(!entry.getValue().getHand().isEmpty())
-                playersWithCards.add(entry.getKey());
+        for (String player: getInGamePlayers()) {
+            if(!getByName(player).getHand().isEmpty())
+                playersWithCards.add(player);
         }
 
         return playersWithCards;
     }
 
+    public void eliminate(String playerName){
+        inGamePlayers.remove(playerName);
+    }
+
     public void resetAll(){
+        inGamePlayers = new ArrayList<>(players.keySet());
+
         for (Player p : players.values()){
             p.resetHand();
             p.resetScore();

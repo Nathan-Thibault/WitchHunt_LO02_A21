@@ -4,7 +4,6 @@ import fr.utt.lo02.witchhunt.card.CardManager;
 import fr.utt.lo02.witchhunt.player.Player;
 import fr.utt.lo02.witchhunt.player.PlayerManager;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public final class RoundManager {
@@ -12,7 +11,6 @@ public final class RoundManager {
     private static RoundManager instance;
 
     private int index;
-    private ArrayList<String> players;
     private String startingPlayer;
 
     private RoundManager() {
@@ -25,33 +23,39 @@ public final class RoundManager {
     }
 
     public void startNewRound() {
+        PlayerManager pManager = PlayerManager.getInstance();
+
         CardManager.getInstance().resetDealSystem();
-        PlayerManager.getInstance().resetAll();
+        pManager.resetAll();
         //TODO : make players choose their identity
 
-        players = PlayerManager.getInstance().getAllPlayers();
         if(startingPlayer == null){
-            index = new Random().nextInt(players.size());
+            index = new Random().nextInt(pManager.getInGamePlayers().size());
         } else {
             setIndexAtPlayer(startingPlayer);
+            startingPlayer = null;
         }
 
         next();
     }
 
     public void next() {
-        if(PlayerManager.getInstance().getUnrevealedPlayers().size() <= 1) {
+        PlayerManager pManager = PlayerManager.getInstance();
+
+        if(pManager.getUnrevealedPlayers().size() <= 1) {
             endRound();
         } else {
-            PlayerManager.getInstance().getByName(players.get(index)).playTurn();
+            pManager.getByName(pManager.getInGamePlayers().get(index)).playTurn();
             incrementIndex();
         }
     }
 
     public void endRound(){
-        startingPlayer = PlayerManager.getInstance().getUnrevealedPlayers().get(0);
+        PlayerManager pManager = PlayerManager.getInstance();
 
-        Player lastUnrevealed = PlayerManager.getInstance().getByName(startingPlayer);
+        startingPlayer = pManager.getUnrevealedPlayers().get(0);
+
+        Player lastUnrevealed = pManager.getByName(startingPlayer);
         lastUnrevealed.revealIdentity();
         lastUnrevealed.addToScore(lastUnrevealed.getIdentityCard().getIdentity().equals(Identity.WITCH) ? 2 : 1);
 
@@ -59,16 +63,12 @@ public final class RoundManager {
     }
 
     public void setIndexAtPlayer(String playerName) {
-        index = players.lastIndexOf(playerName);
-    }
-
-    public void eliminate(String playerName){
-        players.remove(playerName);
+        index = PlayerManager.getInstance().getInGamePlayers().lastIndexOf(playerName);
     }
 
     private void incrementIndex(){
         index++;
-        if (index > players.size())
+        if (index > PlayerManager.getInstance().getInGamePlayers().size())
             index = 0;
     }
 }
