@@ -1,4 +1,3 @@
-LOOK("Before their turn, secretly\nlook at their identity"),
 MAKE_REVEAL_OR_DISCARD("Choose a player. They must reveal their\nidentity or discard a card from their hand."),
 MUST_ACCUSE("On their turn they must accuse a\nplayer other than you, if possible."),
 RANDOMLY_TAKE_CARD_FROM("Before their turn, take a random card\nfrom their hand and add it to your hand."),
