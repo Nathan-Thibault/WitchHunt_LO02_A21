@@ -1,6 +1,5 @@
 MAKE_REVEAL_OR_DISCARD("Choose a player. They must reveal their\nidentity or discard a card from their hand."),
 MUST_ACCUSE("On their turn they must accuse a\nplayer other than you, if possible."),
-RANDOMLY_TAKE_CARD_FROM("Before their turn, take a random card\nfrom their hand and add it to your hand."),
 SWITCH_CARD_WITH_DISCARDED("Add one discarded card to your\nhand, and then discard this card."),
 TAKE_ANY_REVEALED("Take a revealed Rumour card from\nany other player into your hand."),
 TAKE_BACK_REVEALED("Take one of your own revealed\nRumour cards into your hand."),
