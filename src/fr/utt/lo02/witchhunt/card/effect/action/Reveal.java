@@ -4,6 +4,7 @@ import fr.utt.lo02.witchhunt.Identity;
 import fr.utt.lo02.witchhunt.RoundManager;
 import fr.utt.lo02.witchhunt.card.effect.CardEffect;
 import fr.utt.lo02.witchhunt.player.Player;
+import fr.utt.lo02.witchhunt.player.PlayerManager;
 
 public final class Reveal extends Action{
 
@@ -17,7 +18,14 @@ public final class Reveal extends Action{
             //TODO: can't execute this action -> can't play card
             return false;
         } else {
+            String callerName = PlayerManager.getInstance().getByPlayer(caller);
+
             caller.getIdentityCard().reveal();
+            if(caller.getIdentityCard().getIdentity().equals(Identity.VILLAGER)) {
+                RoundManager.getInstance().setIndexAtPlayer(callerName);
+            } else {
+                PlayerManager.getInstance().eliminate(callerName);
+            }
             return true;
         }
     }
