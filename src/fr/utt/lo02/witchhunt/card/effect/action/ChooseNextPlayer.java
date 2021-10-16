@@ -7,12 +7,12 @@ import fr.utt.lo02.witchhunt.player.PlayerManager;
 
 public final class ChooseNextPlayer extends Action{
 
-    private final boolean mustHaveCards;
+    private final String requirement;
 
-    public ChooseNextPlayer(boolean mustHaveCards){
+    public ChooseNextPlayer(String requirement){
         super("Choose next player.");
 
-        this.mustHaveCards = mustHaveCards;
+        this.requirement = requirement;
     }
 
     @Override
@@ -20,10 +20,14 @@ public final class ChooseNextPlayer extends Action{
         PlayerManager pManager = PlayerManager.getInstance();
 
         String target;
-        if(mustHaveCards) {
-            target = caller.choosePlayerFrom(pManager.getPlayersWithCards());
-        } else {
-            target = caller.choosePlayerFrom(pManager.getInGamePlayers());
+        switch (requirement){
+            case "unrevealed" -> target = caller.choosePlayerFrom(pManager.getUnrevealedPlayers());
+            case "cards" -> {
+                if(pManager.getPlayersWithUnrevealedCards().isEmpty())
+                    return false;
+                target = caller.choosePlayerFrom(pManager.getPlayersWithUnrevealedCards());
+            }
+            default -> target = caller.choosePlayerFrom(pManager.getInGamePlayers());
         }
 
         effect.setTarget(target);
