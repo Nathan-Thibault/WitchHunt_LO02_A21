@@ -42,6 +42,10 @@ public final class CardEffect {
     }
 
     public boolean play(Player caller){
+        return play(caller, null);
+    }
+
+    public boolean play(Player caller, String accuserName){
         for (Condition condition: conditions) {
             if(!condition.verify(caller)){
                 if(caller instanceof PhysicalPlayer)
@@ -56,6 +60,10 @@ public final class CardEffect {
                 case "ChooseNextPlayer", "Look", "RandomlyTakeCardFrom" -> {
                     args = new HashMap<>();
                     args.put("effect", this);
+                }
+                case "MakeDiscard" -> {
+                    args = new HashMap<>();
+                    args.put("accuserName", accuserName);
                 }
                 default -> args = null;
             }

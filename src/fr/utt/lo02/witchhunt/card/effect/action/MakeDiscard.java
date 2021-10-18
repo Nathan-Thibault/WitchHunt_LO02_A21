@@ -7,6 +7,7 @@ import fr.utt.lo02.witchhunt.player.PlayerManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public final class MakeDiscard extends Action {
 
@@ -16,19 +17,14 @@ public final class MakeDiscard extends Action {
 
     @Override
     public boolean execute(Player caller, HashMap<String, Object> args) {
-        PlayerManager pManager = PlayerManager.getInstance();
-        ArrayList<String> playersWithCards = pManager.getPlayersWithUnrevealedCards();
+        String accuserName = (String) Objects.requireNonNull(args.get("accuserName"), "CardEffect play: accuserName cannot be null to execute action ");
+        Player accuser = PlayerManager.getInstance().getByName(accuserName);
 
-        if (playersWithCards.isEmpty()) {
-            return false;
-        } else {
-            String target = caller.choosePlayerFrom(playersWithCards);
-            //discard random card from target's hand
-            String card = Utils.randomFromList(pManager.getByName(target).getHand());
-            pManager.getByName(target).getOwnedCards().remove(card);
-            CardManager.getInstance().discard(card);
-            return true;
-        }
+        //discard random card from accuser's hand
+        String card = Utils.randomFromList(accuser.getHand());
+        accuser.getOwnedCards().remove(card);
+        CardManager.getInstance().discard(card);
+        return true;
     }
 
     @Override
