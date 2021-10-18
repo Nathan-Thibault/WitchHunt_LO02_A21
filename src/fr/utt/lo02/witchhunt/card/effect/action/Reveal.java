@@ -6,6 +6,8 @@ import fr.utt.lo02.witchhunt.card.effect.CardEffect;
 import fr.utt.lo02.witchhunt.player.Player;
 import fr.utt.lo02.witchhunt.player.PlayerManager;
 
+import java.util.HashMap;
+
 public final class Reveal extends Action{
 
     public Reveal(){
@@ -13,7 +15,7 @@ public final class Reveal extends Action{
     }
 
     @Override
-    public boolean execute(Player caller, CardEffect effect) {
+    public boolean execute(Player caller, HashMap<String, Object> args) {
         if(caller.getIdentityCard().isRevealed()){
             return false;
         } else {

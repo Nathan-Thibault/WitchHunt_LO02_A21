@@ -6,6 +6,9 @@ import fr.utt.lo02.witchhunt.player.ArtificialPlayer;
 import fr.utt.lo02.witchhunt.player.Player;
 import fr.utt.lo02.witchhunt.player.PlayerManager;
 
+import java.util.HashMap;
+import java.util.Objects;
+
 public final class Look extends Action{
 
     public Look(){
@@ -13,7 +16,8 @@ public final class Look extends Action{
     }
 
     @Override
-    public boolean execute(Player caller, CardEffect effect) {
+    public boolean execute(Player caller, HashMap<String, Object> args) {
+        CardEffect effect = (CardEffect) Objects.requireNonNull(args.get("effect"), "Look : missing argument effect");
         Identity targetIdentity = PlayerManager.getInstance().getByName(effect.getTarget()).getIdentityCard().getIdentity();
 
         if(caller instanceof ArtificialPlayer){

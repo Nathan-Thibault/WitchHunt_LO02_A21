@@ -6,6 +6,7 @@ import fr.utt.lo02.witchhunt.player.Player;
 import fr.utt.lo02.witchhunt.player.PlayerManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 public final class TakeAnyRevealed extends Action{
@@ -15,7 +16,7 @@ public final class TakeAnyRevealed extends Action{
     }
 
     @Override
-    public boolean execute(Player caller, CardEffect effect) {
+    public boolean execute(Player caller, HashMap<String, Object> args) {
         ArrayList<String> revealedCards = CardManager.getInstance().getRevealedNonDiscardedCards();
 
         //remove caller cards since he has to chose from another player
