@@ -1,11 +1,13 @@
 package fr.utt.lo02.witchhunt.player;
 
+import fr.utt.lo02.witchhunt.Identity;
 import fr.utt.lo02.witchhunt.Utils;
 import fr.utt.lo02.witchhunt.player.strategy.identity.IdentityStrategy;
 import fr.utt.lo02.witchhunt.player.strategy.respond.RespondStrategy;
 import fr.utt.lo02.witchhunt.player.strategy.turn.TurnStrategy;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 public final class ArtificialPlayer extends Player{
@@ -14,11 +16,17 @@ public final class ArtificialPlayer extends Player{
     private RespondStrategy respondStrategy;
     private IdentityStrategy identityStrategy;
 
+    private HashMap<String, Identity> knownIdentities = new HashMap<>();
+
     public ArtificialPlayer(TurnStrategy turnStrategy, RespondStrategy respondStrategy, IdentityStrategy identityStrategy){
         super();
         this.turnStrategy = Objects.requireNonNull(turnStrategy, "ArtificialPlayer constructor: turnStrategy can't be null");
         this.respondStrategy = Objects.requireNonNull(respondStrategy, "ArtificialPlayer constructor: respondStrategy can't be null");
         this.identityStrategy = Objects.requireNonNull(identityStrategy, "ArtificialPlayer constructor: identityStrategy can't be null");
+    }
+
+    public void savePlayerIdentity(String playerName, Identity identity){
+        knownIdentities.put(playerName, identity);
     }
 
     @Override
