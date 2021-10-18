@@ -8,11 +8,11 @@ import java.util.ArrayList;
 
 public final class NeverReveal implements RespondStrategy{
     @Override
-    public void respondAccusation(ArtificialPlayer caller) {
-        tryNotToReveal(caller);
+    public void respondAccusation(ArtificialPlayer caller, String accuser) {
+        tryNotToReveal(caller, accuser);
     }
 
-    public static void tryNotToReveal(ArtificialPlayer caller){
+    public static void tryNotToReveal(ArtificialPlayer caller, String accuser){
         CardManager cManager = CardManager.getInstance();
 
         ArrayList<String> cards = caller.getHand();

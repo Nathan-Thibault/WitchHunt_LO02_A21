@@ -35,8 +35,8 @@ public final class ArtificialPlayer extends Player{
     }
 
     @Override
-    public void respondAccusation() {
-        respondStrategy.respondAccusation(this);
+    public void respondAccusation(String accuser) {
+        respondStrategy.respondAccusation(this, accuser);
     }
 
     @Override
