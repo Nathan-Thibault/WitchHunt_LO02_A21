@@ -2,16 +2,15 @@ package fr.utt.lo02.witchhunt.card.effect.action;
 
 import fr.utt.lo02.witchhunt.Utils;
 import fr.utt.lo02.witchhunt.card.CardManager;
-import fr.utt.lo02.witchhunt.card.effect.CardEffect;
 import fr.utt.lo02.witchhunt.player.Player;
 import fr.utt.lo02.witchhunt.player.PlayerManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public final class MakeDiscard extends Action{
+public final class MakeDiscard extends Action {
 
-    public MakeDiscard(){
+    public MakeDiscard() {
         super("The player who accused you discards\na random card from their hand.");
     }
 
@@ -20,7 +19,7 @@ public final class MakeDiscard extends Action{
         PlayerManager pManager = PlayerManager.getInstance();
         ArrayList<String> playersWithCards = pManager.getPlayersWithUnrevealedCards();
 
-        if(playersWithCards.isEmpty()){
+        if (playersWithCards.isEmpty()) {
             return false;
         } else {
             String target = caller.choosePlayerFrom(playersWithCards);

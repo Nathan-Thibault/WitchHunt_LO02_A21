@@ -8,9 +8,9 @@ import fr.utt.lo02.witchhunt.player.PlayerManager;
 import java.util.HashMap;
 import java.util.Objects;
 
-public final class RandomlyTakeCardFrom extends Action{
+public final class RandomlyTakeCardFrom extends Action {
 
-    public RandomlyTakeCardFrom(){
+    public RandomlyTakeCardFrom() {
         super("Before their turn, take a random card\nfrom their hand and add it to your hand.");
     }
 

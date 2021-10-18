@@ -9,9 +9,9 @@ import fr.utt.lo02.witchhunt.player.PlayerManager;
 import java.util.HashMap;
 import java.util.Objects;
 
-public final class Look extends Action{
+public final class Look extends Action {
 
-    public Look(){
+    public Look() {
         super("Before their turn, secretly\nlook at their identity");
     }
 
@@ -20,7 +20,7 @@ public final class Look extends Action{
         CardEffect effect = (CardEffect) Objects.requireNonNull(args.get("effect"), "Look : missing argument effect");
         Identity targetIdentity = PlayerManager.getInstance().getByName(effect.getTarget()).getIdentityCard().getIdentity();
 
-        if(caller instanceof ArtificialPlayer){
+        if (caller instanceof ArtificialPlayer) {
             ((ArtificialPlayer) caller).savePlayerIdentity(effect.getTarget(), targetIdentity);
         } else {
             System.out.println(effect.getTarget().concat(" is a ").concat(targetIdentity.toString()));

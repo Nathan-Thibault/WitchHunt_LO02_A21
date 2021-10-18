@@ -8,11 +8,11 @@ import fr.utt.lo02.witchhunt.player.PlayerManager;
 import java.util.HashMap;
 import java.util.Objects;
 
-public final class ChooseNextPlayer extends Action{
+public final class ChooseNextPlayer extends Action {
 
     private final String requirement;
 
-    public ChooseNextPlayer(String requirement){
+    public ChooseNextPlayer(String requirement) {
         super("Choose next player.");
 
         this.requirement = requirement;
@@ -25,10 +25,10 @@ public final class ChooseNextPlayer extends Action{
         CardEffect effect = (CardEffect) Objects.requireNonNull(args.get("effect"), "ChooseNextPlayer : missing argument effect");
 
         String target;
-        switch (requirement){
+        switch (requirement) {
             case "unrevealed" -> target = caller.choosePlayerFrom(pManager.getUnrevealedPlayers());
             case "cards" -> {
-                if(pManager.getPlayersWithUnrevealedCards().isEmpty())
+                if (pManager.getPlayersWithUnrevealedCards().isEmpty())
                     return false;
                 target = caller.choosePlayerFrom(pManager.getPlayersWithUnrevealedCards());
             }
