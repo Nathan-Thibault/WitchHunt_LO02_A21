@@ -8,9 +8,9 @@ import fr.utt.lo02.witchhunt.player.PlayerManager;
 import java.util.HashMap;
 import java.util.Objects;
 
-public final class MakeDiscard extends Action {
+public final class MakeAccuserDiscard extends Action {
 
-    public MakeDiscard() {
+    public MakeAccuserDiscard() {
         super("The player who accused you discards\na random card from their hand.");
     }
 

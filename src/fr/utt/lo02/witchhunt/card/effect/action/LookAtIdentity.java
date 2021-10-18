@@ -9,9 +9,9 @@ import fr.utt.lo02.witchhunt.player.PlayerManager;
 import java.util.HashMap;
 import java.util.Objects;
 
-public final class Look extends Action {
+public final class LookAtIdentity extends Action {
 
-    public Look() {
+    public LookAtIdentity() {
         super("Before their turn, secretly\nlook at their identity");
     }
 
