@@ -1,6 +1,7 @@
 package fr.utt.lo02.witchhunt.card.effect.action;
 
 import fr.utt.lo02.witchhunt.Identity;
+import fr.utt.lo02.witchhunt.RoundManager;
 import fr.utt.lo02.witchhunt.card.effect.CardEffect;
 import fr.utt.lo02.witchhunt.player.Player;
 import fr.utt.lo02.witchhunt.player.PlayerManager;
@@ -8,21 +9,23 @@ import fr.utt.lo02.witchhunt.player.PlayerManager;
 public final class RevealPlayer extends Action{
 
     public RevealPlayer(){
-        super("Reveal another player's identity.\nWitch: You gein 2pts. You take next turn.\nVillager: You lose 2pts. They take next turn.");
+        super("Reveal another player's identity.\nWitch: You gain 2pts. You take next turn.\nVillager: You lose 2pts. They take next turn.");
     }
 
     @Override
     public boolean execute(Player caller, CardEffect effect) {
         PlayerManager pManager = PlayerManager.getInstance();
-        Player target = pManager.getByName(caller.choosePlayerFrom(pManager.getUnrevealedPlayers()));
+        String targetName = caller.choosePlayerFrom(pManager.getUnrevealedPlayers());
+        Player target = pManager.getByName(targetName);
 
         target.getIdentityCard().setRevealed(true);
         if(target.getIdentityCard().getIdentity().equals(Identity.WITCH)){
             caller.addToScore(2);
-            //TODO: caller take next turn
+            pManager.eliminate(targetName);
+            RoundManager.getInstance().setIndexAtPlayer(pManager.getByPlayer(caller));
         } else {
             caller.addToScore(-2);
-            //TODO: target take next turn
+            RoundManager.getInstance().setIndexAtPlayer(targetName);
         }
         return true;
     }
