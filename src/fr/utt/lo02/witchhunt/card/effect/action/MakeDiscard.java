@@ -5,7 +5,6 @@ import fr.utt.lo02.witchhunt.card.CardManager;
 import fr.utt.lo02.witchhunt.player.Player;
 import fr.utt.lo02.witchhunt.player.PlayerManager;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -17,7 +16,7 @@ public final class MakeDiscard extends Action {
 
     @Override
     public boolean execute(Player caller, HashMap<String, Object> args) {
-        String accuserName = (String) Objects.requireNonNull(args.get("accuserName"), "CardEffect play: accuserName cannot be null to execute action ");
+        String accuserName = (String) Objects.requireNonNull(args.get("accuserName"), "MakeDiscard: missing accuserName argument");
         Player accuser = PlayerManager.getInstance().getByName(accuserName);
 
         //discard random card from accuser's hand
