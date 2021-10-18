@@ -17,7 +17,7 @@ public final class RandomlyTakeCardFrom extends Action {
     @Override
     public boolean execute(Player caller, HashMap<String, Object> args) {
         CardEffect effect = (CardEffect) Objects.requireNonNull(args.get("effect"), "RandomlyTakeCardFrom : missing argument effect");
-        Player target = PlayerManager.getInstance().getByName(effect.getTarget());
+        Player target = PlayerManager.getInstance().getByName(Objects.requireNonNull(effect.getTarget(),"RandomlyTakeCardFrom : target is can't be null"));
 
         String card = Utils.randomFromList(target.getHand());
         target.getOwnedCards().remove(card);
