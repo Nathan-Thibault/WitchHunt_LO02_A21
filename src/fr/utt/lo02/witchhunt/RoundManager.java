@@ -27,7 +27,7 @@ public final class RoundManager {
 
         CardManager.getInstance().resetDealSystem();
         pManager.resetAll();
-        //TODO : make players choose their identity
+        identityRound();
 
         if(startingPlayer == null){
             index = new Random().nextInt(pManager.getInGamePlayers().size());
@@ -70,5 +70,12 @@ public final class RoundManager {
         index++;
         if (index > PlayerManager.getInstance().getInGamePlayers().size())
             index = 0;
+    }
+
+    private void identityRound(){
+        PlayerManager pManager = PlayerManager.getInstance();
+        for(String player : pManager.getInGamePlayers()){
+            pManager.getByName(player).chooseIdentity();
+        }
     }
 }
