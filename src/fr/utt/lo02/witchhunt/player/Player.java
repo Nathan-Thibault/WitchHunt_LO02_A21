@@ -59,7 +59,7 @@ public abstract class Player {
 
     public abstract void playTurn();
 
-    public abstract void respondAccusation();
+    public abstract void respondAccusation(String accuser);
 
     public abstract void chooseIdentity();
 

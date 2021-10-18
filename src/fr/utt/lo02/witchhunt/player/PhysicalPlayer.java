@@ -14,7 +14,7 @@ public final class PhysicalPlayer extends Player{
     }
 
     @Override
-    public void respondAccusation() {
+    public void respondAccusation(String accuser) {
         //TODO
     }
 

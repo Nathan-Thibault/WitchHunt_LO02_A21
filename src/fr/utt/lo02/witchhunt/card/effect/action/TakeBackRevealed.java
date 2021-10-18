@@ -1,25 +1,25 @@
 package fr.utt.lo02.witchhunt.card.effect.action;
 
 import fr.utt.lo02.witchhunt.card.CardManager;
-import fr.utt.lo02.witchhunt.card.effect.CardEffect;
 import fr.utt.lo02.witchhunt.player.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public final class TakeBackRevealed extends Action{
+public final class TakeBackRevealed extends Action {
 
-    public TakeBackRevealed(){
+    public TakeBackRevealed() {
         super("Take one of your own revealed\nRumour cards into your hand.");
     }
 
     @Override
-    public boolean execute(Player caller, CardEffect effect) {
+    public boolean execute(Player caller, HashMap<String, Object> args) {
         CardManager cManager = CardManager.getInstance();
 
         ArrayList<String> revealedCards = caller.getOwnedCards();
         revealedCards.removeAll(caller.getHand());
 
-        if(revealedCards.isEmpty()){
+        if (revealedCards.isEmpty()) {
             return false;
         } else {
             String card = caller.chooseCardFrom(revealedCards);

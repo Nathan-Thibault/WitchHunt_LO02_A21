@@ -5,15 +5,19 @@ import fr.utt.lo02.witchhunt.card.effect.CardEffect;
 import fr.utt.lo02.witchhunt.player.Player;
 import fr.utt.lo02.witchhunt.player.PlayerManager;
 
-public final class RandomlyTakeCardFrom extends Action{
+import java.util.HashMap;
+import java.util.Objects;
 
-    public RandomlyTakeCardFrom(){
+public final class RandomlyTakeCardFrom extends Action {
+
+    public RandomlyTakeCardFrom() {
         super("Before their turn, take a random card\nfrom their hand and add it to your hand.");
     }
 
     @Override
-    public boolean execute(Player caller, CardEffect effect) {
-        Player target = PlayerManager.getInstance().getByName(effect.getTarget());
+    public boolean execute(Player caller, HashMap<String, Object> args) {
+        CardEffect effect = (CardEffect) Objects.requireNonNull(args.get("effect"), "RandomlyTakeCardFrom : missing argument effect");
+        Player target = PlayerManager.getInstance().getByName(Objects.requireNonNull(effect.getTarget(),"RandomlyTakeCardFrom : target is can't be null"));
 
         String card = Utils.randomFromList(target.getHand());
         target.getOwnedCards().remove(card);
