@@ -6,6 +6,7 @@ import fr.utt.lo02.witchhunt.player.PhysicalPlayer;
 import fr.utt.lo02.witchhunt.player.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 public final class CardEffect {
@@ -49,7 +50,17 @@ public final class CardEffect {
             }
         }
         for (Action action: actions) {
-            if(!action.execute(caller, this)){
+            HashMap<String, Object> args;
+
+            switch (action.getClass().getName()) {
+                case "ChooseNextPlayer", "Look", "RandomlyTakeCardFrom" -> {
+                    args = new HashMap<>();
+                    args.put("effect", this);
+                }
+                default -> args = null;
+            }
+
+            if(!action.execute(caller, args)){
                 if(caller instanceof PhysicalPlayer)
                     System.out.println("This effect can't be played :\n".concat(action.cantExecute()));
                 return false;
