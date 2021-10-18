@@ -53,8 +53,8 @@ public abstract class Player {
         score += addend;
     }
 
-    public void resetScore() {
-        score = 0;
+    public int getScore(){
+        return score;
     }
 
     public abstract void playTurn();

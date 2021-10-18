@@ -101,7 +101,6 @@ public final class PlayerManager {
 
         for (Player p : players.values()) {
             p.resetHand();
-            p.resetScore();
         }
     }
 }
