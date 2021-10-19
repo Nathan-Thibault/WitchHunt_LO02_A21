@@ -35,9 +35,7 @@ public final class Utils {
                 .concat(Integer.toString(max))
                 .concat(" :");
 
-        Scanner sc = new Scanner(System.in);
-
-        try {
+        try (Scanner sc = new Scanner(System.in)) {
             int result;
             do {
                 System.out.println(message);
@@ -47,8 +45,8 @@ public final class Utils {
 
             return result;
         } catch (InputMismatchException e) {
-            System.out.println("This is not an integer.");
-            
+            System.err.println("This is not an integer.");
+
             return readIntBetween(min, max);
         }
     }
