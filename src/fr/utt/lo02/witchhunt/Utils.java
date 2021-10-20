@@ -39,8 +39,8 @@ public final class Utils {
             int result;
             do {
                 System.out.println(message);
+                //TODO : fix NoSuchElementException because scanner is exhausted
                 result = sc.nextInt();
-
             } while (result < min || result > max);
 
             return result;
