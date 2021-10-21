@@ -35,20 +35,19 @@ public final class Utils {
                 .concat(Integer.toString(max))
                 .concat(" :");
 
-        try (Scanner sc = new Scanner(System.in)) {
-            int result;
-            do {
-                System.out.println(message);
-                //TODO : fix NoSuchElementException because scanner is exhausted
+        Scanner sc = new Scanner(System.in);
+
+        Integer result = null;
+        while (result == null || result < min || result > max) {
+            System.out.println(message);
+            if(sc.hasNextInt()){
                 result = sc.nextInt();
-            } while (result < min || result > max);
-
-            return result;
-        } catch (InputMismatchException e) {
-            System.err.println("This is not an integer.");
-
-            return readIntBetween(min, max);
+            }else if (sc.hasNext()){
+                System.out.println(sc.next().concat(" is not an integer."));
+            }
         }
+
+        return result;
     }
 
     public static void setWindowsConsole(boolean b) {
