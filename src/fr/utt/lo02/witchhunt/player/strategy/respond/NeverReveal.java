@@ -2,6 +2,7 @@ package fr.utt.lo02.witchhunt.player.strategy.respond;
 
 import fr.utt.lo02.witchhunt.card.CardManager;
 import fr.utt.lo02.witchhunt.player.ArtificialPlayer;
+import fr.utt.lo02.witchhunt.player.PlayerManager;
 
 import java.util.ArrayList;
 
@@ -19,7 +20,7 @@ public final class NeverReveal implements RespondStrategy {
 
         //try to play witch effect of every card in hand until there's one that works
         while (!cards.isEmpty()) {
-            if (cManager.getByName(card).playWitchEffect(caller, accuser)) {
+            if (cManager.getByName(card).playWitchEffect(PlayerManager.getInstance().getByPlayer(caller), accuser)) {
                 return;
             } else {
                 cards.remove(card);

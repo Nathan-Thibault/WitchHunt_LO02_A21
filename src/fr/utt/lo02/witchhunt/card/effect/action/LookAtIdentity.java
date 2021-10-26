@@ -16,10 +16,13 @@ public final class LookAtIdentity extends Action {
     }
 
     @Override
-    public boolean execute(Player caller, HashMap<String, Object> args) {
+    public boolean execute(String callerName, HashMap<String, Object> args) {
+        PlayerManager pManager = PlayerManager.getInstance();
+        Player caller = pManager.getByName(callerName);
+
         CardEffect effect = (CardEffect) Objects.requireNonNull(args.get("effect"), "Look : missing argument effect");
-        String target = Objects.requireNonNull(effect.getTarget(),"RandomlyTakeCardFrom : target is can't be null");
-        Identity targetIdentity = PlayerManager.getInstance().getByName(target).getIdentityCard().getIdentity();
+        String target = Objects.requireNonNull(effect.getTarget(), "RandomlyTakeCardFrom : target can't be null");
+        Identity targetIdentity = pManager.getByName(target).getIdentityCard().getIdentity();
 
         if (caller instanceof ArtificialPlayer) {
             ((ArtificialPlayer) caller).savePlayerIdentity(target, targetIdentity);

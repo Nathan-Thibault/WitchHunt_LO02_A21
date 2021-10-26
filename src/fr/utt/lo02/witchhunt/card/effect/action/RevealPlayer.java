@@ -5,6 +5,7 @@ import fr.utt.lo02.witchhunt.RoundManager;
 import fr.utt.lo02.witchhunt.player.Player;
 import fr.utt.lo02.witchhunt.player.PlayerManager;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public final class RevealPlayer extends Action {
@@ -14,16 +15,20 @@ public final class RevealPlayer extends Action {
     }
 
     @Override
-    public boolean execute(Player caller, HashMap<String, Object> args) {
+    public boolean execute(String callerName, HashMap<String, Object> args) {
         PlayerManager pManager = PlayerManager.getInstance();
-        String targetName = caller.choosePlayerFrom(pManager.getUnrevealedPlayers());
+        Player caller = pManager.getByName(callerName);
+
+        ArrayList<String> possibleTargets = pManager.getUnrevealedPlayers();
+        possibleTargets.remove(callerName);
+        String targetName = caller.choosePlayerFrom(possibleTargets);
         Player target = pManager.getByName(targetName);
 
         target.getIdentityCard().setRevealed(true);
         if (target.getIdentityCard().getIdentity().equals(Identity.WITCH)) {
             caller.addToScore(2);
             pManager.eliminate(targetName);
-            RoundManager.getInstance().setIndexAtPlayer(pManager.getByPlayer(caller));
+            RoundManager.getInstance().setIndexAtPlayer(callerName);
         } else {
             caller.addToScore(-2);
             RoundManager.getInstance().setIndexAtPlayer(targetName);

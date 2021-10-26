@@ -14,17 +14,19 @@ public final class Reveal extends Action {
     }
 
     @Override
-    public boolean execute(Player caller, HashMap<String, Object> args) {
+    public boolean execute(String callerName, HashMap<String, Object> args) {
+        PlayerManager pManager = PlayerManager.getInstance();
+        Player caller = pManager.getByName(callerName);
+
         if (caller.getIdentityCard().isRevealed()) {
             return false;
         } else {
-            String callerName = PlayerManager.getInstance().getByPlayer(caller);
-
             caller.getIdentityCard().setRevealed(true);
+
             if (caller.getIdentityCard().getIdentity().equals(Identity.VILLAGER)) {
                 RoundManager.getInstance().setIndexAtPlayer(callerName);
             } else {
-                PlayerManager.getInstance().eliminate(callerName);
+                pManager.eliminate(callerName);
             }
             return true;
         }
@@ -32,6 +34,6 @@ public final class Reveal extends Action {
 
     @Override
     public String cantExecute() {
-        return "You're identity is already revealed.";
+        return "Your identity is already revealed.";
     }
 }

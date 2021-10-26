@@ -15,7 +15,9 @@ public final class TakeAnyRevealed extends Action {
     }
 
     @Override
-    public boolean execute(Player caller, HashMap<String, Object> args) {
+    public boolean execute(String callerName, HashMap<String, Object> args) {
+        Player caller = PlayerManager.getInstance().getByName(callerName);
+
         ArrayList<String> revealedCards = CardManager.getInstance().getRevealedNonDiscardedCards();
 
         //remove caller cards since he has to chose from another player

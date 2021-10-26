@@ -1,8 +1,6 @@
 package fr.utt.lo02.witchhunt.card.effect.action;
 
 import fr.utt.lo02.witchhunt.RoundManager;
-import fr.utt.lo02.witchhunt.player.Player;
-import fr.utt.lo02.witchhunt.player.PlayerManager;
 
 import java.util.HashMap;
 
@@ -13,8 +11,8 @@ public final class TakeTurn extends Action {
     }
 
     @Override
-    public boolean execute(Player caller, HashMap<String, Object> args) {
-        RoundManager.getInstance().setIndexAtPlayer(PlayerManager.getInstance().getByPlayer(caller));
+    public boolean execute(String callerName, HashMap<String, Object> args) {
+        RoundManager.getInstance().setIndexAtPlayer(callerName);
         return true;
     }
 

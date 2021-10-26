@@ -5,6 +5,7 @@ import fr.utt.lo02.witchhunt.card.effect.CardEffect;
 import fr.utt.lo02.witchhunt.player.Player;
 import fr.utt.lo02.witchhunt.player.PlayerManager;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -19,21 +20,25 @@ public final class ChooseNextPlayer extends Action {
     }
 
     @Override
-    public boolean execute(Player caller, HashMap<String, Object> args) {
+    public boolean execute(String callerName, HashMap<String, Object> args) {
         PlayerManager pManager = PlayerManager.getInstance();
+        Player caller = pManager.getByName(callerName);
 
         CardEffect effect = (CardEffect) Objects.requireNonNull(args.get("effect"), "ChooseNextPlayer : missing argument effect");
 
-        String target;
+        ArrayList<String> possibleTargets;
         switch (requirement) {
-            case "unrevealed" -> target = caller.choosePlayerFrom(pManager.getUnrevealedPlayers());
+            case "unrevealed" -> possibleTargets = pManager.getUnrevealedPlayers();
             case "cards" -> {
                 if (pManager.getPlayersWithUnrevealedCards().isEmpty())
                     return false;
-                target = caller.choosePlayerFrom(pManager.getPlayersWithUnrevealedCards());
+                possibleTargets = pManager.getPlayersWithUnrevealedCards();
             }
-            default -> target = caller.choosePlayerFrom(pManager.getInGamePlayers());
+            default -> possibleTargets = pManager.getInGamePlayers();
         }
+        possibleTargets.remove(callerName);//a player can never choose himself as the target
+
+        String target = caller.choosePlayerFrom(possibleTargets);
 
         effect.setTarget(target);
         RoundManager.getInstance().setIndexAtPlayer(target);
