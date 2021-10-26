@@ -7,7 +7,7 @@ import fr.utt.lo02.witchhunt.player.PlayerManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MustAccuse extends Action {
+public final class MustAccuse extends Action {
 
     public MustAccuse() {
         super("On their turn they must accuse a\nplayer other than you, if possible.");

@@ -9,7 +9,7 @@ import fr.utt.lo02.witchhunt.player.PlayerManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MakeRevealOrDiscard extends Action {
+public final class MakeRevealOrDiscard extends Action {
 
     public MakeRevealOrDiscard() {
         super("Choose a player. They must reveal their\nidentity or discard a card from their hand."

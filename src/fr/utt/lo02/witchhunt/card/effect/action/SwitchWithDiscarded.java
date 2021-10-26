@@ -6,7 +6,7 @@ import fr.utt.lo02.witchhunt.player.PlayerManager;
 
 import java.util.HashMap;
 
-public class SwitchWithDiscarded extends Action {
+public final class SwitchWithDiscarded extends Action {
 
     public SwitchWithDiscarded() {
         super("Add one discarded card to your\nhand, and then discard this card.");
