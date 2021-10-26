@@ -25,5 +25,13 @@ public interface Strategy {
         public String getName() {
             return name;
         }
+
+        public static StrategyType getByClass(Class<? extends Strategy> sClass) throws IllegalArgumentException {
+            for (StrategyType s : StrategyType.values()) {
+                if (s.getTypeClass().equals(sClass))
+                    return s;
+            }
+            throw new IllegalArgumentException("StrategyType getByClass: couldn't find a strategy type matching given class");
+        }
     }
 }

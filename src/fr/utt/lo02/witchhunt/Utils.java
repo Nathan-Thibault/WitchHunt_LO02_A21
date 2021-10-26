@@ -1,6 +1,7 @@
 package fr.utt.lo02.witchhunt;
 
 import fr.utt.lo02.witchhunt.player.strategy.Strategy;
+import fr.utt.lo02.witchhunt.player.strategy.StrategyEnum;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -53,30 +54,39 @@ public final class Utils {
         return result;
     }
 
-    public static <T extends Strategy> T readStrategy(Class<T> strategyType) {
-        Scanner sc = new Scanner(System.in);
+    public static <T extends Strategy> T readStrategy(Class<T> sTypeClass) {
+        Strategy.StrategyType strategyType = Strategy.StrategyType.getByClass(sTypeClass);
 
-        String listOfOptions = switch (strategyType.getSimpleName()){
-            case "IdentityStrategy" -> "(RandomIdentityStrategy, VillagerStrategy, WitchStrategy)";
-            case "RespondStrategy" -> "(AlwaysReveal, NeverReveal, RevealIfVillager)";
-            case "TurnStrategy" -> "(AlwaysAccuse)";
-            default -> "";
-        };
+        StringBuilder listOfOptions = new StringBuilder();
+        int minCode = 0;
+        int maxCode = 0;
 
-        while (true) {
-            System.out.println("Select the ".concat(strategyType.getSimpleName()).concat(" from the list bellow:"));
-            System.out.println(listOfOptions);
+        listOfOptions.append("Select a strategy from the list bellow for the ");
+        listOfOptions.append(strategyType.getName());
+        listOfOptions.append(":\n");
 
-            if (sc.hasNextLine()) {
-                String input = sc.nextLine();
-                try {
-                    return strategyType.cast(Class.forName(strategyType.getPackageName().concat(".").concat(input)).getConstructor().newInstance());
-                } catch (ClassNotFoundException | NoClassDefFoundError | NoSuchMethodException e) {
-                    System.out.println("Couldn't find ".concat(input).concat(" strategy. Did you correctly wrote your selection (with the correct case)?"));
-                } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
-                    e.printStackTrace();
-                }
+        for (StrategyEnum strategy : StrategyEnum.values()) {
+            if (strategy.getType().equals(strategyType)) {
+                maxCode = strategy.getCode();
+                if (minCode == 0)
+                    minCode = strategy.getCode();
+
+                listOfOptions.append(strategy.getCode());
+                listOfOptions.append(" -> ");
+                listOfOptions.append(strategy.getDescription());
+                listOfOptions.append("\n");
             }
+        }
+
+        System.out.print(listOfOptions);
+
+        int code = readIntBetween(minCode, maxCode);
+
+        try {
+            return sTypeClass.cast(StrategyEnum.getByCode(code).getStrategyClass().getConstructor().newInstance());
+        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
