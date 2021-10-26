@@ -2,6 +2,11 @@ package fr.utt.lo02.witchhunt.card;
 
 import com.sun.jdi.ClassNotPreparedException;
 import fr.utt.lo02.witchhunt.Utils;
+import fr.utt.lo02.witchhunt.card.effect.CardEffect;
+import fr.utt.lo02.witchhunt.card.effect.EffectType;
+import fr.utt.lo02.witchhunt.card.effect.action.*;
+import fr.utt.lo02.witchhunt.card.effect.condition.RevealedARumourCard;
+import fr.utt.lo02.witchhunt.card.effect.condition.RevealedAsVillager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,10 +22,53 @@ public final class CardManager {
     private int numberOfCardsPerPlayer;
 
     private CardManager() {
-        //TODO: create all rumour cards
-//        rumourCards.put("", new RumourCard(
-//                new CardEffect(EffectType.WITCH, new ArrayList<Action>(), null),
-//                new CardEffect(EffectType.HUNT, new ArrayList<Action>(), null), null));
+        allRumourCards.put("Angry Mob", new RumourCard(
+                new CardEffect(EffectType.WITCH, new TakeTurn()),
+                new CardEffect(EffectType.HUNT, new RevealPlayer(), new RevealedAsVillager()), null));
+
+        allRumourCards.put("Black Cat", new RumourCard(
+                new CardEffect(EffectType.WITCH, new TakeTurn()),
+                new CardEffect(EffectType.HUNT, new SwitchWithDiscarded(), new TakeTurn()), null));
+
+        allRumourCards.put("Broomstick", new RumourCard(
+                new CardEffect(EffectType.WITCH, new TakeTurn()),
+                new CardEffect(EffectType.HUNT, new ChooseNextPlayer(null)), "Angry Mob"));
+
+        allRumourCards.put("Cauldron", new RumourCard(
+                new CardEffect(EffectType.WITCH, new MakeAccuserDiscard(), new TakeTurn()),
+                new CardEffect(EffectType.HUNT, new Reveal()), null));
+
+        allRumourCards.put("Ducking Stool", new RumourCard(
+                new CardEffect(EffectType.WITCH, new ChooseNextPlayer(null)),
+                new CardEffect(EffectType.HUNT, new MakeRevealOrDiscard()), null));
+
+        allRumourCards.put("Evil Eye", new RumourCard(
+                new CardEffect(EffectType.WITCH, new ChooseNextPlayer(null), new MustAccuse()),
+                new CardEffect(EffectType.HUNT, new ChooseNextPlayer(null), new MustAccuse()), null));
+
+        allRumourCards.put("Hooked Nose", new RumourCard(
+                new CardEffect(EffectType.WITCH, new TakeFromAccuser(), new TakeTurn()),
+                new CardEffect(EffectType.HUNT, new ChooseNextPlayer("cards"), new RandomlyTakeCardFrom()), null));
+
+        allRumourCards.put("Pet Newt", new RumourCard(
+                new CardEffect(EffectType.WITCH, new TakeTurn()),
+                new CardEffect(EffectType.HUNT, new TakeAnyRevealed(), new ChooseNextPlayer(null)), null));
+
+        allRumourCards.put("Pointed Hat", new RumourCard(
+                new CardEffect(EffectType.WITCH, new TakeBackRevealed(), new TakeTurn(), new RevealedARumourCard()),
+                new CardEffect(EffectType.HUNT, new TakeBackRevealed(), new ChooseNextPlayer(null), new RevealedARumourCard()), null));
+
+        allRumourCards.put("The Inquisition", new RumourCard(
+                new CardEffect(EffectType.WITCH, new Discard(), new TakeTurn()),
+                new CardEffect(EffectType.HUNT, new ChooseNextPlayer("unrevealed"), new LookAtIdentity()), null));
+
+        allRumourCards.put("Toad", new RumourCard(
+                new CardEffect(EffectType.WITCH, new TakeTurn()),
+                new CardEffect(EffectType.HUNT, new Reveal()), null));
+
+        allRumourCards.put("Wart", new RumourCard(
+                new CardEffect(EffectType.WITCH, new TakeTurn()),
+                new CardEffect(EffectType.HUNT, new ChooseNextPlayer(null)), "Ducking Stool"));
     }
 
     public static CardManager getInstance() {
@@ -39,7 +87,7 @@ public final class CardManager {
         getByName(name).setRevealed(true);
     }
 
-    public void takeFromDiscarded(String name){
+    public void takeFromDiscarded(String name) {
         discardedCards.remove(name);
         getByName(name).setRevealed(false);
     }
@@ -83,7 +131,7 @@ public final class CardManager {
         ArrayList<String> revealedCards = new ArrayList<>();
 
         for (Map.Entry<String, RumourCard> entry : allRumourCards.entrySet()) {
-            if(!discardedCards.contains(entry.getKey()) && entry.getValue().isRevealed())
+            if (!discardedCards.contains(entry.getKey()) && entry.getValue().isRevealed())
                 revealedCards.add(entry.getKey());
         }
 

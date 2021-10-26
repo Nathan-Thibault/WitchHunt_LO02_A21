@@ -2,9 +2,9 @@ package fr.utt.lo02.witchhunt.card.effect.condition;
 
 import fr.utt.lo02.witchhunt.player.Player;
 
-public final class RevealedARumourCard extends Condition{
+public final class RevealedARumourCard extends Condition {
 
-    public RevealedARumourCard(){
+    public RevealedARumourCard() {
         super("Only playable if you have\na revealed Rumour card.");
     }
 
