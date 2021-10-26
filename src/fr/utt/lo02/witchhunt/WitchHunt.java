@@ -1,11 +1,13 @@
 package fr.utt.lo02.witchhunt;
 
 import fr.utt.lo02.witchhunt.player.PlayerManager;
+import fr.utt.lo02.witchhunt.player.strategy.Strategy;
 import fr.utt.lo02.witchhunt.player.strategy.identity.IdentityStrategy;
 import fr.utt.lo02.witchhunt.player.strategy.respond.RespondStrategy;
 import fr.utt.lo02.witchhunt.player.strategy.turn.TurnStrategy;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -45,11 +47,6 @@ public class WitchHunt {
         int p = Utils.readIntBetween(0, 6);
 
         Utils.resetScreen();
-        System.out.println("Now, choose the number of artificial players you want.");
-
-        int a = Utils.readIntBetween(Math.max(3 - p, 0), 6 - p);
-
-        Utils.resetScreen();
         Scanner sc = new Scanner(System.in);
         PlayerManager pManager = PlayerManager.getInstance();
 
@@ -64,15 +61,21 @@ public class WitchHunt {
             }
         }
 
+        Utils.resetScreen();
+        System.out.println("Now, choose the number of artificial players you want.");
+
+        int a = Utils.readIntBetween(Math.max(3 - p, 0), 6 - p);
+
         for (int i = 0; i < a; i++) {
             Utils.resetScreen();
             System.out.println("Choose strategies for artificial player ".concat(Integer.toString(i)));
 
-            IdentityStrategy identityS = Utils.readStrategy(IdentityStrategy.class);
-            RespondStrategy respondS = Utils.readStrategy(RespondStrategy.class);
-            TurnStrategy turnS = Utils.readStrategy(TurnStrategy.class);
+            HashMap<Strategy.StrategyType, Class<? extends Strategy>> strategies = new HashMap<>();
+            for(Strategy.StrategyType sType : Strategy.StrategyType.values()){
+                strategies.put(sType, Utils.readStrategy(sType));
+            }
 
-            pManager.createArtificialPlayer(turnS, respondS, identityS);
+            pManager.createArtificialPlayer(strategies);
         }
 
         Utils.resetScreen();

@@ -4,8 +4,9 @@ import fr.utt.lo02.witchhunt.player.strategy.Strategy;
 import fr.utt.lo02.witchhunt.player.strategy.StrategyEnum;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.Scanner;
 
 public final class Utils {
 
@@ -24,7 +25,7 @@ public final class Utils {
             }
         } else {
             /*
-            \033[H moves the cursor at the top left corner of the screen or console.
+            \033[H moves the cursor to the top left corner of the screen or console.
             \033[2J clears the screen from the cursor to the end of the screen.
              */
             System.out.print("\033[H\033[2J");
@@ -54,9 +55,7 @@ public final class Utils {
         return result;
     }
 
-    public static <T extends Strategy> T readStrategy(Class<T> sTypeClass) {
-        Strategy.StrategyType strategyType = Strategy.StrategyType.getByClass(sTypeClass);
-
+    public static Class<? extends Strategy> readStrategy(Strategy.StrategyType strategyType) {
         StringBuilder listOfOptions = new StringBuilder();
         int minCode = 0;
         int maxCode = 0;
@@ -82,12 +81,7 @@ public final class Utils {
 
         int code = readIntBetween(minCode, maxCode);
 
-        try {
-            return sTypeClass.cast(StrategyEnum.getByCode(code).getStrategyClass().getConstructor().newInstance());
-        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-            return null;
-        }
+        return StrategyEnum.getByCode(code).getStrategyClass();
     }
 
     public static void setWindowsConsole(boolean b) {
