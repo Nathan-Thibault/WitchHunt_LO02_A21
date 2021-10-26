@@ -52,6 +52,11 @@ public final class RoundManager {
         }
     }
 
+    public void accuse(String accuser, String target){
+        setIndexAtPlayer(target);
+        PlayerManager.getInstance().getByName(target).respondAccusation(accuser);
+    }
+
     public void endRound(){
         PlayerManager pManager = PlayerManager.getInstance();
 
