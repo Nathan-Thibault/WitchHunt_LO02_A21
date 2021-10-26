@@ -1,1 +1,0 @@
-MAKE_REVEAL_OR_DISCARD("Choose a player. They must reveal their\nidentity or discard a card from their hand."),

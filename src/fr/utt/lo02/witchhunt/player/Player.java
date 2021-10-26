@@ -63,6 +63,12 @@ public abstract class Player {
 
     public abstract void chooseIdentity();
 
+    /**
+     *
+     * @return true to reveal and false to discard
+     */
+    public abstract boolean chooseToRevealOrDiscard();
+
     public abstract String chooseCardFrom(ArrayList<String> listOfCardNames);
 
     public abstract String choosePlayerFrom(ArrayList<String> listOfPlayerNames);

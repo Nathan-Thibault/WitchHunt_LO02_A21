@@ -10,6 +10,7 @@ import fr.utt.lo02.witchhunt.player.strategy.turn.TurnStrategy;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 public final class ArtificialPlayer extends Player {
 
@@ -48,6 +49,12 @@ public final class ArtificialPlayer extends Player {
     @Override
     public void chooseIdentity() {
         setIdentity(identityStrategy.chooseIdentity());
+    }
+
+    @Override
+    public boolean chooseToRevealOrDiscard() {
+        //reveal if villager
+        return identityCard.getIdentity().equals(Identity.VILLAGER);
     }
 
     @Override

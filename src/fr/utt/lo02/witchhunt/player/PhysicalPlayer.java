@@ -24,6 +24,12 @@ public final class PhysicalPlayer extends Player{
     }
 
     @Override
+    public boolean chooseToRevealOrDiscard() {
+        //TODO
+        return false;
+    }
+
+    @Override
     public String chooseCardFrom(ArrayList<String> listOfCardNames) {
         //TODO
         return null;
