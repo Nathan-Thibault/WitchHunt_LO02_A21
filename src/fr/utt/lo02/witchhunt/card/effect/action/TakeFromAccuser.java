@@ -6,7 +6,7 @@ import fr.utt.lo02.witchhunt.player.PlayerManager;
 import java.util.HashMap;
 import java.util.Objects;
 
-public class TakeFromAccuser extends Action {
+public final class TakeFromAccuser extends Action {
 
     public TakeFromAccuser() {
         super("Take one card from the hand of\nthe player who accused you.");

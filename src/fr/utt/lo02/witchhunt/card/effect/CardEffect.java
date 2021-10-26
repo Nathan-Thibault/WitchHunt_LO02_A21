@@ -1,6 +1,5 @@
 package fr.utt.lo02.witchhunt.card.effect;
 
-import fr.utt.lo02.witchhunt.card.CardManager;
 import fr.utt.lo02.witchhunt.card.effect.action.Action;
 import fr.utt.lo02.witchhunt.card.effect.condition.Condition;
 import fr.utt.lo02.witchhunt.player.PhysicalPlayer;
