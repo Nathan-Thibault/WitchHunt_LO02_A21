@@ -20,27 +20,19 @@ public final class CardEffect {
     private String targetName;
 
     public CardEffect(EffectType type, Action action) {
-        new CardEffect(type, new ArrayList<>(List.of(action)), null);
+        this(type, new ArrayList<>(List.of(action)), null);
     }
 
     public CardEffect(EffectType type, Action action, Condition condition) {
-        new CardEffect(type, new ArrayList<>(List.of(action)), new ArrayList<>(List.of(condition)));
+        this(type, new ArrayList<>(List.of(action)), new ArrayList<>(List.of(condition)));
     }
 
     public CardEffect(EffectType type, Action firstAction, Action secondAction) {
-        ArrayList<Action> actions = new ArrayList<>();
-        actions.add(firstAction);
-        actions.add(secondAction);
-
-        new CardEffect(type, actions, null);
+        this(type, new ArrayList<>(List.of(firstAction, secondAction)), null);
     }
 
     public CardEffect(EffectType type, Action firstAction, Action secondAction, Condition condition) {
-        ArrayList<Action> actions = new ArrayList<>();
-        actions.add(firstAction);
-        actions.add(secondAction);
-
-        new CardEffect(type, actions, new ArrayList<>(List.of(condition)));
+        this(type, new ArrayList<>(List.of(firstAction, secondAction)), new ArrayList<>(List.of(condition)));
     }
 
     public CardEffect(EffectType type, ArrayList<Action> actions, ArrayList<Condition> conditions) throws NullPointerException {
