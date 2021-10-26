@@ -1,3 +1,2 @@
 MAKE_REVEAL_OR_DISCARD("Choose a player. They must reveal their\nidentity or discard a card from their hand."),
 MUST_ACCUSE("On their turn they must accuse a\nplayer other than you, if possible."),
-SWITCH_CARD_WITH_DISCARDED("Add one discarded card to your\nhand, and then discard this card."),
