@@ -2,7 +2,6 @@ package fr.utt.lo02.witchhunt.card;
 
 import fr.utt.lo02.witchhunt.card.effect.CardEffect;
 import fr.utt.lo02.witchhunt.card.effect.EffectType;
-import fr.utt.lo02.witchhunt.player.Player;
 
 public final class RumourCard extends Card {
 
@@ -15,7 +14,7 @@ public final class RumourCard extends Card {
 
         if (witchEffect == null) {
             throw new NullPointerException("RumourCard constructor: witchEffect can't be null.");
-        } else if (witchEffect.getType() != EffectType.WITCH) {
+        } else if (!witchEffect.getType().equals(EffectType.WITCH)) {
             throw new IllegalArgumentException("RumourCard constructor: witchEffect type isn't WITCH.");
         } else {
             this.witchEffect = witchEffect;
@@ -23,7 +22,7 @@ public final class RumourCard extends Card {
 
         if (huntEffect == null) {
             throw new NullPointerException("RumourCard constructor: huntEffect can't be null.");
-        } else if (huntEffect.getType() != EffectType.HUNT) {
+        } else if (!huntEffect.getType().equals(EffectType.HUNT)) {
             throw new IllegalArgumentException("RumourCard constructor: huntEffect type isn't HUNT.");
         } else {
             this.huntEffect = huntEffect;

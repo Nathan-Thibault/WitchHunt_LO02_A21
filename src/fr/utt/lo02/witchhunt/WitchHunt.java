@@ -13,7 +13,6 @@ public class WitchHunt {
 
     public static void main(String[] args) {
         Utils.setWindowsConsole(System.console() != null && System.getProperty("os.name").contains("Windows"));
-
         Utils.resetScreen();
         System.out.println("\n"
                 .concat(" █     █░ ██▓▄▄▄█████▓ ▄████▄   ██░ ██     ██░ ██  █    ██  ███▄    █ ▄▄▄█████▓\n")
@@ -36,6 +35,16 @@ public class WitchHunt {
         }
 
         createPlayers();
+        CardManager.getInstance();//create cards
+
+        System.out.println("Press enter to continue.");
+        try {
+            System.in.read();//blocks until input data is available, i.e. until enter is pressed
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        RoundManager.getInstance().startNewRound();
     }
 
     private static void createPlayers() {
@@ -85,13 +94,5 @@ public class WitchHunt {
         }
         sb.deleteCharAt(sb.lastIndexOf(","));//remove useless last comma
         System.out.println(sb);
-
-        //only for test
-        System.out.println("Press enter to continue.");
-        try {
-            System.in.read();//blocks until input data is available, i.e. until enter is pressed
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }
