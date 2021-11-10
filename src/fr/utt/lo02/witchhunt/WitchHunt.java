@@ -4,7 +4,6 @@ import fr.utt.lo02.witchhunt.card.CardManager;
 import fr.utt.lo02.witchhunt.player.PlayerManager;
 import fr.utt.lo02.witchhunt.player.strategy.Strategy;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -12,38 +11,8 @@ import java.util.Scanner;
 public class WitchHunt {
 
     public static void main(String[] args) {
-        Utils.setWindowsConsole(System.console() != null && System.getProperty("os.name").contains("Windows"));
-        Utils.resetScreen();
-        System.out.println("\n"
-                .concat(" █     █░ ██▓▄▄▄█████▓ ▄████▄   ██░ ██     ██░ ██  █    ██  ███▄    █ ▄▄▄█████▓\n")
-                .concat("▓█░ █ ░█░▓██▒▓  ██▒ ▓▒▒██▀ ▀█  ▓██░ ██▒   ▓██░ ██▒ ██  ▓██▒ ██ ▀█   █ ▓  ██▒ ▓▒\n")
-                .concat("▒█░ █ ░█ ▒██▒▒ ▓██░ ▒░▒▓█    ▄ ▒██▀▀██░   ▒██▀▀██░▓██  ▒██░▓██  ▀█ ██▒▒ ▓██░ ▒░\n")
-                .concat("░█░ █ ░█ ░██░░ ▓██▓ ░ ▒▓▓▄ ▄██▒░▓█ ░██    ░▓█ ░██ ▓▓█  ░██░▓██▒  ▐▌██▒░ ▓██▓ ░ \n")
-                .concat("░░██▒██▓ ░██░  ▒██▒ ░ ▒ ▓███▀ ░░▓█▒░██▓   ░▓█▒░██▓▒▒█████▓ ▒██░   ▓██░  ▒██▒ ░ \n")
-                .concat("░ ▓░▒ ▒  ░▓    ▒ ░░   ░ ░▒ ▒  ░ ▒ ░░▒░▒    ▒ ░░▒░▒░▒▓▒ ▒ ▒ ░ ▒░   ▒ ▒   ▒ ░░   \n")
-                .concat("  ▒ ░ ░   ▒ ░    ░      ░  ▒    ▒ ░▒░ ░    ▒ ░▒░ ░░░▒░ ░ ░ ░ ░░   ░ ▒░    ░    \n")
-                .concat("  ░   ░   ▒ ░  ░      ░         ░  ░░ ░    ░  ░░ ░ ░░░ ░ ░    ░   ░ ░   ░      \n")
-                .concat("    ░     ░           ░ ░       ░  ░  ░    ░  ░  ░   ░              ░          \n")
-                .concat("                      ░                                                        \n")
-                .concat("\n"));
-
-        System.out.println("Press enter to continue.");
-        try {
-            System.in.read();//blocks until input data is available, i.e. until enter is pressed
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         createPlayers();
         CardManager.getInstance();//create cards
-
-        System.out.println("Press enter to continue.");
-        try {
-            System.in.read();//blocks until input data is available, i.e. until enter is pressed
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         RoundManager.getInstance().startNewRound();
     }
 
