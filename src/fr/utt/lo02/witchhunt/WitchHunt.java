@@ -11,6 +11,7 @@ import java.util.Scanner;
 
 public class WitchHunt {
     public static void main(String[] args) {
+        IOController.getInstance().titleScreen();
         createPlayers();
         CardManager.getInstance();//create cards
         RoundManager.getInstance().startNewRound();

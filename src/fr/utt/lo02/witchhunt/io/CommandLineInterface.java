@@ -44,6 +44,7 @@ public class CommandLineInterface implements IOInterface {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        IOController.getInstance().stopWaiting();
     }
 
     @Override

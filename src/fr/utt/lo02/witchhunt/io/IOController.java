@@ -12,6 +12,7 @@ public class IOController {
 
     private volatile int readInt = -1;
     private volatile Class<? extends Strategy> readStrategy = null;
+    private volatile boolean waiting = false;
 
     private IOController() {
         interfaces.add(new CommandLineInterface());
@@ -32,6 +33,10 @@ public class IOController {
         readStrategy = strategy;
     }
 
+    public void stopWaiting() {
+        waiting = false;
+    }
+
     public void clear() {
         for (IOInterface ioInterface : interfaces) {
             ioInterface.clear();
@@ -39,9 +44,17 @@ public class IOController {
     }
 
     public void titleScreen() {
+        waiting = true;
+
         for (IOInterface ioInterface : interfaces) {
-            ioInterface.titleScreen();
+            new Thread(ioInterface::titleScreen).start();
         }
+
+        while (waiting) {
+            Thread.onSpinWait();
+        }
+
+        clear();
     }
 
     public void printInfo(String msg) {
@@ -67,10 +80,7 @@ public class IOController {
             Thread.onSpinWait();
         }
 
-        for (IOInterface ioInterface : interfaces) {
-            ioInterface.clear();
-        }
-
+        clear();
         return readInt;
     }
 
@@ -85,10 +95,7 @@ public class IOController {
             Thread.onSpinWait();
         }
 
-        for (IOInterface ioInterface : interfaces) {
-            ioInterface.clear();
-        }
-
+        clear();
         return readStrategy;
     }
 }
