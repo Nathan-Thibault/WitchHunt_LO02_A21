@@ -30,19 +30,29 @@ public abstract class Player {
     }
 
     public ArrayList<String> getHand() {
-        CardManager cManager = CardManager.getInstance();
-
-        ArrayList<String> hand = new ArrayList<>();
-        for (String card : ownedCards) {
-            if (!cManager.getByName(card).isRevealed())
-                hand.add(card);
-        }
-
-        return hand;
+        return getRevealedCards(false);
     }
 
     public ArrayList<String> getOwnedCards() {
         return ownedCards;
+    }
+
+    public ArrayList<String> getRevealedCards() {
+        return getRevealedCards(true);
+    }
+
+    private ArrayList<String> getRevealedCards(boolean revealed) {
+        CardManager cManager = CardManager.getInstance();
+
+        ArrayList<String> cards = new ArrayList<>();
+        for (String card : ownedCards) {
+            boolean cr = cManager.getByName(card).isRevealed();
+            //card revealed or not depending on if we want it to be or not
+            if (!(cr || revealed) || (cr && revealed))
+                cards.add(card);
+        }
+
+        return cards;
     }
 
     public void resetHand() {
@@ -53,7 +63,7 @@ public abstract class Player {
         score += addend;
     }
 
-    public int getScore(){
+    public int getScore() {
         return score;
     }
 
@@ -64,7 +74,6 @@ public abstract class Player {
     public abstract void chooseIdentity();
 
     /**
-     *
      * @return true to reveal and false to discard
      */
     public abstract boolean chooseToRevealOrDiscard();
