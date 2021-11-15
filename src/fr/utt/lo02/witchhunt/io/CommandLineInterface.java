@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.Scanner;
 
-public class CommandLineInterface implements IOInterface {
+public final class CommandLineInterface implements IOInterface {
 
     private final boolean windowsConsole;
     private boolean waiting;
@@ -60,15 +60,17 @@ public class CommandLineInterface implements IOInterface {
     }
 
     @Override
-    public void readIntBetween(int min, int max) {
+    public int readIntBetween(int min, int max) {
         IOController.getInstance().setReadInt(intBetween(min, max));
+
+        return 0;
     }
 
     @Override
-    public void readStrategy(Strategy.StrategyType strategyType) {
-        StringBuilder listOfOptions = new StringBuilder();
+    public Class<? extends Strategy> readStrategy(Strategy.StrategyType strategyType) {
         int minCode = 0;
         int maxCode = 0;
+        StringBuilder listOfOptions = new StringBuilder();
 
         listOfOptions.append("Select a strategy from the list bellow for the ");
         listOfOptions.append(strategyType.getName());
@@ -86,12 +88,12 @@ public class CommandLineInterface implements IOInterface {
                 listOfOptions.append("\n");
             }
         }
-
         System.out.print(listOfOptions);
 
         int code = intBetween(minCode, maxCode);
-
         IOController.getInstance().setReadStrategy(StrategyEnum.getByCode(code).getStrategyClass());
+
+        return null;
     }
 
     private int intBetween(int min, int max) throws NullPointerException {

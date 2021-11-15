@@ -4,7 +4,7 @@ import fr.utt.lo02.witchhunt.player.strategy.Strategy;
 
 import java.util.ArrayList;
 
-public class IOController {
+public final class IOController implements IOInterface {
 
     private static IOController instance;
 
@@ -37,12 +37,14 @@ public class IOController {
         waiting = false;
     }
 
+    @Override
     public void clear() {
         for (IOInterface ioInterface : interfaces) {
             ioInterface.clear();
         }
     }
 
+    @Override
     public void titleScreen() {
         waiting = true;
 
@@ -63,12 +65,14 @@ public class IOController {
         }
     }
 
+    @Override
     public void printError(String msg) {
         for (IOInterface ioInterface : interfaces) {
             ioInterface.printError(msg);
         }
     }
 
+    @Override
     public int readIntBetween(int min, int max) {
         readInt = -1;
 
@@ -84,6 +88,7 @@ public class IOController {
         return readInt;
     }
 
+    @Override
     public Class<? extends Strategy> readStrategy(Strategy.StrategyType strategyType) {
         readStrategy = null;
 
