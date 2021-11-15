@@ -59,6 +59,21 @@ public final class IOController implements IOInterface {
         clear();
     }
 
+    @Override
+    public void displayGameInfos() {
+        for (IOInterface ioInterface : interfaces) {
+            ioInterface.displayGameInfos();
+        }
+    }
+
+    @Override
+    public void playerTurn(String playerName) {
+        for (IOInterface ioInterface : interfaces) {
+            ioInterface.playerTurn(playerName);
+        }
+    }
+
+    @Override
     public void printInfo(String msg) {
         for (IOInterface ioInterface : interfaces) {
             ioInterface.printInfo(msg);

@@ -7,11 +7,15 @@ public interface IOInterface {
 
     void titleScreen();
 
+    void displayGameInfos();
+
+    void playerTurn(String playerName);
+
     void printInfo(String msg);
 
     void printError(String msg);
 
-    void readIntBetween(int min, int max);
+    int readIntBetween(int min, int max);
 
-    void readStrategy(Strategy.StrategyType strategyType);
+    Class<? extends Strategy> readStrategy(Strategy.StrategyType strategyType);
 }

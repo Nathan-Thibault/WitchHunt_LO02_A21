@@ -1,9 +1,14 @@
 package fr.utt.lo02.witchhunt.io;
 
+import fr.utt.lo02.witchhunt.card.CardManager;
+import fr.utt.lo02.witchhunt.card.IdentityCard;
+import fr.utt.lo02.witchhunt.player.Player;
+import fr.utt.lo02.witchhunt.player.PlayerManager;
 import fr.utt.lo02.witchhunt.player.strategy.Strategy;
 import fr.utt.lo02.witchhunt.player.strategy.StrategyEnum;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -45,6 +50,43 @@ public final class CommandLineInterface implements IOInterface {
             e.printStackTrace();
         }
         IOController.getInstance().stopWaiting();
+    }
+
+    @Override
+    public void displayGameInfos() {
+        PlayerManager pManager = PlayerManager.getInstance();
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("List of the players in game :\n");
+        for (String pName : pManager.getInGamePlayers()) {
+            Player p = pManager.getByName(pName);
+            IdentityCard ic = p.getIdentityCard();
+
+            //player name
+            sb.append(pName);
+            //identity
+            sb.append(" [Identity: ");
+            sb.append(ic.isRevealed() ? ic.getIdentity() : "Unrevealed");
+            //score
+            sb.append(", Score: ");
+            sb.append(p.getScore());
+            //revealed cards if any
+            formatList(sb, ", Revealed cards: ", p.getRevealedCards());
+
+            sb.append("]\n");
+        }
+
+        //list of discarded cards if any
+        formatList(sb, "List of discarded cards:\n", CardManager.getInstance().getDiscardedCards());
+
+        System.out.print(sb);
+    }
+
+    @Override
+    public void playerTurn(String playerName) {
+        resetScreen();
+        System.out.println("It's ".concat(playerName).concat("'s turn:"));
     }
 
     @Override
@@ -140,6 +182,19 @@ public final class CommandLineInterface implements IOInterface {
              */
             System.out.print("\033[H\033[2J");
             System.out.flush();
+        }
+    }
+
+    private void formatList(StringBuilder sb, String msg, ArrayList<String> list) {
+        if (!list.isEmpty()) {
+            sb.append(msg);
+            sb.append("{");
+            for (String str : list) {
+                sb.append(str);
+                sb.append(", ");
+            }
+            sb.delete(sb.length() - 3, sb.length() - 1);//remove last ", "
+            sb.append("}");
         }
     }
 }
