@@ -10,7 +10,6 @@ import fr.utt.lo02.witchhunt.player.strategy.turn.TurnStrategy;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
 
 public final class ArtificialPlayer extends Player {
 
