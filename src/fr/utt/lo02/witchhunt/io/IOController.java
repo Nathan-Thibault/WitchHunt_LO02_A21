@@ -1,5 +1,6 @@
 package fr.utt.lo02.witchhunt.io;
 
+import fr.utt.lo02.witchhunt.Identity;
 import fr.utt.lo02.witchhunt.player.strategy.Strategy;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ public final class IOController implements IOInterface {
 
     private volatile int readInt = -1;
     private volatile Class<? extends Strategy> readStrategy = null;
+    private volatile Identity readIdentity = null;
     private volatile boolean waiting = false;
 
     private IOController() {
@@ -31,6 +33,10 @@ public final class IOController implements IOInterface {
 
     public void setReadStrategy(Class<? extends Strategy> strategy) {
         readStrategy = strategy;
+    }
+
+    public void setReadIdentity(Identity identity) {
+        readIdentity = identity;
     }
 
     public void stopWaiting() {
@@ -117,5 +123,21 @@ public final class IOController implements IOInterface {
 
         clear();
         return readStrategy;
+    }
+
+    @Override
+    public Identity readIdentity() {
+        readIdentity = null;
+
+        for (IOInterface ioInterface : interfaces) {
+            new Thread(ioInterface::readIdentity).start();
+        }
+
+        while (readIdentity == null) {
+            Thread.onSpinWait();
+        }
+
+        clear();
+        return readIdentity;
     }
 }
