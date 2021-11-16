@@ -104,13 +104,14 @@ public final class CommandLineInterface implements IOInterface {
 
     @Override
     public int readIntBetween(int min, int max) {
-        IOController.getInstance().setReadInt(intBetween(min, max));
+        IOController.getInstance().read("int", intBetween(min, max));
 
         return 0;
     }
 
     @Override
     public Class<? extends Strategy> readStrategy(Strategy.StrategyType strategyType) {
+        //TODO: try to refactor duplicated code with listOfOptions building
         int minCode = 0;
         int maxCode = 0;
         StringBuilder listOfOptions = new StringBuilder();
@@ -134,13 +135,14 @@ public final class CommandLineInterface implements IOInterface {
         System.out.print(listOfOptions);
 
         int code = intBetween(minCode, maxCode);
-        IOController.getInstance().setReadStrategy(StrategyEnum.getByCode(code).getStrategyClass());
+        IOController.getInstance().read("strategy", StrategyEnum.getByCode(code).getStrategyClass());
 
         return null;
     }
 
     @Override
     public Identity readIdentity() {
+        //TODO: try to refactor duplicated code with listOfOptions building
         int minCode = 0;
         int maxCode = 0;
         StringBuilder listOfOptions = new StringBuilder();
@@ -161,7 +163,7 @@ public final class CommandLineInterface implements IOInterface {
         System.out.print(listOfOptions);
 
         int code = intBetween(minCode, maxCode);
-        IOController.getInstance().setReadIdentity(Identity.getByCode(code));
+        IOController.getInstance().read("identity", Identity.getByCode(code));
 
         return null;
     }

@@ -11,9 +11,7 @@ public final class IOController implements IOInterface {
 
     private final ArrayList<IOInterface> interfaces = new ArrayList<>();
 
-    private volatile int readInt = -1;
-    private volatile Class<? extends Strategy> readStrategy = null;
-    private volatile Identity readIdentity = null;
+    private volatile HashMap<String, Object> readValues = new HashMap<>();
     private volatile boolean waiting = false;
 
     private IOController() {
@@ -27,20 +25,20 @@ public final class IOController implements IOInterface {
         return instance;
     }
 
-    public void setReadInt(int n) {
-        readInt = n;
-    }
-
-    public void setReadStrategy(Class<? extends Strategy> strategy) {
-        readStrategy = strategy;
-    }
-
-    public void setReadIdentity(Identity identity) {
-        readIdentity = identity;
-    }
-
     public void stopWaiting() {
         waiting = false;
+    }
+
+    public void read(String key, Object value) {
+        readValues.put(key, value);
+        stopWaiting();
+    }
+
+    private void startWaiting() {
+        waiting = true;
+        readValues.clear();
+
+        while (waiting) Thread.onSpinWait();
     }
 
     @Override
@@ -52,16 +50,11 @@ public final class IOController implements IOInterface {
 
     @Override
     public void titleScreen() {
-        waiting = true;
-
         for (IOInterface ioInterface : interfaces) {
             new Thread(ioInterface::titleScreen).start();
         }
 
-        while (waiting) {
-            Thread.onSpinWait();
-        }
-
+        startWaiting();
         clear();
     }
 
@@ -95,34 +88,26 @@ public final class IOController implements IOInterface {
 
     @Override
     public int readIntBetween(int min, int max) {
-        readInt = -1;
-
         for (IOInterface ioInterface : interfaces) {
             new Thread(() -> ioInterface.readIntBetween(min, max)).start();
         }
 
-        while (readInt == -1) {
-            Thread.onSpinWait();
-        }
-
+        startWaiting();
         clear();
-        return readInt;
+        return (int) readValues.get("int");
     }
 
     @Override
     public Class<? extends Strategy> readStrategy(Strategy.StrategyType strategyType) {
-        readStrategy = null;
-
         for (IOInterface ioInterface : interfaces) {
             new Thread(() -> ioInterface.readStrategy(strategyType)).start();
         }
 
-        while (readStrategy == null) {
-            Thread.onSpinWait();
-        }
-
+        startWaiting();
         clear();
-        return readStrategy;
+
+        @SuppressWarnings("unchecked") final Class<? extends Strategy> strategy = (Class<? extends Strategy>) readValues.get("strategy");
+        return strategy;
     }
 
     @Override
@@ -133,11 +118,8 @@ public final class IOController implements IOInterface {
             new Thread(ioInterface::readIdentity).start();
         }
 
-        while (readIdentity == null) {
-            Thread.onSpinWait();
-        }
-
+        startWaiting();
         clear();
-        return readIdentity;
+        return (Identity) readValues.get("identity");
     }
 }
