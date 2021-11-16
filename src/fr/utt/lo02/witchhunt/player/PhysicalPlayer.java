@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 public final class PhysicalPlayer extends Player {
 
+    private final String name = PlayerManager.getInstance().getByPlayer(this);
+
     public PhysicalPlayer() {
         super();
     }
@@ -22,7 +24,10 @@ public final class PhysicalPlayer extends Player {
 
     @Override
     public void chooseIdentity() {
-        setIdentity(IOController.getInstance().readIdentity());
+        IOController io = IOController.getInstance();
+
+        io.printInfo(name.concat(" choose your identity from the list bellow:"));
+        setIdentity(io.readIdentity());
     }
 
     @Override
@@ -33,13 +38,17 @@ public final class PhysicalPlayer extends Player {
 
     @Override
     public String chooseCardFrom(ArrayList<String> listOfCardNames) {
-        //TODO
-        return null;
+        IOController io = IOController.getInstance();
+
+        io.printInfo(name.concat(" choose a card from the list bellow:"));
+        return io.readFromList(listOfCardNames);
     }
 
     @Override
     public String choosePlayerFrom(ArrayList<String> listOfPlayerNames) {
-        //TODO
-        return null;
+        IOController io = IOController.getInstance();
+
+        io.printInfo(name.concat(" choose a player from the list bellow:"));
+        return io.readFromList(listOfPlayerNames);
     }
 }
