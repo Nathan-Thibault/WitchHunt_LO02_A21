@@ -1,6 +1,5 @@
 package fr.utt.lo02.witchhunt.player;
 
-import fr.utt.lo02.witchhunt.card.IdentityCard;
 import fr.utt.lo02.witchhunt.io.IOController;
 
 import java.util.ArrayList;
@@ -23,7 +22,7 @@ public final class PhysicalPlayer extends Player {
 
     @Override
     public void chooseIdentity() {
-        identityCard = new IdentityCard(IOController.getInstance().readIdentity());
+        setIdentity(IOController.getInstance().readIdentity());
     }
 
     @Override

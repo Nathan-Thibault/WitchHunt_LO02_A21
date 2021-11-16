@@ -94,7 +94,7 @@ public final class PlayerManager {
         inGamePlayers = new ArrayList<>(players.keySet());
 
         for (Player p : players.values()) {
-            p.resetHand();
+            p.reset();
         }
     }
 }

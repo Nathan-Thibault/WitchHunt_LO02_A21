@@ -55,7 +55,8 @@ public abstract class Player {
         return cards;
     }
 
-    public void resetHand() {
+    public void reset() {
+        identityCard = null;
         ownedCards = CardManager.getInstance().dealHand();
     }
 
