@@ -168,6 +168,27 @@ public final class CommandLineInterface implements IOInterface {
         return null;
     }
 
+    @Override
+    public <T> T readFromList(ArrayList<T> list) {
+        StringBuilder listOfOptions = new StringBuilder();
+
+        listOfOptions.append("Select an option from the list bellow:");
+        listOfOptions.append(":\n");
+
+        for (int i = 0; i < list.size(); i++) {
+            listOfOptions.append(i);
+            listOfOptions.append(" -> ");
+            listOfOptions.append(list.get(i).toString());
+            listOfOptions.append("\n");
+        }
+        System.out.print(listOfOptions);
+
+        int code = intBetween(0, list.size() - 1);
+        IOController.getInstance().read("from_list", list.get(code));
+
+        return null;
+    }
+
     private int intBetween(int min, int max) throws NullPointerException {
         String message = "Please enter an integer between "
                 .concat(Integer.toString(min))

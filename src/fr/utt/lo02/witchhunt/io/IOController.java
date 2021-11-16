@@ -4,6 +4,7 @@ import fr.utt.lo02.witchhunt.Identity;
 import fr.utt.lo02.witchhunt.player.strategy.Strategy;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public final class IOController implements IOInterface {
 
@@ -112,8 +113,6 @@ public final class IOController implements IOInterface {
 
     @Override
     public Identity readIdentity() {
-        readIdentity = null;
-
         for (IOInterface ioInterface : interfaces) {
             new Thread(ioInterface::readIdentity).start();
         }
@@ -121,5 +120,18 @@ public final class IOController implements IOInterface {
         startWaiting();
         clear();
         return (Identity) readValues.get("identity");
+    }
+
+    @Override
+    public <T> T readFromList(ArrayList<T> list) {
+        for (IOInterface ioInterface : interfaces) {
+            new Thread(() -> ioInterface.readFromList(list)).start();
+        }
+
+        startWaiting();
+        clear();
+
+        @SuppressWarnings("unchecked") final T from_list = (T) readValues.get("from_list");
+        return from_list;
     }
 }
