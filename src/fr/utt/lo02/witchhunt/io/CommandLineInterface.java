@@ -147,8 +147,7 @@ public final class CommandLineInterface implements IOInterface {
         int maxCode = 0;
         StringBuilder listOfOptions = new StringBuilder();
 
-        listOfOptions.append("Select an identity from the list bellow:");
-        listOfOptions.append(":\n");
+        listOfOptions.append("Select an identity from the list bellow:\n");
 
         for (Identity identity : Identity.values()) {
             maxCode = identity.getCode();
@@ -172,8 +171,7 @@ public final class CommandLineInterface implements IOInterface {
     public <T> T readFromList(ArrayList<T> list) {
         StringBuilder listOfOptions = new StringBuilder();
 
-        listOfOptions.append("Select an option from the list bellow:");
-        listOfOptions.append(":\n");
+        listOfOptions.append("Select an option from the list bellow:\n");
 
         for (int i = 0; i < list.size(); i++) {
             listOfOptions.append(i);

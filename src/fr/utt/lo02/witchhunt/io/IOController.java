@@ -12,7 +12,7 @@ public final class IOController implements IOInterface {
 
     private final ArrayList<IOInterface> interfaces = new ArrayList<>();
 
-    private volatile HashMap<String, Object> readValues = new HashMap<>();
+    private final HashMap<String, Object> readValues = new HashMap<>();
     private volatile boolean waiting = false;
 
     private IOController() {
