@@ -59,7 +59,7 @@ public final class CommandLineInterface implements IOInterface {
 
         StringBuilder sb = new StringBuilder();
 
-        sb.append("List of the players in game :\n");
+        sb.append("\nList of the players in game :\n");
         for (String pName : pManager.getInGamePlayers()) {
             Player p = pManager.getByName(pName);
             IdentityCard ic = p.getIdentityCard();
@@ -80,6 +80,7 @@ public final class CommandLineInterface implements IOInterface {
 
         //list of discarded cards if any
         formatList(sb, "List of discarded cards:\n", CardManager.getInstance().getDiscardedCards());
+        sb.append("\n");
 
         System.out.print(sb);
     }
