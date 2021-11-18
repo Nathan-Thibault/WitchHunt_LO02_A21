@@ -86,12 +86,6 @@ public final class CommandLineInterface implements IOInterface {
     }
 
     @Override
-    public void playerTurn(String playerName) {
-        resetScreen();
-        System.out.println("It's ".concat(playerName).concat("'s turn:"));
-    }
-
-    @Override
     public void printInfo(String msg) {
         resetScreen();
         System.out.println(msg);
