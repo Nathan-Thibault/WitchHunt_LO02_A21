@@ -1,12 +1,14 @@
 package fr.utt.lo02.witchhunt.card;
 
 import com.sun.jdi.ClassNotPreparedException;
+import fr.utt.lo02.witchhunt.RoundManager;
 import fr.utt.lo02.witchhunt.Utils;
 import fr.utt.lo02.witchhunt.card.effect.CardEffect;
 import fr.utt.lo02.witchhunt.card.effect.EffectType;
 import fr.utt.lo02.witchhunt.card.effect.action.*;
 import fr.utt.lo02.witchhunt.card.effect.condition.RevealedARumourCard;
 import fr.utt.lo02.witchhunt.card.effect.condition.RevealedAsVillager;
+import fr.utt.lo02.witchhunt.player.PlayerManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -118,7 +120,7 @@ public final class CardManager {
         cardsToDeal = new ArrayList<>(allRumourCards.keySet());
 
         //Discard cards until there is an integer amount of cards to deal per player
-        int numberOfPlayers = 6;//TODO: change numberOfPlayers when RoundManager will be created
+        int numberOfPlayers = PlayerManager.getInstance().getAllPlayers().size();
         while (cardsToDeal.size() % numberOfPlayers != 0) {
             String cardName = Utils.randomFromList(cardsToDeal);
             discard(cardName);
