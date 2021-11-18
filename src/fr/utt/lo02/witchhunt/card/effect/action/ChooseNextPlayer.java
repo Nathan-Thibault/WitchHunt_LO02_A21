@@ -42,6 +42,9 @@ public final class ChooseNextPlayer extends Action {
 
     @Override
     public boolean isExecutable(String callerName, HashMap<String, Object> args) {
-        return requirement.equals("cards") && PlayerManager.getInstance().getPlayersWithHand().isEmpty();
+        if (requirement != null)
+            return requirement.equals("cards") && PlayerManager.getInstance().getPlayersWithHand().isEmpty();
+        else
+            return true;
     }
 }
