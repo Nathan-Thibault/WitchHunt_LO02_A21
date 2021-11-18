@@ -1,7 +1,9 @@
 package fr.utt.lo02.witchhunt.player;
 
 import fr.utt.lo02.witchhunt.Identity;
+import fr.utt.lo02.witchhunt.RoundManager;
 import fr.utt.lo02.witchhunt.card.CardManager;
+import fr.utt.lo02.witchhunt.card.RumourCard;
 import fr.utt.lo02.witchhunt.io.IOController;
 
 import java.util.ArrayList;
@@ -17,16 +19,23 @@ public final class PhysicalPlayer extends Player {
     public void playTurn() {
         IOController io = IOController.getInstance();
 
-        io.playerTurn(name);
+        io.printInfo(name.concat(" it's your turn. Choose what to do from the options bellow:"));
         io.displayGameInfos();
         PlayerAction action = io.readFromList(PlayerAction.getTurnActions());
 
         switch (action) {
             case ACCUSE -> {
-                //TODO choose player
+                ArrayList<String> possibleTargets = PlayerManager.getInstance().getUnrevealedPlayers();
+                possibleTargets.remove(name);//player can't choose himself
+
+                String target = choosePlayerFrom(possibleTargets);
+                RoundManager.getInstance().accuse(name, target);
             }
             case PLAY_HUNT -> {
-                //TODO
+                String cardName = chooseCardFrom(getPlayableCards());
+                RumourCard card = CardManager.getInstance().getByName(cardName);
+
+                card.canPlayHuntEffect(name);
             }
         }
     }
