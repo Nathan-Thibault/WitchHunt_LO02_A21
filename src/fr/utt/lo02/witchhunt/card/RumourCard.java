@@ -31,12 +31,20 @@ public final class RumourCard extends Card {
         this.cantBeChosenBy = cantBeChosenBy;
     }
 
-    public boolean playWitchEffect(String callerName, String accuser) {
-        return witchEffect.play(callerName, accuser);
+    public void playWitchEffect(String callerName, String accuser) {
+        witchEffect.play(callerName, accuser);
     }
 
-    public boolean playHuntEffect(String callerName) {
-        return huntEffect.play(callerName);
+    public void playHuntEffect(String callerName) {
+        huntEffect.play(callerName);
+    }
+
+    public boolean canPlayWitchEffect(String callerName, String accuser){
+        return witchEffect.isPlayable(callerName, accuser);
+    }
+
+    public boolean canPlayHuntEffect(String callerName){
+        return huntEffect.isPlayable(callerName);
     }
 
     public String getCantBeChosenBy() {

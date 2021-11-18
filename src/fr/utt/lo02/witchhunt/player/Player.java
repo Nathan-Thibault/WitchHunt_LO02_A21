@@ -3,6 +3,8 @@ package fr.utt.lo02.witchhunt.player;
 import fr.utt.lo02.witchhunt.Identity;
 import fr.utt.lo02.witchhunt.card.CardManager;
 import fr.utt.lo02.witchhunt.card.IdentityCard;
+import fr.utt.lo02.witchhunt.card.RumourCard;
+import fr.utt.lo02.witchhunt.card.effect.EffectType;
 import fr.utt.lo02.witchhunt.io.IOController;
 
 import java.util.ArrayList;
@@ -49,6 +51,32 @@ public abstract class Player {
 
     public ArrayList<String> getHand() {
         return getRevealedCards(false);
+    }
+
+    public ArrayList<String> getPlayableCards(EffectType type, String accuser) {
+        CardManager cManager = CardManager.getInstance();
+        ArrayList<String> cards = new ArrayList<>();
+
+        for (String cardName : getHand()) {
+            RumourCard card = cManager.getByName(cardName);
+
+            boolean playable = switch (type) {
+                case HUNT -> card.canPlayHuntEffect(name);
+                case WITCH -> card.canPlayWitchEffect(name, accuser);
+            };
+
+            if (playable) cards.add(cardName);
+        }
+
+        return cards;
+    }
+
+    public ArrayList<String> getPlayableCards() {
+        return getPlayableCards(EffectType.HUNT, null);
+    }
+
+    public ArrayList<String> getPlayableCards(String accuser) {
+        return getPlayableCards(EffectType.WITCH, accuser);
     }
 
     public ArrayList<String> getOwnedCards() {

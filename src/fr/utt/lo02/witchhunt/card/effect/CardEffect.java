@@ -42,41 +42,38 @@ public final class CardEffect {
         this.conditions = conditions;
     }
 
-    public boolean play(String caller) {
-        return play(caller, null);
-    }
-
-    public boolean play(String callerName, String accuserName) {
-        IOController io = IOController.getInstance();
+    public boolean isPlayable(String callerName, String accuserName) {
         Player caller = PlayerManager.getInstance().getByName(callerName);
 
         if (conditions != null) {
             for (Condition condition : conditions) {
                 if (!condition.verify(caller)) {
-                    if (caller instanceof PhysicalPlayer)
-                        io.printInfo(callerName.concat(", this effect can't be played :\n".concat(condition.getDescription())));
                     return false;
                 }
             }
         }
 
         for (Action action : actions) {
-            HashMap<String, Object> args = new HashMap<>();
-
-            switch (action.getClass().getName()) {
-                case "ChooseNextPlayer", "LookAtIdentity", "RandomlyTakeCardFrom" -> args.put("effect", this);
-                case "MakeAccuserDiscard" -> args.put("accuserName", accuserName);
-                default -> args = null;
-            }
-
-            if (!action.execute(callerName, args)) {
-                if (caller instanceof PhysicalPlayer)
-                    io.printInfo(callerName.concat(", this effect can't be played :\n".concat(action.cantExecute())));
+            if (!action.isExecutable(callerName, buildArgs(action, accuserName))) {
                 return false;
             }
         }
 
         return true;
+    }
+
+    public boolean isPlayable(String callerName) {
+        return isPlayable(callerName, null);
+    }
+
+    public void play(String callerName, String accuserName) {
+        for (Action action : actions) {
+            action.execute(callerName, buildArgs(action, accuserName));
+        }
+    }
+
+    public void play(String caller) {
+        play(caller, null);
     }
 
     public void setTarget(String playerName) {
@@ -89,5 +86,17 @@ public final class CardEffect {
 
     public EffectType getType() {
         return this.type;
+    }
+
+    private HashMap<String, Object> buildArgs(Action action, String accuserName) {
+        HashMap<String, Object> args = new HashMap<>();
+
+        switch (action.getClass().getName()) {
+            case "ChooseNextPlayer", "LookAtIdentity", "RandomlyTakeCardFrom" -> args.put("effect", this);
+            case "MakeAccuserDiscard" -> args.put("accuserName", accuserName);
+            default -> args = null;
+        }
+
+        return args;
     }
 }

@@ -35,26 +35,17 @@ public final class PhysicalPlayer extends Player {
         IOController io = IOController.getInstance();
         CardManager cManager = CardManager.getInstance();
 
-        if (getHand().size() > 0) {//player has cards to play, he have a choice
+        ArrayList<String> playableCards = getPlayableCards(accuser);
+        if (playableCards.size() > 0) {//player has cards to play, he has a choice
             io.printInfo(name.concat(" you've been accused by ").concat(accuser).concat(". Choose what to do."));
             PlayerAction action = io.readFromList(PlayerAction.getRespondActions());
 
             switch (action) {
                 case PLAY_WITCH -> {
-                    ArrayList<String> playableCards = getHand();
+                    io.printInfo(name.concat(" choose a card to play it's witch effect."));
+                    String card = chooseCardFrom(playableCards);
 
-                    //try to play witch effect of every card in hand until there's one that works
-                    while (!playableCards.isEmpty()) {
-                        io.printInfo(name.concat(" choose a card to play it's witch effect."));
-                        String card = chooseCardFrom(playableCards);
-                        if (cManager.getByName(card).playWitchEffect(name, accuser)) {
-                            return;
-                        } else {
-                            playableCards.remove(card);
-                        }
-                    }
-                    //no card could have been played -> reveal
-                    revealIdentity(accuser);
+                    cManager.getByName(card).playWitchEffect(name, accuser);
                 }
                 case REVEAL -> revealIdentity(accuser);
             }
