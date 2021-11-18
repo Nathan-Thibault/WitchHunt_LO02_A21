@@ -2,6 +2,7 @@ package fr.utt.lo02.witchhunt.card.effect;
 
 import fr.utt.lo02.witchhunt.card.effect.action.Action;
 import fr.utt.lo02.witchhunt.card.effect.condition.Condition;
+import fr.utt.lo02.witchhunt.io.IOController;
 import fr.utt.lo02.witchhunt.player.PhysicalPlayer;
 import fr.utt.lo02.witchhunt.player.Player;
 import fr.utt.lo02.witchhunt.player.PlayerManager;
@@ -46,13 +47,14 @@ public final class CardEffect {
     }
 
     public boolean play(String callerName, String accuserName) {
+        IOController io = IOController.getInstance();
         Player caller = PlayerManager.getInstance().getByName(callerName);
 
         if (conditions != null) {
             for (Condition condition : conditions) {
                 if (!condition.verify(caller)) {
                     if (caller instanceof PhysicalPlayer)
-                        System.out.println("This effect can't be played :\n".concat(condition.getDescription()));
+                        io.printInfo(callerName.concat(", this effect can't be played :\n".concat(condition.getDescription())));
                     return false;
                 }
             }
@@ -69,7 +71,7 @@ public final class CardEffect {
 
             if (!action.execute(callerName, args)) {
                 if (caller instanceof PhysicalPlayer)
-                    System.out.println("This effect can't be played :\n".concat(action.cantExecute()));
+                    io.printInfo(callerName.concat(", this effect can't be played :\n".concat(action.cantExecute())));
                 return false;
             }
         }
