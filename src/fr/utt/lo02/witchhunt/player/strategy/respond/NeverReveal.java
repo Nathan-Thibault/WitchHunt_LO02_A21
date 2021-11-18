@@ -15,16 +15,15 @@ public final class NeverReveal implements RespondStrategy {
     public static void tryNotToReveal(ArtificialPlayer caller, String accuser) {
         CardManager cManager = CardManager.getInstance();
 
-        ArrayList<String> cards = caller.getHand();
-        String card = caller.chooseCardFrom(cards);
+        ArrayList<String> playableCards = caller.getHand();
 
         //try to play witch effect of every card in hand until there's one that works
-        while (!cards.isEmpty()) {
+        while (!playableCards.isEmpty()) {
+            String card = caller.chooseCardFrom(playableCards);
             if (cManager.getByName(card).playWitchEffect(PlayerManager.getInstance().getByPlayer(caller), accuser)) {
                 return;
             } else {
-                cards.remove(card);
-                card = caller.chooseCardFrom(cards);
+                playableCards.remove(card);
             }
         }
         //no card could have been played -> reveal
