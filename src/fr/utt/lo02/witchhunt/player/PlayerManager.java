@@ -76,7 +76,7 @@ public final class PlayerManager {
         return unrevealedPlayers;
     }
 
-    public ArrayList<String> getPlayersWithUnrevealedCards() {
+    public ArrayList<String> getPlayersWithHand() {
         ArrayList<String> playersWithCards = new ArrayList<>();
 
         for (String player : getInGamePlayers()) {

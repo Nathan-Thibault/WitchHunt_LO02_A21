@@ -14,7 +14,7 @@ public final class MustAccuse extends Action {
     }
 
     @Override
-    public boolean execute(String callerName, HashMap<String, Object> args) {
+    public void execute(String callerName, HashMap<String, Object> args) {
         PlayerManager pManager = PlayerManager.getInstance();
         RoundManager rManager = RoundManager.getInstance();
 
@@ -29,12 +29,10 @@ public final class MustAccuse extends Action {
         rManager.setIndexAtPlayer(target);
         String targetOfTarget = pManager.getByName(target).choosePlayerFrom(targetables);
         rManager.accuse(target, targetOfTarget);
-
-        return true;
     }
 
     @Override
-    public String cantExecute() {
-        return null;
+    public boolean isExecutable(String callerName, HashMap<String, Object> args) {
+        return true;
     }
 }

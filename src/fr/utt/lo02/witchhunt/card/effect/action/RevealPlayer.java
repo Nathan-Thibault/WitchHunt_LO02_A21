@@ -15,7 +15,7 @@ public final class RevealPlayer extends Action {
     }
 
     @Override
-    public boolean execute(String callerName, HashMap<String, Object> args) {
+    public void execute(String callerName, HashMap<String, Object> args) {
         PlayerManager pManager = PlayerManager.getInstance();
         Player caller = pManager.getByName(callerName);
 
@@ -33,11 +33,10 @@ public final class RevealPlayer extends Action {
             caller.addToScore(-2);
             RoundManager.getInstance().setIndexAtPlayer(targetName);
         }
-        return true;
     }
 
     @Override
-    public String cantExecute() {
-        return null;
+    public boolean isExecutable(String callerName, HashMap<String, Object> args) {
+        return true;
     }
 }

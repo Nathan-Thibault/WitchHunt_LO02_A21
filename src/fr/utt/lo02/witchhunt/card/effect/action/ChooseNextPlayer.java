@@ -20,7 +20,7 @@ public final class ChooseNextPlayer extends Action {
     }
 
     @Override
-    public boolean execute(String callerName, HashMap<String, Object> args) {
+    public void execute(String callerName, HashMap<String, Object> args) {
         PlayerManager pManager = PlayerManager.getInstance();
         Player caller = pManager.getByName(callerName);
 
@@ -29,11 +29,7 @@ public final class ChooseNextPlayer extends Action {
         ArrayList<String> possibleTargets;
         switch (requirement) {
             case "unrevealed" -> possibleTargets = pManager.getUnrevealedPlayers();
-            case "cards" -> {
-                if (pManager.getPlayersWithUnrevealedCards().isEmpty())
-                    return false;
-                possibleTargets = pManager.getPlayersWithUnrevealedCards();
-            }
+            case "cards" -> possibleTargets = pManager.getPlayersWithHand();
             default -> possibleTargets = pManager.getInGamePlayers();
         }
         possibleTargets.remove(callerName);//a player can never choose himself as the target
@@ -42,11 +38,10 @@ public final class ChooseNextPlayer extends Action {
 
         effect.setTarget(target);
         RoundManager.getInstance().setIndexAtPlayer(target);
-        return true;
     }
 
     @Override
-    public String cantExecute() {
-        return "There is no players with cards in hand to choose.";
+    public boolean isExecutable(String callerName, HashMap<String, Object> args) {
+        return requirement.equals("cards") && PlayerManager.getInstance().getPlayersWithHand().isEmpty();
     }
 }

@@ -15,9 +15,8 @@ public final class TakeAnyRevealed extends Action {
     }
 
     @Override
-    public boolean execute(String callerName, HashMap<String, Object> args) {
+    public void execute(String callerName, HashMap<String, Object> args) {
         Player caller = PlayerManager.getInstance().getByName(callerName);
-
         ArrayList<String> revealedCards = CardManager.getInstance().getRevealedNonDiscardedCards();
 
         //remove caller cards since he has to chose from another player
@@ -25,20 +24,23 @@ public final class TakeAnyRevealed extends Action {
             revealedCards.remove(card);
         }
 
-        if (revealedCards.isEmpty()) {
-            return false;
-        } else {
-            String card = caller.chooseCardFrom(revealedCards);
-            Player owner = Objects.requireNonNull(PlayerManager.getInstance().getOwnerOf(card));
+        String card = caller.chooseCardFrom(revealedCards);
+        Player owner = Objects.requireNonNull(PlayerManager.getInstance().getOwnerOf(card));
 
-            owner.getOwnedCards().remove(card);
-            caller.getOwnedCards().add(card);
-            return true;
-        }
+        owner.getOwnedCards().remove(card);
+        caller.getOwnedCards().add(card);
     }
 
     @Override
-    public String cantExecute() {
-        return "There isn't any revealed cards to choose.";
+    public boolean isExecutable(String callerName, HashMap<String, Object> args) {
+        Player caller = PlayerManager.getInstance().getByName(callerName);
+        ArrayList<String> revealedCards = CardManager.getInstance().getRevealedNonDiscardedCards();
+
+        //remove caller cards since he has to chose from another player
+        for (String card : caller.getOwnedCards()) {
+            revealedCards.remove(card);
+        }
+
+        return !revealedCards.isEmpty();
     }
 }

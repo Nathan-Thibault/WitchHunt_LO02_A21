@@ -14,24 +14,24 @@ public final class TakeBackRevealed extends Action {
     }
 
     @Override
-    public boolean execute(String callerName, HashMap<String, Object> args) {
+    public void execute(String callerName, HashMap<String, Object> args) {
         CardManager cManager = CardManager.getInstance();
         Player caller = PlayerManager.getInstance().getByName(callerName);
 
         ArrayList<String> revealedCards = caller.getOwnedCards();
         revealedCards.removeAll(caller.getHand());
 
-        if (revealedCards.isEmpty()) {
-            return false;
-        } else {
-            String card = caller.chooseCardFrom(revealedCards);
-            cManager.getByName(card).setRevealed(false);
-            return true;
-        }
+        String card = caller.chooseCardFrom(revealedCards);
+        cManager.getByName(card).setRevealed(false);
     }
 
     @Override
-    public String cantExecute() {
-        return "You have no revealed cards.";
+    public boolean isExecutable(String callerName, HashMap<String, Object> args) {
+        Player caller = PlayerManager.getInstance().getByName(callerName);
+
+        ArrayList<String> revealedCards = caller.getOwnedCards();
+        revealedCards.removeAll(caller.getHand());
+
+        return !revealedCards.isEmpty();
     }
 }

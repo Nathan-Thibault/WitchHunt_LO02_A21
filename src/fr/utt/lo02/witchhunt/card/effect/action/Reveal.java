@@ -14,26 +14,21 @@ public final class Reveal extends Action {
     }
 
     @Override
-    public boolean execute(String callerName, HashMap<String, Object> args) {
+    public void execute(String callerName, HashMap<String, Object> args) {
         PlayerManager pManager = PlayerManager.getInstance();
         Player caller = pManager.getByName(callerName);
 
-        if (caller.getIdentityCard().isRevealed()) {
-            return false;
-        } else {
-            caller.getIdentityCard().setRevealed(true);
+        caller.getIdentityCard().setRevealed(true);
 
-            if (caller.getIdentityCard().getIdentity().equals(Identity.VILLAGER)) {
-                RoundManager.getInstance().setIndexAtPlayer(callerName);
-            } else {
-                pManager.eliminate(callerName);
-            }
-            return true;
+        if (caller.getIdentityCard().getIdentity().equals(Identity.VILLAGER)) {
+            RoundManager.getInstance().setIndexAtPlayer(callerName);
+        } else {
+            pManager.eliminate(callerName);
         }
     }
 
     @Override
-    public String cantExecute() {
-        return "Your identity is already revealed.";
+    public boolean isExecutable(String callerName, HashMap<String, Object> args) {
+        return !PlayerManager.getInstance().getByName(callerName).getIdentityCard().isRevealed();
     }
 }

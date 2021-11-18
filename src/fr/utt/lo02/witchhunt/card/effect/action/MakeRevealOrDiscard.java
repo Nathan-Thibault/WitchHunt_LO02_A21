@@ -19,7 +19,7 @@ public final class MakeRevealOrDiscard extends Action {
     }
 
     @Override
-    public boolean execute(String callerName, HashMap<String, Object> args) {
+    public void execute(String callerName, HashMap<String, Object> args) {
         PlayerManager pManager = PlayerManager.getInstance();
         RoundManager rManager = RoundManager.getInstance();
         Player caller = pManager.getByName(callerName);
@@ -51,12 +51,10 @@ public final class MakeRevealOrDiscard extends Action {
             CardManager.getInstance().discard(card);
             rManager.setIndexAtPlayer(targetName);
         }
-
-        return true;
     }
 
     @Override
-    public String cantExecute() {
-        return null;
+    public boolean isExecutable(String callerName, HashMap<String, Object> args) {
+        return true;
     }
 }

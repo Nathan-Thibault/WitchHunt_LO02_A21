@@ -15,7 +15,7 @@ public final class RandomlyTakeCardFrom extends Action {
     }
 
     @Override
-    public boolean execute(String callerName, HashMap<String, Object> args) {
+    public void execute(String callerName, HashMap<String, Object> args) {
         PlayerManager pManager = PlayerManager.getInstance();
         Player caller = pManager.getByName(callerName);
 
@@ -25,12 +25,10 @@ public final class RandomlyTakeCardFrom extends Action {
         String card = Utils.randomFromList(target.getHand());
         target.getOwnedCards().remove(card);
         caller.getOwnedCards().add(card);
-
-        return true;
     }
 
     @Override
-    public String cantExecute() {
-        return null;
+    public boolean isExecutable(String callerName, HashMap<String, Object> args) {
+        return true;
     }
 }

@@ -13,12 +13,9 @@ public final class SwitchWithDiscarded extends Action {
     }
 
     @Override
-    public boolean execute(String callerName, HashMap<String, Object> args) {
+    public void execute(String callerName, HashMap<String, Object> args) {
         CardManager cManager = CardManager.getInstance();
         Player caller = PlayerManager.getInstance().getByName(callerName);
-
-        if (cManager.getDiscardedCards().isEmpty())
-            return false;
 
         String card = caller.chooseCardFrom(cManager.getDiscardedCards());
 
@@ -27,12 +24,10 @@ public final class SwitchWithDiscarded extends Action {
         //only Back Cat card has this action, hence the following code
         caller.getHand().remove("Black Cat");
         cManager.discard("Black Cat");
-
-        return true;
     }
 
     @Override
-    public String cantExecute() {
-        return "There is no discarded cards.";
+    public boolean isExecutable(String callerName, HashMap<String, Object> args) {
+        return !CardManager.getInstance().getDiscardedCards().isEmpty();
     }
 }
