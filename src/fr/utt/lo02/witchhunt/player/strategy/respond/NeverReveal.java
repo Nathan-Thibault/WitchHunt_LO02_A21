@@ -27,5 +27,7 @@ public final class NeverReveal implements RespondStrategy {
                 card = caller.chooseCardFrom(cards);
             }
         }
+        //no card could have been played -> reveal
+        caller.revealIdentity(accuser);
     }
 }

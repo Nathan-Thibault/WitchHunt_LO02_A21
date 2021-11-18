@@ -3,6 +3,7 @@ package fr.utt.lo02.witchhunt.player;
 import fr.utt.lo02.witchhunt.Identity;
 import fr.utt.lo02.witchhunt.card.CardManager;
 import fr.utt.lo02.witchhunt.card.IdentityCard;
+import fr.utt.lo02.witchhunt.io.IOController;
 
 import java.util.ArrayList;
 
@@ -21,6 +22,21 @@ public abstract class Player {
 
     public void revealIdentity() {
         identityCard.setRevealed(true);
+        IOController.getInstance().printInfo(name.concat(" was a ").concat(identityCard.getIdentity().toString()).concat("!"));
+    }
+
+    public void revealIdentity(String accuser) {
+        PlayerManager pManager = PlayerManager.getInstance();
+        IOController io = IOController.getInstance();
+
+        revealIdentity();
+        if (identityCard.getIdentity() == Identity.WITCH) {
+            pManager.getByName(accuser).addToScore(1);
+            pManager.eliminate(name);
+            io.printInfo(accuser.concat(" gains one point and ").concat(name).concat(" is out of the game until the end of the round."));
+        } else {
+            io.printInfo(accuser.concat(" gains no point and ").concat(name).concat(" stays in the game."));
+        }
     }
 
     public void setIdentity(Identity identity) {
