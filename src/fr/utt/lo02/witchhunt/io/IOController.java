@@ -1,6 +1,5 @@
 package fr.utt.lo02.witchhunt.io;
 
-import fr.utt.lo02.witchhunt.Identity;
 import fr.utt.lo02.witchhunt.player.strategy.Strategy;
 
 import java.util.ArrayList;
@@ -110,17 +109,6 @@ public final class IOController implements IOInterface {
 
         @SuppressWarnings("unchecked") final Class<? extends Strategy> strategy = (Class<? extends Strategy>) readValues.get("strategy");
         return strategy;
-    }
-
-    @Override
-    public Identity readIdentity() {
-        for (IOInterface ioInterface : interfaces) {
-            new Thread(ioInterface::readIdentity).start();
-        }
-
-        startWaiting();
-        clear();
-        return (Identity) readValues.get("identity");
     }
 
     @Override

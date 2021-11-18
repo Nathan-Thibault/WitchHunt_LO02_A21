@@ -1,6 +1,5 @@
 package fr.utt.lo02.witchhunt.io;
 
-import fr.utt.lo02.witchhunt.Identity;
 import fr.utt.lo02.witchhunt.card.CardManager;
 import fr.utt.lo02.witchhunt.card.IdentityCard;
 import fr.utt.lo02.witchhunt.player.Player;
@@ -137,33 +136,6 @@ public final class CommandLineInterface implements IOInterface {
 
         int code = intBetween(minCode, maxCode);
         IOController.getInstance().read("strategy", StrategyEnum.getByCode(code).getStrategyClass());
-
-        return null;
-    }
-
-    @Override
-    public Identity readIdentity() {
-        //TODO: try to refactor duplicated code with listOfOptions building
-        int minCode = 0;
-        int maxCode = 0;
-        StringBuilder listOfOptions = new StringBuilder();
-
-        listOfOptions.append("Select an identity from the list bellow:\n");
-
-        for (Identity identity : Identity.values()) {
-            maxCode = identity.getCode();
-            if (minCode == 0)
-                minCode = identity.getCode();
-
-            listOfOptions.append(identity.getCode());
-            listOfOptions.append(" -> ");
-            listOfOptions.append(identity);
-            listOfOptions.append("\n");
-        }
-        System.out.print(listOfOptions);
-
-        int code = intBetween(minCode, maxCode);
-        IOController.getInstance().read("identity", Identity.getByCode(code));
 
         return null;
     }
