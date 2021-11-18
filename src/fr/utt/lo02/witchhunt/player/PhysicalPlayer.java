@@ -1,5 +1,6 @@
 package fr.utt.lo02.witchhunt.player;
 
+import fr.utt.lo02.witchhunt.card.CardManager;
 import fr.utt.lo02.witchhunt.io.IOController;
 
 import java.util.ArrayList;
@@ -13,12 +14,53 @@ public final class PhysicalPlayer extends Player {
 
     @Override
     public void playTurn() {
-        //TODO
+        IOController io = IOController.getInstance();
+
+        io.playerTurn(name);
+        io.displayGameInfos();
+        PlayerAction action = io.readFromList(PlayerAction.getTurnActions());
+
+        switch (action) {
+            case ACCUSE -> {
+                //TODO choose player
+            }
+            case PLAY_HUNT -> {
+                //TODO
+            }
+        }
     }
 
     @Override
     public void respondAccusation(String accuser) {
-        //TODO
+        IOController io = IOController.getInstance();
+        CardManager cManager = CardManager.getInstance();
+
+        if (getHand().size() > 0) {//player has cards to play, he have a choice
+            io.printInfo(name.concat(" you've been accused by ").concat(accuser).concat(". Choose what to do."));
+            PlayerAction action = io.readFromList(PlayerAction.getRespondActions());
+
+            switch (action) {
+                case PLAY_WITCH -> {
+                    ArrayList<String> playableCards = getHand();
+
+                    //try to play witch effect of every card in hand until there's one that works
+                    while (!playableCards.isEmpty()) {
+                        io.printInfo(name.concat(" choose a card to play it's witch effect."));
+                        String card = chooseCardFrom(playableCards);
+                        if (cManager.getByName(card).playWitchEffect(name, accuser)) {
+                            return;
+                        } else {
+                            playableCards.remove(card);
+                        }
+                    }
+                    //no card could have been played -> reveal
+                    revealIdentity(accuser);
+                }
+                case REVEAL -> revealIdentity(accuser);
+            }
+        } else {//player has no cards, he is forced to reveal his identity
+            revealIdentity();
+        }
     }
 
     @Override
@@ -31,8 +73,12 @@ public final class PhysicalPlayer extends Player {
 
     @Override
     public boolean chooseToRevealOrDiscard() {
-        //TODO
-        return false;
+        IOController io = IOController.getInstance();
+
+        io.printInfo(name.concat(" you have to choose to reveal your identity or discard a card."));
+        String action = io.readFromList(Arrays.asList("Discard", "Reveal"));
+
+        return action.equals("Reveal");
     }
 
     @Override
