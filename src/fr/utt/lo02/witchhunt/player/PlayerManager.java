@@ -67,7 +67,7 @@ public final class PlayerManager {
         ArrayList<String> unrevealedPlayers = new ArrayList<>();
 
         for (Map.Entry<String, Player> entry : players.entrySet()) {
-            if (entry.getValue().getIdentityCard().isRevealed())
+            if (!entry.getValue().getIdentityCard().isRevealed())
                 unrevealedPlayers.add(entry.getKey());
         }
 
