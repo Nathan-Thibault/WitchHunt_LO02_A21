@@ -72,9 +72,11 @@ public final class CommandLineInterface implements IOInterface {
             //score
             sb.append(", Score: ");
             sb.append(p.getScore());
+            //number of cards in hand
+            sb.append(", Cards in hand: ");
+            sb.append(p.getHand().size());
             //revealed cards if any
             formatList(sb, ", Revealed cards: ", p.getRevealedCards());
-
             sb.append("]\n");
         }
 
