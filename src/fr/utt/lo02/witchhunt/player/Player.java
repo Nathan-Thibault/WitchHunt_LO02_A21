@@ -8,11 +8,13 @@ import java.util.ArrayList;
 
 public abstract class Player {
 
+    protected final String name;
     protected int score;
     protected IdentityCard identityCard;
     protected ArrayList<String> ownedCards;
 
-    public Player() {
+    public Player(String name) {
+        this.name = name;
         identityCard = null;
         score = 0;
     }

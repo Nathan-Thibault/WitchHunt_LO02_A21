@@ -19,8 +19,8 @@ public final class ArtificialPlayer extends Player {
 
     private final HashMap<String, Identity> knownIdentities = new HashMap<>();
 
-    public ArtificialPlayer(HashMap<Strategy.StrategyType, Class<? extends Strategy>> strategies) {
-        super();
+    public ArtificialPlayer(String name, HashMap<Strategy.StrategyType, Class<? extends Strategy>> strategies) {
+        super(name);
         try {
             turnStrategy = (TurnStrategy) strategies.get(Strategy.StrategyType.TURN).getConstructor().newInstance();
             respondStrategy = (RespondStrategy) strategies.get(Strategy.StrategyType.RESPOND).getConstructor().newInstance();

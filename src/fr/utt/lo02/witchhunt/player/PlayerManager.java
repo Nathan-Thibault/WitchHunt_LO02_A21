@@ -30,8 +30,10 @@ public final class PlayerManager {
     }
 
     public void createArtificialPlayer(HashMap<Strategy.StrategyType, Class<? extends Strategy>> strategies) {
-        String artificialPlayerName = "AI";
-        players.put(artificialPlayerName.concat(String.valueOf(artificialPlayerCount)), new ArtificialPlayer(strategies));
+        String artificialPlayerNameBase = "AI";
+        String artificialPlayerName = artificialPlayerNameBase.concat(String.valueOf(artificialPlayerCount));
+
+        players.put(artificialPlayerName, new ArtificialPlayer(artificialPlayerName, strategies));
         artificialPlayerCount++;
     }
 

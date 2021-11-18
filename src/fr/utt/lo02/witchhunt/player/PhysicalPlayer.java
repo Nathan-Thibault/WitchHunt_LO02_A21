@@ -5,12 +5,8 @@ import fr.utt.lo02.witchhunt.io.IOController;
 import java.util.ArrayList;
 
 public final class PhysicalPlayer extends Player {
-
-    private final String name;
-
     public PhysicalPlayer(String name) {
-        super();
-        this.name = name;
+        super(name);
     }
 
     @Override
