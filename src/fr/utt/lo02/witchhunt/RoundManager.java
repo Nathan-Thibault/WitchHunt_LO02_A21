@@ -84,7 +84,7 @@ public final class RoundManager {
         index = PlayerManager.getInstance().getInGamePlayers().lastIndexOf(playerName);
     }
 
-    private void incrementIndex() {
+    public void incrementIndex() {
         index++;
         if (index > PlayerManager.getInstance().getInGamePlayers().size())
             index = 0;

@@ -84,7 +84,7 @@ public final class CommandLineInterface implements IOInterface {
         formatList(sb, "List of discarded cards:\n", CardManager.getInstance().getDiscardedCards());
         sb.append("\n");
 
-        System.out.print(sb);
+        System.out.println(sb);
     }
 
     @Override

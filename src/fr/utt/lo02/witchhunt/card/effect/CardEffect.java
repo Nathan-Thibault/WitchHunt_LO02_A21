@@ -1,9 +1,8 @@
 package fr.utt.lo02.witchhunt.card.effect;
 
+import fr.utt.lo02.witchhunt.RoundManager;
 import fr.utt.lo02.witchhunt.card.effect.action.Action;
 import fr.utt.lo02.witchhunt.card.effect.condition.Condition;
-import fr.utt.lo02.witchhunt.io.IOController;
-import fr.utt.lo02.witchhunt.player.PhysicalPlayer;
 import fr.utt.lo02.witchhunt.player.Player;
 import fr.utt.lo02.witchhunt.player.PlayerManager;
 
@@ -70,6 +69,8 @@ public final class CardEffect {
         for (Action action : actions) {
             action.execute(callerName, buildArgs(action, accuserName));
         }
+
+        RoundManager.getInstance().next();
     }
 
     public void play(String caller) {

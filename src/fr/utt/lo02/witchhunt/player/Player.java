@@ -1,6 +1,7 @@
 package fr.utt.lo02.witchhunt.player;
 
 import fr.utt.lo02.witchhunt.Identity;
+import fr.utt.lo02.witchhunt.RoundManager;
 import fr.utt.lo02.witchhunt.card.CardManager;
 import fr.utt.lo02.witchhunt.card.IdentityCard;
 import fr.utt.lo02.witchhunt.card.RumourCard;
@@ -28,6 +29,7 @@ public abstract class Player {
     }
 
     public void revealIdentity(String accuser) {
+        RoundManager rManager = RoundManager.getInstance();
         PlayerManager pManager = PlayerManager.getInstance();
         IOController io = IOController.getInstance();
 
@@ -35,10 +37,14 @@ public abstract class Player {
         if (identityCard.getIdentity() == Identity.WITCH) {
             pManager.getByName(accuser).addToScore(1);
             pManager.eliminate(name);
-            io.printInfo(accuser.concat(" gains one point and ").concat(name).concat(" is out of the game until the end of the round."));
+            io.printInfo(name.concat(" is out of the game until the end of the round.\n").concat(accuser).concat(" gains one point and takes another turn."));
+            rManager.setIndexAtPlayer(accuser);
         } else {
-            io.printInfo(accuser.concat(" gains no point and ").concat(name).concat(" stays in the game."));
+            io.printInfo(accuser.concat(" gains no point and ").concat(name).concat(" stays in game and take next turn."));
+            rManager.setIndexAtPlayer(name);
         }
+
+        rManager.next();
     }
 
     public void setIdentity(Identity identity) {

@@ -15,15 +15,18 @@ public final class Reveal extends Action {
 
     @Override
     public void execute(String callerName, HashMap<String, Object> args) {
+        RoundManager rManager = RoundManager.getInstance();
         PlayerManager pManager = PlayerManager.getInstance();
         Player caller = pManager.getByName(callerName);
 
-        caller.getIdentityCard().setRevealed(true);
+        caller.revealIdentity();
 
         if (caller.getIdentityCard().getIdentity().equals(Identity.VILLAGER)) {
-            RoundManager.getInstance().setIndexAtPlayer(callerName);
+            String target = caller.choosePlayerFrom(pManager.getInGamePlayers());
+            rManager.setIndexAtPlayer(target);
         } else {
             pManager.eliminate(callerName);
+            rManager.incrementIndex();
         }
     }
 
