@@ -6,10 +6,11 @@ import java.util.ArrayList;
 
 public final class PhysicalPlayer extends Player {
 
-    private final String name = PlayerManager.getInstance().getByPlayer(this);
+    private final String name;
 
-    public PhysicalPlayer() {
+    public PhysicalPlayer(String name) {
         super();
+        this.name = name;
     }
 
     @Override

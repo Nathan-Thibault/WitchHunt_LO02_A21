@@ -26,7 +26,7 @@ public final class PlayerManager {
     }
 
     public void addPhysicalPlayer(String name) {
-        players.put(name, new PhysicalPlayer());
+        players.put(name, new PhysicalPlayer(name));
     }
 
     public void createArtificialPlayer(HashMap<Strategy.StrategyType, Class<? extends Strategy>> strategies) {
