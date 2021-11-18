@@ -10,6 +10,7 @@ import fr.utt.lo02.witchhunt.player.strategy.StrategyEnum;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -168,7 +169,7 @@ public final class CommandLineInterface implements IOInterface {
     }
 
     @Override
-    public <T> T readFromList(ArrayList<T> list) {
+    public <T> T readFromList(List<T> list) {
         StringBuilder listOfOptions = new StringBuilder();
 
         for (int i = 0; i < list.size(); i++) {

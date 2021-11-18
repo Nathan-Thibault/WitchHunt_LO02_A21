@@ -5,6 +5,7 @@ import fr.utt.lo02.witchhunt.player.strategy.Strategy;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public final class IOController implements IOInterface {
 
@@ -123,7 +124,7 @@ public final class IOController implements IOInterface {
     }
 
     @Override
-    public <T> T readFromList(ArrayList<T> list) {
+    public <T> T readFromList(List<T> list) {
         for (IOInterface ioInterface : interfaces) {
             new Thread(() -> ioInterface.readFromList(list)).start();
         }
