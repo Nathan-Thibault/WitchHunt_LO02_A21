@@ -45,7 +45,7 @@ public abstract class Player {
             io.printInfo(name.concat(" is out of the game until the end of the round.\n").concat(accuser).concat(" gains one point and takes another turn."));
             rManager.setIndexAtPlayer(accuser);
         } else {
-            io.printInfo(accuser.concat(" gains no point and ").concat(name).concat(" stays in game and take next turn."));
+            io.printInfo(accuser.concat(" gains no point and ").concat(name).concat(" takes next turn."));
             rManager.setIndexAtPlayer(name);
         }
 

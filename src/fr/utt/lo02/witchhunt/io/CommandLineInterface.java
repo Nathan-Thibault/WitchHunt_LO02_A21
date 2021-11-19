@@ -86,7 +86,7 @@ public final class CommandLineInterface implements IOInterface {
         }
 
         //list of discarded cards if any
-        formatList(sb, "List of discarded cards:\n", CardManager.getInstance().getDiscardedCards());
+        formatList(sb, "\nList of discarded cards:\n", CardManager.getInstance().getDiscardedCards());
         sb.append("\n");
 
         System.out.println(sb);
@@ -94,13 +94,11 @@ public final class CommandLineInterface implements IOInterface {
 
     @Override
     public void printInfo(String msg) {
-        resetScreen();
         System.out.println(msg);
     }
 
     @Override
     public void printError(String msg) {
-        resetScreen();
         System.err.println(msg);
     }
 
@@ -215,7 +213,7 @@ public final class CommandLineInterface implements IOInterface {
                 sb.append(str);
                 sb.append(", ");
             }
-            sb.delete(sb.length() - 3, sb.length() - 1);//remove last ", "
+            sb.delete(sb.length() - 2, sb.length());//remove last ", "
             sb.append("}");
         }
     }

@@ -59,7 +59,7 @@ public final class PhysicalPlayer extends Player {
 
             switch (action) {
                 case PLAY_WITCH -> {
-                    io.printInfo(name.concat(" choose a card to play it's witch effect."));
+                    io.printInfo(name.concat(" choose a card to play it's witch effect from the list bellow."));
                     String card = chooseCardFrom(playableCards);
 
                     cManager.getByName(card).playWitchEffect(name, accuser);
@@ -94,7 +94,6 @@ public final class PhysicalPlayer extends Player {
     public String chooseCardFrom(ArrayList<String> listOfCardNames) {
         IOController io = IOController.getInstance();
 
-        io.printInfo(name.concat(" choose a card from the list bellow:"));
         return io.readFromList(listOfCardNames);
     }
 
