@@ -1,6 +1,7 @@
 package fr.utt.lo02.witchhunt.card.effect.action;
 
 import fr.utt.lo02.witchhunt.RoundManager;
+import fr.utt.lo02.witchhunt.io.IOController;
 import fr.utt.lo02.witchhunt.player.Player;
 import fr.utt.lo02.witchhunt.player.PlayerManager;
 
@@ -21,13 +22,13 @@ public final class MustAccuse extends Action {
         Player caller = pManager.getByName(callerName);
         String target = caller.choosePlayerFrom(pManager.getInGamePlayers());
 
-        ArrayList<String> targetables = pManager.getUnrevealedPlayers();
-        targetables.remove(target);//target can't choose herself as its own target
-        if (targetables.size() > 1)//if there is at least two unrevealed players, target can choose someone else than caller
-            targetables.remove(callerName);
+        ArrayList<String> possibleTargets = pManager.getUnrevealedPlayers();
+        possibleTargets.remove(target);//target can't choose herself as its own target
+        if (possibleTargets.size() > 1)//if there is at least two unrevealed players, target can choose someone else than caller
+            possibleTargets.remove(callerName);
 
-        rManager.setIndexAtPlayer(target);
-        String targetOfTarget = pManager.getByName(target).choosePlayerFrom(targetables);
+        IOController.getInstance().printInfo(target.concat(" you are forced to accuse someone else than ").concat(callerName));
+        String targetOfTarget = pManager.getByName(target).choosePlayerFrom(possibleTargets);
         rManager.accuse(target, targetOfTarget);
     }
 

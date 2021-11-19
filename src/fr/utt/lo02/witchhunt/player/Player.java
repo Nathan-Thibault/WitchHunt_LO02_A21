@@ -27,7 +27,12 @@ public abstract class Player {
         IOController io = IOController.getInstance();
 
         identityCard.setRevealed(true);
-        io.printInfo(name.concat(" was a ").concat(identityCard.getIdentity().toString()).concat("!"));
+        if (identityCard.getIdentity() == Identity.WITCH) {
+            io.printInfo(name.concat(" was a witch. He's out of the game until the end of the round."));
+            PlayerManager.getInstance().eliminate(name);
+        } else {
+            io.printInfo(name.concat(" is a villager. He stays in game."));
+        }
         io.pause();
     }
 
