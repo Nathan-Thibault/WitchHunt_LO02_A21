@@ -33,10 +33,12 @@ public final class RumourCard extends Card {
 
     public void playWitchEffect(String callerName, String accuser) {
         witchEffect.play(callerName, accuser);
+        setRevealed(true);
     }
 
     public void playHuntEffect(String callerName) {
         huntEffect.play(callerName);
+        setRevealed(true);
     }
 
     public boolean canPlayWitchEffect(String callerName, String accuser){
@@ -48,6 +50,7 @@ public final class RumourCard extends Card {
     }
 
     public String getCantBeChosenBy() {
+        //TODO: create verification using this when playing cards
         if (revealed) {
             return cantBeChosenBy;
         }

@@ -37,7 +37,8 @@ public abstract class Player {
         IOController io = IOController.getInstance();
 
         identityCard.setRevealed(true);
-        IOController.getInstance().printInfo(name.concat(" was a ").concat(identityCard.getIdentity().toString()).concat("!"));
+        io.printInfo(name.concat(" was a ").concat(identityCard.getIdentity().toString()).concat("!"));
+
         if (identityCard.getIdentity() == Identity.WITCH) {
             pManager.getByName(accuser).addToScore(1);
             pManager.eliminate(name);
