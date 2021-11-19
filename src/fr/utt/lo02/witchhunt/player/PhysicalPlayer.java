@@ -21,6 +21,13 @@ public final class PhysicalPlayer extends Player {
 
         io.printInfo(name.concat(" it's your turn. Choose what to do from the options bellow:"));
         io.displayGameInfos();
+
+        List<PlayerAction> possibleActions = PlayerAction.getTurnActions();
+        ArrayList<String> playableCards = getPlayableCards();
+
+        if (playableCards.isEmpty())//no playable cards, remove play hunt option from user
+            possibleActions.remove(PlayerAction.PLAY_HUNT);
+
         PlayerAction action = io.readFromList(PlayerAction.getTurnActions());
 
         switch (action) {
@@ -32,7 +39,7 @@ public final class PhysicalPlayer extends Player {
                 RoundManager.getInstance().accuse(name, target);
             }
             case PLAY_HUNT -> {
-                String cardName = chooseCardFrom(getPlayableCards());
+                String cardName = chooseCardFrom(playableCards);
                 RumourCard card = CardManager.getInstance().getByName(cardName);
 
                 card.canPlayHuntEffect(name);
