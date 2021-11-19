@@ -48,8 +48,8 @@ public abstract class Player {
             rManager.setIndexAtPlayer(name);
         }
 
-        rManager.next();
         io.pause();
+        rManager.next();
     }
 
     public void setIdentity(Identity identity) {
