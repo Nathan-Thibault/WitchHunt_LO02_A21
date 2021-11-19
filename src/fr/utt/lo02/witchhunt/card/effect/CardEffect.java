@@ -13,12 +13,13 @@ import java.util.Objects;
 
 public final class CardEffect {
 
-    private EffectType type;
-    private ArrayList<Action> actions;
-    private ArrayList<Condition> conditions;
+    private final EffectType type;
+    private final ArrayList<Action> actions;
+    private final ArrayList<Condition> conditions;
 
     private String targetName;
 
+    //TODO: make a builder for CardEffect ?
     public CardEffect(EffectType type, Action action) {
         this(type, new ArrayList<>(List.of(action)), null);
     }
@@ -87,6 +88,25 @@ public final class CardEffect {
 
     public EffectType getType() {
         return this.type;
+    }
+
+    public String getDescription() {
+        StringBuilder sb = new StringBuilder();
+
+        for (Action action : actions) {
+            sb.append(action.getDescription());
+            sb.append("\n");
+        }
+
+        if (conditions != null) {
+            sb.append("Condition(s):\n");
+            for (Condition condition : conditions) {
+                sb.append(condition.getDescription());
+                sb.append("\n");
+            }
+        }
+
+        return sb.toString();
     }
 
     private HashMap<String, Object> buildArgs(Action action, String accuserName) {

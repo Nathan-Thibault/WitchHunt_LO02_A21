@@ -13,4 +13,8 @@ public abstract class Action {
     public abstract void execute(String callerName, HashMap<String, Object> args);
 
     public abstract boolean isExecutable(String callerName, HashMap<String, Object> args);
+
+    public String getDescription() {
+        return description;
+    }
 }

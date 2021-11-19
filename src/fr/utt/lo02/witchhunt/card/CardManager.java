@@ -1,7 +1,6 @@
 package fr.utt.lo02.witchhunt.card;
 
 import com.sun.jdi.ClassNotPreparedException;
-import fr.utt.lo02.witchhunt.RoundManager;
 import fr.utt.lo02.witchhunt.Utils;
 import fr.utt.lo02.witchhunt.card.effect.CardEffect;
 import fr.utt.lo02.witchhunt.card.effect.EffectType;
@@ -24,51 +23,51 @@ public final class CardManager {
     private int numberOfCardsPerPlayer;
 
     private CardManager() {
-        allRumourCards.put("Angry Mob", new RumourCard(
+        allRumourCards.put("Angry Mob", new RumourCard("Angry Mob",
                 new CardEffect(EffectType.WITCH, new TakeTurn()),
                 new CardEffect(EffectType.HUNT, new RevealPlayer(), new RevealedAsVillager()), null));
 
-        allRumourCards.put("Black Cat", new RumourCard(
+        allRumourCards.put("Black Cat", new RumourCard("Black Cat",
                 new CardEffect(EffectType.WITCH, new TakeTurn()),
                 new CardEffect(EffectType.HUNT, new SwitchWithDiscarded(), new TakeTurn()), null));
 
-        allRumourCards.put("Broomstick", new RumourCard(
+        allRumourCards.put("Broomstick", new RumourCard("Broomstick",
                 new CardEffect(EffectType.WITCH, new TakeTurn()),
                 new CardEffect(EffectType.HUNT, new ChooseNextPlayer(null)), "Angry Mob"));
 
-        allRumourCards.put("Cauldron", new RumourCard(
+        allRumourCards.put("Cauldron", new RumourCard("Cauldron",
                 new CardEffect(EffectType.WITCH, new MakeAccuserDiscard(), new TakeTurn()),
                 new CardEffect(EffectType.HUNT, new Reveal()), null));
 
-        allRumourCards.put("Ducking Stool", new RumourCard(
+        allRumourCards.put("Ducking Stool", new RumourCard("Ducking Stool",
                 new CardEffect(EffectType.WITCH, new ChooseNextPlayer(null)),
                 new CardEffect(EffectType.HUNT, new MakeRevealOrDiscard()), null));
 
-        allRumourCards.put("Evil Eye", new RumourCard(
+        allRumourCards.put("Evil Eye", new RumourCard("Evil Eye",
                 new CardEffect(EffectType.WITCH, new ChooseNextPlayer(null), new MustAccuse()),
                 new CardEffect(EffectType.HUNT, new ChooseNextPlayer(null), new MustAccuse()), null));
 
-        allRumourCards.put("Hooked Nose", new RumourCard(
+        allRumourCards.put("Hooked Nose", new RumourCard("Hooked Nose",
                 new CardEffect(EffectType.WITCH, new TakeFromAccuser(), new TakeTurn()),
                 new CardEffect(EffectType.HUNT, new ChooseNextPlayer("cards"), new RandomlyTakeCardFrom()), null));
 
-        allRumourCards.put("Pet Newt", new RumourCard(
+        allRumourCards.put("Pet Newt", new RumourCard("Pet Newt",
                 new CardEffect(EffectType.WITCH, new TakeTurn()),
                 new CardEffect(EffectType.HUNT, new TakeAnyRevealed(), new ChooseNextPlayer(null)), null));
 
-        allRumourCards.put("Pointed Hat", new RumourCard(
+        allRumourCards.put("Pointed Hat", new RumourCard("Pointed Hat",
                 new CardEffect(EffectType.WITCH, new TakeBackRevealed(), new TakeTurn(), new RevealedARumourCard()),
                 new CardEffect(EffectType.HUNT, new TakeBackRevealed(), new ChooseNextPlayer(null), new RevealedARumourCard()), null));
 
-        allRumourCards.put("The Inquisition", new RumourCard(
+        allRumourCards.put("The Inquisition", new RumourCard("The Inquisition",
                 new CardEffect(EffectType.WITCH, new Discard(), new TakeTurn()),
                 new CardEffect(EffectType.HUNT, new ChooseNextPlayer("unrevealed"), new LookAtIdentity()), null));
 
-        allRumourCards.put("Toad", new RumourCard(
+        allRumourCards.put("Toad", new RumourCard("Toad",
                 new CardEffect(EffectType.WITCH, new TakeTurn()),
                 new CardEffect(EffectType.HUNT, new Reveal()), null));
 
-        allRumourCards.put("Wart", new RumourCard(
+        allRumourCards.put("Wart", new RumourCard("Wart",
                 new CardEffect(EffectType.WITCH, new TakeTurn()),
                 new CardEffect(EffectType.HUNT, new ChooseNextPlayer(null)), "Ducking Stool"));
     }
