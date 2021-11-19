@@ -51,7 +51,6 @@ public final class RoundManager {
             String nextPlayer = pManager.getInGamePlayers().get(index);
 
             pManager.getByName(nextPlayer).playTurn();
-
             incrementIndex();
         }
     }

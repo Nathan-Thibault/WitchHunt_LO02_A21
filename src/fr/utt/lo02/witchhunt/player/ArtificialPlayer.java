@@ -37,7 +37,7 @@ public final class ArtificialPlayer extends Player {
 
     @Override
     public void playTurn() {
-        turnStrategy.playTurn();
+        turnStrategy.playTurn(name);
     }
 
     @Override
