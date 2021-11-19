@@ -61,5 +61,6 @@ public class WitchHunt {
         }
         sb.deleteCharAt(sb.lastIndexOf(","));//remove useless last comma
         io.printInfo(sb.toString());
+        io.pause();
     }
 }

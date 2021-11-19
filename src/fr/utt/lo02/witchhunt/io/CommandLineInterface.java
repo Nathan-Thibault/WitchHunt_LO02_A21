@@ -44,6 +44,11 @@ public final class CommandLineInterface implements IOInterface {
                 .concat("                      ░                                                        \n")
                 .concat("\n"));
 
+        pause();
+    }
+
+    @Override
+    public void pause() {
         System.out.println("Press enter to continue.");
         try {
             System.in.read();//blocks until input data is available, i.e. until enter is pressed

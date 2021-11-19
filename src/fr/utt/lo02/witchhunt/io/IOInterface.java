@@ -9,6 +9,8 @@ public interface IOInterface {
 
     void titleScreen();
 
+    void pause();
+
     void displayGameInfos();
 
     void printInfo(String msg);

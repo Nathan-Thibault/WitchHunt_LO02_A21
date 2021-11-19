@@ -60,6 +60,16 @@ public final class IOController implements IOInterface {
     }
 
     @Override
+    public void pause() {
+        for(IOInterface ioInterface: interfaces){
+            new Thread(ioInterface::pause).start();
+        }
+
+        startWaiting();
+        clear();
+    }
+
+    @Override
     public void displayGameInfos() {
         for (IOInterface ioInterface : interfaces) {
             ioInterface.displayGameInfos();
