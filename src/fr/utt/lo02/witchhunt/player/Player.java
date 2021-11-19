@@ -24,8 +24,11 @@ public abstract class Player {
     }
 
     public void revealIdentity() {
+        IOController io = IOController.getInstance();
+
         identityCard.setRevealed(true);
-        IOController.getInstance().printInfo(name.concat(" was a ").concat(identityCard.getIdentity().toString()).concat("!"));
+        io.printInfo(name.concat(" was a ").concat(identityCard.getIdentity().toString()).concat("!"));
+        io.pause();
     }
 
     public void revealIdentity(String accuser) {
@@ -33,7 +36,8 @@ public abstract class Player {
         PlayerManager pManager = PlayerManager.getInstance();
         IOController io = IOController.getInstance();
 
-        revealIdentity();
+        identityCard.setRevealed(true);
+        IOController.getInstance().printInfo(name.concat(" was a ").concat(identityCard.getIdentity().toString()).concat("!"));
         if (identityCard.getIdentity() == Identity.WITCH) {
             pManager.getByName(accuser).addToScore(1);
             pManager.eliminate(name);
@@ -45,6 +49,7 @@ public abstract class Player {
         }
 
         rManager.next();
+        io.pause();
     }
 
     public void setIdentity(Identity identity) {
