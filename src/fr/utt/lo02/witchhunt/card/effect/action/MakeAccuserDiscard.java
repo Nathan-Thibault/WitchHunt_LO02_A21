@@ -27,7 +27,7 @@ public final class MakeAccuserDiscard extends Action {
 
     @Override
     public boolean isExecutable(String callerName, HashMap<String, Object> args) {
-        String accuserName = (String) Objects.requireNonNull(args.get("accuserName"), "MakeDiscard: missing accuserName argument");
+        String accuserName = (String) Objects.requireNonNull(args.get("accuserName"), "MakeAccuserDiscard: missing accuserName argument");
         Player accuser = PlayerManager.getInstance().getByName(accuserName);
 
         return !accuser.getHand().isEmpty();

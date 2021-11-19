@@ -92,9 +92,9 @@ public final class CardEffect {
     private HashMap<String, Object> buildArgs(Action action, String accuserName) {
         HashMap<String, Object> args = new HashMap<>();
 
-        switch (action.getClass().getName()) {
+        switch (action.getClass().getSimpleName()) {
             case "ChooseNextPlayer", "LookAtIdentity", "RandomlyTakeCardFrom" -> args.put("effect", this);
-            case "MakeAccuserDiscard" -> args.put("accuserName", accuserName);
+            case "MakeAccuserDiscard", "TakeFromAccuser" -> args.put("accuserName", accuserName);
             default -> args = null;
         }
 
