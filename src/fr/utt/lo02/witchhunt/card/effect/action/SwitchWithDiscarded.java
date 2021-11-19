@@ -20,9 +20,9 @@ public final class SwitchWithDiscarded extends Action {
         String card = caller.chooseCardFrom(cManager.getDiscardedCards());
 
         cManager.takeFromDiscarded(card);
-        caller.getHand().add(card);
+        caller.getOwnedCards().add(card);
         //only Back Cat card has this action, hence the following code
-        caller.getHand().remove("Black Cat");
+        caller.getOwnedCards().remove("Black Cat");
         cManager.discard("Black Cat");
     }
 
