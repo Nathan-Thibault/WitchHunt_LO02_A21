@@ -27,10 +27,14 @@ public final class ChooseNextPlayer extends Action {
         CardEffect effect = (CardEffect) Objects.requireNonNull(args.get("effect"), "ChooseNextPlayer : missing argument effect");
 
         ArrayList<String> possibleTargets;
-        switch (requirement) {
-            case "unrevealed" -> possibleTargets = pManager.getUnrevealedPlayers();
-            case "cards" -> possibleTargets = pManager.getPlayersWithHand();
-            default -> possibleTargets = pManager.getInGamePlayers();
+        if (requirement == null) {
+            possibleTargets = pManager.getInGamePlayers();
+        } else {
+            possibleTargets = switch (requirement) {
+                case "unrevealed" -> pManager.getUnrevealedPlayers();
+                case "cards" -> pManager.getPlayersWithHand();
+                default -> throw new IllegalArgumentException("ChooseNextPlayer: unsupported requirement");
+            };
         }
         possibleTargets.remove(callerName);//a player can never choose himself as the target
 
