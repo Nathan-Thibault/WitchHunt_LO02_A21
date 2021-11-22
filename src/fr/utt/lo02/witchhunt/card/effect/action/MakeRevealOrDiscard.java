@@ -54,7 +54,7 @@ public final class MakeRevealOrDiscard extends Action {
 
             io.printInfo(targetName.concat("  discarded ").concat(card).concat(". He takes next turn."));
 
-            target.getHand().remove(card);
+            target.getOwnedCards().remove(card);
             CardManager.getInstance().discard(card);
 
             rManager.setIndexAtPlayer(targetName);
