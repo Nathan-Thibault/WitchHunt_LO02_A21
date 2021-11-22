@@ -36,13 +36,13 @@ public final class RumourCard extends Card {
     }
 
     public void playWitchEffect(String callerName, String accuser) {
-        IOController.getInstance().printInfo(callerName.concat(" played ").concat(name).concat(":\n").concat(witchEffect.getDescription()));
+        IOController.getInstance().printInfo(callerName.concat(" played ").concat(name).concat(":\n").concat(witchEffectDescription()));
         setRevealed(true);
         witchEffect.play(callerName, accuser);
     }
 
     public void playHuntEffect(String callerName) {
-        IOController.getInstance().printInfo(callerName.concat(" played ").concat(name).concat(":\n").concat(huntEffect.getDescription()));
+        IOController.getInstance().printInfo(callerName.concat(" played ").concat(name).concat(":\n").concat(huntEffectDescription()));
         setRevealed(true);
         huntEffect.play(callerName);
     }
@@ -53,6 +53,14 @@ public final class RumourCard extends Card {
 
     public boolean canPlayHuntEffect(String callerName) {
         return huntEffect.isPlayable(callerName);
+    }
+
+    public String witchEffectDescription(){
+        return witchEffect.getDescription();
+    }
+
+    public String huntEffectDescription(){
+        return huntEffect.getDescription();
     }
 
     public String getCantBeChosenBy() {
