@@ -18,15 +18,25 @@ public final class PhysicalPlayer extends Player {
     @Override
     public void playTurn() {
         IOController io = IOController.getInstance();
-
-        io.printInfo(name.concat(" it's your turn. Choose what to do from the options bellow:"));
-        io.displayGameInfos();
+        CardManager cManager = CardManager.getInstance();
 
         ArrayList<PlayerAction> possibleActions = new ArrayList<>(PlayerAction.getTurnActions());
         ArrayList<String> playableCards = getPlayableCards();
 
         if (playableCards.isEmpty())//no playable cards, remove play hunt option from user
             possibleActions.remove(PlayerAction.PLAY_HUNT);
+
+        io.displayGameInfos();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(name);
+        sb.append(" it's your turn.\n");
+
+        //display list of his cards if hand is not null
+        buildListOfCards(sb, false);
+
+        sb.append("\nChoose what to do from the options bellow:");
+        io.printInfo(sb.toString());
 
         PlayerAction action = io.readFromList(possibleActions);
 
@@ -39,6 +49,7 @@ public final class PhysicalPlayer extends Player {
                 RoundManager.getInstance().accuse(name, target);
             }
             case PLAY_HUNT -> {
+                io.printInfo(name.concat(" choose a card to play it's hunt effect from the list bellow."));
                 String cardName = chooseCardFrom(playableCards);
                 RumourCard card = CardManager.getInstance().getByName(cardName);
 
@@ -53,8 +64,21 @@ public final class PhysicalPlayer extends Player {
         CardManager cManager = CardManager.getInstance();
 
         ArrayList<String> playableCards = getPlayableCards(accuser);
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(name);
+        sb.append(" you've been accused by ");
+        sb.append(accuser);
+        sb.append(".\n");
+
+        //display list of his cards if hand is not null
+        buildListOfCards(sb, true);
+
+
         if (playableCards.size() > 0) {//player has cards to play, he has a choice
-            io.printInfo(name.concat(" you've been accused by ").concat(accuser).concat(". Choose what to do."));
+            sb.append("\nChoose what to do from the options bellow:");
+            io.printInfo(sb.toString());
+
             PlayerAction action = io.readFromList(PlayerAction.getRespondActions());
 
             switch (action) {
@@ -67,6 +91,9 @@ public final class PhysicalPlayer extends Player {
                 case REVEAL -> revealIdentity(accuser);
             }
         } else {//player has no cards, he is forced to reveal his identity
+            sb.append("\nYou are forced to reveal because you can't play any card:");
+            io.printInfo(sb.toString());
+
             revealIdentity();
         }
     }
@@ -103,6 +130,31 @@ public final class PhysicalPlayer extends Player {
 
         io.printInfo(name.concat(" choose a player from the list bellow:"));
         return io.readFromList(listOfPlayerNames);
+    }
+
+    private void buildListOfCards(StringBuilder sb, boolean witchEffect) {
+        ArrayList<String> hand = getHand();
+
+        if (!hand.isEmpty()) {
+            CardManager cardManager = CardManager.getInstance();
+
+            sb.append("List of your cards an their ");
+            sb.append(witchEffect ? "witch" : "hunt");
+            sb.append(" effect:\n");
+
+            for (String cardName : hand) {
+                sb.append("-");
+                sb.append(cardName);
+                sb.append(":\n");
+
+                if (witchEffect)
+                    sb.append(cardManager.getByName(cardName).witchEffectDescription());
+                else
+                    sb.append(cardManager.getByName(cardName).huntEffectDescription());
+            }
+
+            sb.append("\n");
+        }
     }
 
     enum PlayerAction {
