@@ -5,8 +5,8 @@ import fr.utt.lo02.witchhunt.io.IOController;
 import fr.utt.lo02.witchhunt.player.Player;
 import fr.utt.lo02.witchhunt.player.PlayerManager;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 public final class MustAccuse extends Action {
 
@@ -22,7 +22,7 @@ public final class MustAccuse extends Action {
         Player caller = pManager.getByName(callerName);
         String target = caller.choosePlayerFrom(pManager.getInGamePlayers());
 
-        ArrayList<String> possibleTargets = pManager.getUnrevealedPlayers();
+        Set<String> possibleTargets = pManager.getUnrevealedPlayers();
         possibleTargets.remove(target);//target can't choose herself as its own target
         if (possibleTargets.size() > 1)//if there is at least two unrevealed players, target can choose someone else than caller
             possibleTargets.remove(callerName);

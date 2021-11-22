@@ -8,7 +8,6 @@ import fr.utt.lo02.witchhunt.player.PlayerManager;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Random;
 
 public final class RoundManager {
 
@@ -33,9 +32,7 @@ public final class RoundManager {
         pManager.resetAll();
         identityRound();
 
-        if (startingPlayer == null) {
-            index = new Random().nextInt(pManager.getInGamePlayers().size());
-        } else {
+        if (startingPlayer != null) {
             setIndexAtPlayer(startingPlayer);
             startingPlayer = null;
         }
@@ -49,7 +46,7 @@ public final class RoundManager {
         if (pManager.getUnrevealedPlayers().size() <= 1) {
             endRound();
         } else {
-            String nextPlayer = pManager.getInGamePlayers().get(index);
+            String nextPlayer = new ArrayList<>(pManager.getInGamePlayers()).get(index);
 
             pManager.getByName(nextPlayer).playTurn();
             incrementIndex();
@@ -64,7 +61,7 @@ public final class RoundManager {
     public void endRound() {
         PlayerManager pManager = PlayerManager.getInstance();
 
-        startingPlayer = pManager.getUnrevealedPlayers().get(0);
+        startingPlayer = pManager.getUnrevealedPlayers().iterator().next();
 
         Player lastUnrevealed = pManager.getByName(startingPlayer);
         Identity identity = lastUnrevealed.getIdentityCard().getIdentity();
@@ -81,7 +78,8 @@ public final class RoundManager {
     }
 
     public void setIndexAtPlayer(String playerName) {
-        index = PlayerManager.getInstance().getInGamePlayers().lastIndexOf(playerName);
+        ArrayList<String> inGamePlayers = new ArrayList<>(PlayerManager.getInstance().getInGamePlayers());
+        index = inGamePlayers.lastIndexOf(playerName);
     }
 
     public void incrementIndex() {

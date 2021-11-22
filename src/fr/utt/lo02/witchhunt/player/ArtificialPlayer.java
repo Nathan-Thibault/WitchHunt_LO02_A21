@@ -8,7 +8,7 @@ import fr.utt.lo02.witchhunt.player.strategy.respond.RespondStrategy;
 import fr.utt.lo02.witchhunt.player.strategy.turn.TurnStrategy;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
+import java.util.Set;
 import java.util.HashMap;
 
 public final class ArtificialPlayer extends Player {
@@ -57,14 +57,14 @@ public final class ArtificialPlayer extends Player {
     }
 
     @Override
-    public String chooseCardFrom(ArrayList<String> listOfCardNames) {
+    public String chooseCardFrom(Set<String> listOfCardNames) {
         //TODO create strategies to choose a card
-        return Utils.randomFromList(listOfCardNames);
+        return Utils.randomFromSet(listOfCardNames);
     }
 
     @Override
-    public String choosePlayerFrom(ArrayList<String> listOfPlayerNames) {
+    public String choosePlayerFrom(Set<String> listOfPlayerNames) {
         //TODO create strategies to choose a player
-        return Utils.randomFromList(listOfPlayerNames);
+        return Utils.randomFromSet(listOfPlayerNames);
     }
 }

@@ -3,15 +3,20 @@ package fr.utt.lo02.witchhunt.player;
 import fr.utt.lo02.witchhunt.player.strategy.Strategy;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 
 public final class PlayerManager {
 
     private static PlayerManager instance;
 
-    private final HashMap<String, Player> players = new HashMap<>();
-    private ArrayList<String> inGamePlayers = new ArrayList<>();
+    private LinkedHashMap<String, Player> players = new LinkedHashMap<>();
+    private LinkedHashSet<String> inGamePlayers = new LinkedHashSet<>();
     private int artificialPlayerCount;
 
     private PlayerManager() {
@@ -37,6 +42,15 @@ public final class PlayerManager {
         artificialPlayerCount++;
     }
 
+    public void shufflePlayers() {
+        List<String> list = new ArrayList<>(players.keySet());
+        Collections.shuffle(list);
+
+        LinkedHashMap<String, Player> shuffleMap = new LinkedHashMap<>();
+        list.forEach(k -> shuffleMap.put(k, players.get(k)));
+        players = shuffleMap;
+    }
+
     public Player getByName(String name) {
         return players.get(name);
     }
@@ -57,16 +71,16 @@ public final class PlayerManager {
         return null;
     }
 
-    public ArrayList<String> getAllPlayers() {
-        return new ArrayList<>(players.keySet());
+    public LinkedHashSet<String> getAllPlayers() {
+        return new LinkedHashSet<>(players.keySet());
     }
 
-    public ArrayList<String> getInGamePlayers() {
+    public LinkedHashSet<String> getInGamePlayers() {
         return inGamePlayers;
     }
 
-    public ArrayList<String> getUnrevealedPlayers() {
-        ArrayList<String> unrevealedPlayers = new ArrayList<>();
+    public HashSet<String> getUnrevealedPlayers() {
+        HashSet<String> unrevealedPlayers = new HashSet<>();
 
         for (Map.Entry<String, Player> entry : players.entrySet()) {
             if (!entry.getValue().getIdentityCard().isRevealed())
@@ -76,8 +90,8 @@ public final class PlayerManager {
         return unrevealedPlayers;
     }
 
-    public ArrayList<String> getPlayersWithHand() {
-        ArrayList<String> playersWithCards = new ArrayList<>();
+    public HashSet<String> getPlayersWithHand() {
+        HashSet<String> playersWithCards = new HashSet<>();
 
         for (String player : getInGamePlayers()) {
             if (!getByName(player).getHand().isEmpty()) {
@@ -93,7 +107,7 @@ public final class PlayerManager {
     }
 
     public void resetAll() {
-        inGamePlayers = new ArrayList<>(players.keySet());
+        inGamePlayers = new LinkedHashSet<>(players.keySet());
 
         for (Player p : players.values()) {
             p.reset();

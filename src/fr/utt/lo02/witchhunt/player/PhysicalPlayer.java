@@ -6,9 +6,8 @@ import fr.utt.lo02.witchhunt.card.CardManager;
 import fr.utt.lo02.witchhunt.card.RumourCard;
 import fr.utt.lo02.witchhunt.io.IOController;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.EnumSet;
+import java.util.Set;
 
 public final class PhysicalPlayer extends Player {
     public PhysicalPlayer(String name) {
@@ -18,10 +17,9 @@ public final class PhysicalPlayer extends Player {
     @Override
     public void playTurn() {
         IOController io = IOController.getInstance();
-        CardManager cManager = CardManager.getInstance();
 
-        ArrayList<PlayerAction> possibleActions = new ArrayList<>(PlayerAction.getTurnActions());
-        ArrayList<String> playableCards = getPlayableCards();
+        Set<PlayerAction> possibleActions = PlayerAction.getActions(false);
+        Set<String> playableCards = getPlayableCards();
 
         if (playableCards.isEmpty())//no playable cards, remove play hunt option from user
             possibleActions.remove(PlayerAction.PLAY_HUNT);
@@ -33,16 +31,16 @@ public final class PhysicalPlayer extends Player {
         sb.append(" it's your turn.\n");
 
         //display list of his cards if hand is not null
-        buildListOfCards(sb, false);
+        buildSetOfCards(sb, false);
 
         sb.append("\nChoose what to do from the options bellow:");
         io.printInfo(sb.toString());
 
-        PlayerAction action = io.readFromList(possibleActions);
+        PlayerAction action = io.readFromSet(possibleActions);
 
         switch (action) {
             case ACCUSE -> {
-                ArrayList<String> possibleTargets = PlayerManager.getInstance().getUnrevealedPlayers();
+                Set<String> possibleTargets = PlayerManager.getInstance().getUnrevealedPlayers();
                 possibleTargets.remove(name);//player can't choose himself
 
                 String target = choosePlayerFrom(possibleTargets);
@@ -63,7 +61,7 @@ public final class PhysicalPlayer extends Player {
         IOController io = IOController.getInstance();
         CardManager cManager = CardManager.getInstance();
 
-        ArrayList<String> playableCards = getPlayableCards(accuser);
+        Set<String> playableCards = getPlayableCards(accuser);
 
         StringBuilder sb = new StringBuilder();
         sb.append(name);
@@ -72,14 +70,14 @@ public final class PhysicalPlayer extends Player {
         sb.append(".\n");
 
         //display list of his cards if hand is not null
-        buildListOfCards(sb, true);
+        buildSetOfCards(sb, true);
 
 
         if (playableCards.size() > 0) {//player has cards to play, he has a choice
             sb.append("\nChoose what to do from the options bellow:");
             io.printInfo(sb.toString());
 
-            PlayerAction action = io.readFromList(PlayerAction.getRespondActions());
+            PlayerAction action = io.readFromSet(PlayerAction.getActions(true));
 
             switch (action) {
                 case PLAY_WITCH -> {
@@ -103,7 +101,7 @@ public final class PhysicalPlayer extends Player {
         IOController io = IOController.getInstance();
 
         io.printInfo(name.concat(" choose your identity from the list bellow:"));
-        Identity identity = io.readFromList(Arrays.stream(Identity.values()).toList());
+        Identity identity = io.readFromSet(EnumSet.allOf(Identity.class));
         setIdentity(identity);
     }
 
@@ -112,28 +110,28 @@ public final class PhysicalPlayer extends Player {
         IOController io = IOController.getInstance();
 
         io.printInfo(name.concat(" you have to choose to reveal your identity or discard a card."));
-        String action = io.readFromList(Arrays.asList("Discard", "Reveal"));
+        String action = io.readFromSet(Set.of("Discard", "Reveal"));
 
         return action.equals("Reveal");
     }
 
     @Override
-    public String chooseCardFrom(ArrayList<String> listOfCardNames) {
+    public String chooseCardFrom(Set<String> listOfCardNames) {
         IOController io = IOController.getInstance();
 
-        return io.readFromList(listOfCardNames);
+        return io.readFromSet(listOfCardNames);
     }
 
     @Override
-    public String choosePlayerFrom(ArrayList<String> listOfPlayerNames) {
+    public String choosePlayerFrom(Set<String> listOfPlayerNames) {
         IOController io = IOController.getInstance();
 
         io.printInfo(name.concat(" choose a player from the list bellow:"));
-        return io.readFromList(listOfPlayerNames);
+        return io.readFromSet(listOfPlayerNames);
     }
 
-    private void buildListOfCards(StringBuilder sb, boolean witchEffect) {
-        ArrayList<String> hand = getHand();
+    private void buildSetOfCards(StringBuilder sb, boolean witchEffect) {
+        Set<String> hand = getHand();
 
         if (!hand.isEmpty()) {
             CardManager cardManager = CardManager.getInstance();
@@ -171,12 +169,11 @@ public final class PhysicalPlayer extends Player {
             this.respondAction = respondAction;
         }
 
-        public static List<PlayerAction> getTurnActions() {
-            return Arrays.stream(PlayerAction.values()).filter(pa -> !pa.isRespondAction()).toList();
-        }
+        public static Set<PlayerAction> getActions(boolean respondAction) {
+            EnumSet<PlayerAction> actions = EnumSet.allOf(PlayerAction.class);
 
-        public static List<PlayerAction> getRespondActions() {
-            return Arrays.stream(PlayerAction.values()).filter(PlayerAction::isRespondAction).toList();
+            actions.removeIf(pa -> respondAction != pa.isRespondAction());
+            return actions;
         }
 
 

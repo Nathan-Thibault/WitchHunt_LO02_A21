@@ -4,8 +4,8 @@ import fr.utt.lo02.witchhunt.card.CardManager;
 import fr.utt.lo02.witchhunt.player.Player;
 import fr.utt.lo02.witchhunt.player.PlayerManager;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.Objects;
 
 public final class TakeAnyRevealed extends Action {
@@ -17,7 +17,7 @@ public final class TakeAnyRevealed extends Action {
     @Override
     public void execute(String callerName, HashMap<String, Object> args) {
         Player caller = PlayerManager.getInstance().getByName(callerName);
-        ArrayList<String> revealedCards = CardManager.getInstance().getRevealedNonDiscardedCards();
+        Set<String> revealedCards = CardManager.getInstance().getRevealedNonDiscardedCards();
 
         //remove caller cards since he has to chose from another player
         for (String card : caller.getOwnedCards()) {
@@ -34,7 +34,7 @@ public final class TakeAnyRevealed extends Action {
     @Override
     public boolean isExecutable(String callerName, HashMap<String, Object> args) {
         Player caller = PlayerManager.getInstance().getByName(callerName);
-        ArrayList<String> revealedCards = CardManager.getInstance().getRevealedNonDiscardedCards();
+        Set<String> revealedCards = CardManager.getInstance().getRevealedNonDiscardedCards();
 
         //remove caller cards since he has to chose from another player
         for (String card : caller.getOwnedCards()) {

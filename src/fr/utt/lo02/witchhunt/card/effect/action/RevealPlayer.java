@@ -6,7 +6,7 @@ import fr.utt.lo02.witchhunt.io.IOController;
 import fr.utt.lo02.witchhunt.player.Player;
 import fr.utt.lo02.witchhunt.player.PlayerManager;
 
-import java.util.ArrayList;
+import java.util.Set;
 import java.util.HashMap;
 
 public final class RevealPlayer extends Action {
@@ -20,7 +20,7 @@ public final class RevealPlayer extends Action {
         PlayerManager pManager = PlayerManager.getInstance();
         Player caller = pManager.getByName(callerName);
 
-        ArrayList<String> possibleTargets = pManager.getUnrevealedPlayers();
+        Set<String> possibleTargets = pManager.getUnrevealedPlayers();
         possibleTargets.remove(callerName);
         String targetName = caller.choosePlayerFrom(possibleTargets);
         Player target = pManager.getByName(targetName);

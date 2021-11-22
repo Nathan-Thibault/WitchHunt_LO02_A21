@@ -4,7 +4,7 @@ import fr.utt.lo02.witchhunt.card.CardManager;
 import fr.utt.lo02.witchhunt.player.Player;
 import fr.utt.lo02.witchhunt.player.PlayerManager;
 
-import java.util.ArrayList;
+import java.util.Set;
 import java.util.HashMap;
 
 public final class TakeBackRevealed extends Action {
@@ -18,7 +18,7 @@ public final class TakeBackRevealed extends Action {
         CardManager cManager = CardManager.getInstance();
         Player caller = PlayerManager.getInstance().getByName(callerName);
 
-        ArrayList<String> revealedCards = caller.getOwnedCards();
+        Set<String> revealedCards = caller.getOwnedCards();
         revealedCards.removeAll(caller.getHand());
 
         String card = caller.chooseCardFrom(revealedCards);
@@ -29,7 +29,7 @@ public final class TakeBackRevealed extends Action {
     public boolean isExecutable(String callerName, HashMap<String, Object> args) {
         Player caller = PlayerManager.getInstance().getByName(callerName);
 
-        ArrayList<String> revealedCards = caller.getOwnedCards();
+        Set<String> revealedCards = caller.getOwnedCards();
         revealedCards.removeAll(caller.getHand());
 
         return !revealedCards.isEmpty();

@@ -4,7 +4,7 @@ import fr.utt.lo02.witchhunt.RoundManager;
 import fr.utt.lo02.witchhunt.player.Player;
 import fr.utt.lo02.witchhunt.player.PlayerManager;
 
-import java.util.ArrayList;
+import java.util.Set;
 
 public final class AlwaysAccuse implements TurnStrategy {
     @Override
@@ -12,7 +12,7 @@ public final class AlwaysAccuse implements TurnStrategy {
         PlayerManager pManager = PlayerManager.getInstance();
         Player caller = pManager.getByName(callerName);
 
-        ArrayList<String> possibleTargets = pManager.getUnrevealedPlayers();
+        Set<String> possibleTargets = pManager.getUnrevealedPlayers();
         possibleTargets.remove(callerName);//player can't choose himself
 
         String target = caller.choosePlayerFrom(possibleTargets);

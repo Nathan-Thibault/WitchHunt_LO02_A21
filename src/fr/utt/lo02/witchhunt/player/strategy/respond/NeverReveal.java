@@ -4,7 +4,7 @@ import fr.utt.lo02.witchhunt.card.CardManager;
 import fr.utt.lo02.witchhunt.player.ArtificialPlayer;
 import fr.utt.lo02.witchhunt.player.PlayerManager;
 
-import java.util.ArrayList;
+import java.util.Set;
 
 public final class NeverReveal implements RespondStrategy {
     @Override
@@ -13,7 +13,7 @@ public final class NeverReveal implements RespondStrategy {
     }
 
     public static void tryNotToReveal(ArtificialPlayer caller, String accuser) {
-        ArrayList<String> playableCards = caller.getPlayableCards(accuser);
+        Set<String> playableCards = caller.getPlayableCards(accuser);
 
         while (!playableCards.isEmpty()) {//player has cards to play
             String card = caller.chooseCardFrom(playableCards);

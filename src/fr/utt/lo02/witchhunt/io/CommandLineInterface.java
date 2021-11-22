@@ -10,9 +10,9 @@ import fr.utt.lo02.witchhunt.player.strategy.StrategyEnum;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.Set;
 
 public final class CommandLineInterface implements IOInterface {
 
@@ -86,12 +86,12 @@ public final class CommandLineInterface implements IOInterface {
             sb.append(", Cards in hand: ");
             sb.append(p.getHand().size());
             //revealed cards if any
-            formatList(sb, ", Revealed cards: ", p.getRevealedCards());
+            formatSet(sb, ", Revealed cards: ", p.getRevealedCards());
             sb.append("]\n");
         }
 
         //list of discarded cards if any
-        formatList(sb, "\nList of discarded cards:\n", CardManager.getInstance().getDiscardedCards());
+        formatSet(sb, "\nList of discarded cards:\n", CardManager.getInstance().getDiscardedCards());
         sb.append("\n");
 
         System.out.println(sb);
@@ -146,7 +146,8 @@ public final class CommandLineInterface implements IOInterface {
     }
 
     @Override
-    public <T> T readFromList(List<T> list) {
+    public <T> T readFromSet(Set<T> set) {
+        ArrayList<T> list = new ArrayList<>(set);
         StringBuilder listOfOptions = new StringBuilder();
 
         for (int i = 0; i < list.size(); i++) {
@@ -210,7 +211,7 @@ public final class CommandLineInterface implements IOInterface {
         }
     }
 
-    private void formatList(StringBuilder sb, String msg, ArrayList<String> list) {
+    private void formatSet(StringBuilder sb, String msg, Set<String> list) {
         if (!list.isEmpty()) {
             sb.append(msg);
             sb.append("{");

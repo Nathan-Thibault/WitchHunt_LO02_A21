@@ -32,6 +32,7 @@ public class WitchHunt {
             createPlayers();
 
         CardManager.getInstance();//create cards
+        PlayerManager.getInstance().shufflePlayers();
         RoundManager.getInstance().startNewRound();
     }
 
@@ -98,7 +99,7 @@ public class WitchHunt {
         pManager.createArtificialPlayer(strategies);
     }
 
-    public static boolean isTest(){
+    public static boolean isTest() {
         return test;
     }
 }

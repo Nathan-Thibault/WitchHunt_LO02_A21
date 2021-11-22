@@ -4,7 +4,7 @@ import fr.utt.lo02.witchhunt.player.strategy.Strategy;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Set;
 
 public final class IOController implements IOInterface {
 
@@ -115,9 +115,9 @@ public final class IOController implements IOInterface {
     }
 
     @Override
-    public <T> T readFromList(List<T> list) {
+    public <T> T readFromSet(Set<T> set) {
         for (IOInterface ioInterface : interfaces) {
-            new Thread(() -> ioInterface.readFromList(list)).start();
+            new Thread(() -> ioInterface.readFromSet(set)).start();
         }
 
         startWaiting();

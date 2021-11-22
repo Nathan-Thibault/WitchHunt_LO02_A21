@@ -5,9 +5,9 @@ import fr.utt.lo02.witchhunt.card.effect.CardEffect;
 import fr.utt.lo02.witchhunt.player.Player;
 import fr.utt.lo02.witchhunt.player.PlayerManager;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.Set;
 
 public final class ChooseNextPlayer extends Action {
 
@@ -26,7 +26,7 @@ public final class ChooseNextPlayer extends Action {
 
         CardEffect effect = (CardEffect) Objects.requireNonNull(args.get("effect"), "ChooseNextPlayer : missing argument effect");
 
-        ArrayList<String> possibleTargets;
+        Set<String> possibleTargets;
         if (requirement == null) {
             possibleTargets = pManager.getInGamePlayers();
         } else {
