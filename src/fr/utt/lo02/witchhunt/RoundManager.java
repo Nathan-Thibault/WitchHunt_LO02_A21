@@ -2,6 +2,7 @@ package fr.utt.lo02.witchhunt;
 
 import fr.utt.lo02.witchhunt.card.CardManager;
 import fr.utt.lo02.witchhunt.io.IOController;
+import fr.utt.lo02.witchhunt.player.ArtificialPlayer;
 import fr.utt.lo02.witchhunt.player.Player;
 import fr.utt.lo02.witchhunt.player.PlayerManager;
 
@@ -91,8 +92,19 @@ public final class RoundManager {
 
     private void identityRound() {
         PlayerManager pManager = PlayerManager.getInstance();
-        for (String player : pManager.getInGamePlayers()) {
-            pManager.getByName(player).chooseIdentity();
+
+        boolean test = WitchHunt.isTest();
+
+        if (test) {
+            pManager.getByName("Pierre").setIdentity(Identity.VILLAGER);
+            pManager.getByName("Paul").setIdentity(Identity.WITCH);
+            pManager.getByName("Jacques").setIdentity(Identity.VILLAGER);
+        }
+
+        for (String playerName : pManager.getInGamePlayers()) {
+            Player player = pManager.getByName(playerName);
+            if (player instanceof ArtificialPlayer || !test)
+                player.chooseIdentity();
         }
     }
 
