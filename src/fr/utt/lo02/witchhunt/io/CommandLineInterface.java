@@ -1,5 +1,6 @@
 package fr.utt.lo02.witchhunt.io;
 
+import fr.utt.lo02.witchhunt.WitchHunt;
 import fr.utt.lo02.witchhunt.card.CardManager;
 import fr.utt.lo02.witchhunt.card.IdentityCard;
 import fr.utt.lo02.witchhunt.player.Player;
@@ -25,7 +26,11 @@ public final class CommandLineInterface implements IOInterface {
     @Override
     public void clear() {
         waiting = false;
-        resetScreen();
+
+        if (WitchHunt.isTest())
+            System.out.println("\n---\n\n");
+        else
+            resetScreen();
     }
 
     @Override

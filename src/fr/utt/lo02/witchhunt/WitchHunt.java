@@ -13,8 +13,11 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class WitchHunt {
+
+    private static boolean test;
+
     public static void main(String[] args) {
-        boolean test = false;
+        test = false;
 
         for (String arg : args) {
             if (arg.equals("-test")) {
@@ -93,5 +96,9 @@ public class WitchHunt {
 
         pManager.createArtificialPlayer(strategies);
         pManager.createArtificialPlayer(strategies);
+    }
+
+    public static boolean isTest(){
+        return test;
     }
 }
