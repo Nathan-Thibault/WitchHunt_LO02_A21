@@ -28,10 +28,10 @@ public abstract class Player {
 
         identityCard.setRevealed(true);
         if (identityCard.getIdentity() == Identity.WITCH) {
-            io.printInfo(name.concat(" was a witch. He's out of the game until the end of the round."));
+            io.printInfo(name.concat(" was a witch."));
             PlayerManager.getInstance().eliminate(name);
         } else {
-            io.printInfo(name.concat(" is a villager. He stays in game."));
+            io.printInfo(name.concat(" is a villager."));
         }
         io.pause();
     }

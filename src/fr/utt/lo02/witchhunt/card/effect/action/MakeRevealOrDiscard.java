@@ -3,6 +3,7 @@ package fr.utt.lo02.witchhunt.card.effect.action;
 import fr.utt.lo02.witchhunt.Identity;
 import fr.utt.lo02.witchhunt.RoundManager;
 import fr.utt.lo02.witchhunt.card.CardManager;
+import fr.utt.lo02.witchhunt.io.IOController;
 import fr.utt.lo02.witchhunt.player.Player;
 import fr.utt.lo02.witchhunt.player.PlayerManager;
 
@@ -22,8 +23,9 @@ public final class MakeRevealOrDiscard extends Action {
     public void execute(String callerName, HashMap<String, Object> args) {
         PlayerManager pManager = PlayerManager.getInstance();
         RoundManager rManager = RoundManager.getInstance();
-        Player caller = pManager.getByName(callerName);
+        IOController io = IOController.getInstance();
 
+        Player caller = pManager.getByName(callerName);
         ArrayList<String> possibleTargets = pManager.getUnrevealedPlayers();
         possibleTargets.remove(callerName);
         String targetName = caller.choosePlayerFrom(possibleTargets);
@@ -39,16 +41,22 @@ public final class MakeRevealOrDiscard extends Action {
         if (b) {
             target.revealIdentity();
             if (target.getIdentityCard().getIdentity().equals(Identity.VILLAGER)) {
+                io.printInfo(callerName.concat(" loses a point and ").concat(targetName).concat(" takes next turn."));
                 caller.addToScore(-1);
                 rManager.setIndexAtPlayer(targetName);
             } else {
+                io.printInfo(callerName.concat(" gains a point and takes next turn."));
                 caller.addToScore(1);
                 rManager.setIndexAtPlayer(callerName);
             }
         } else {
             String card = target.chooseCardFrom(target.getHand());
+
+            io.printInfo(targetName.concat("  discarded ").concat(card).concat(". He takes next turn."));
+
             target.getHand().remove(card);
             CardManager.getInstance().discard(card);
+
             rManager.setIndexAtPlayer(targetName);
         }
     }

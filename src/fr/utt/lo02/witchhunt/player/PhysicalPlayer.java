@@ -94,7 +94,7 @@ public final class PhysicalPlayer extends Player {
             sb.append("\nYou are forced to reveal because you can't play any card:");
             io.printInfo(sb.toString());
 
-            revealIdentity();
+            revealIdentity(accuser);
         }
     }
 
