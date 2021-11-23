@@ -21,8 +21,8 @@ public final class LookAtIdentity extends Action {
         PlayerManager pManager = PlayerManager.getInstance();
         Player caller = pManager.getByName(callerName);
 
-        CardEffect effect = (CardEffect) Objects.requireNonNull(args.get("effect"), "Look : missing argument effect");
-        String target = Objects.requireNonNull(effect.getTarget(), "RandomlyTakeCardFrom : target can't be null");
+        CardEffect effect = (CardEffect) Objects.requireNonNull(args.get("effect"), "LookAtIdentity : missing argument effect");
+        String target = Objects.requireNonNull(effect.getTarget(), "LookAtIdentity : target can't be null");
         Identity targetIdentity = pManager.getByName(target).getIdentityCard().getIdentity();
 
         if (caller instanceof ArtificialPlayer) {

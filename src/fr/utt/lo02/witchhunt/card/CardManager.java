@@ -47,7 +47,7 @@ public final class CardManager {
 
         allRumourCards.put("Evil Eye", new RumourCard("Evil Eye",
                 new CardEffect(EffectType.WITCH, new ChooseNextPlayer(null), new MustAccuse()),
-                new CardEffect(EffectType.HUNT, new ChooseNextPlayer(null), new MustAccuse()), null));
+                new CardEffect(EffectType.HUNT, new ChooseNextPlayer("unrevealed"), new MustAccuse()), null));
 
         allRumourCards.put("Hooked Nose", new RumourCard("Hooked Nose",
                 new CardEffect(EffectType.WITCH, new TakeFromAccuser(), new TakeTurn()),
@@ -118,8 +118,13 @@ public final class CardManager {
     }
 
     public void resetDealSystem() {
+        discardedCards.clear();//remove all discarded cards
+
         cardsToDeal = new ArrayList<>(allRumourCards.keySet());
         Collections.shuffle(cardsToDeal);
+
+        for (String card : cardsToDeal)//un-reveal every card
+            getByName(card).setRevealed(false);
 
         //Discard cards until there is an integer amount of cards to deal per player
         int numberOfPlayers = PlayerManager.getInstance().getAllPlayers().size();
