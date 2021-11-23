@@ -69,8 +69,8 @@ public final class CommandLineInterface implements IOInterface {
 
         StringBuilder sb = new StringBuilder();
 
-        sb.append("\nList of the players in game :\n");
-        for (String pName : pManager.getInGamePlayers()) {
+        sb.append("\nList of the players:\n");
+        for (String pName : pManager.getAllPlayers()) {
             Player p = pManager.getByName(pName);
             IdentityCard ic = p.getIdentityCard();
 
