@@ -6,6 +6,7 @@ import fr.utt.lo02.witchhunt.player.Player;
 import fr.utt.lo02.witchhunt.player.PlayerManager;
 
 import java.util.HashMap;
+import java.util.Set;
 
 public final class Reveal extends Action {
 
@@ -14,26 +15,27 @@ public final class Reveal extends Action {
     }
 
     @Override
-    public boolean execute(String callerName, HashMap<String, Object> args) {
+    public void execute(String callerName, HashMap<String, Object> args) {
+        RoundManager rManager = RoundManager.getInstance();
         PlayerManager pManager = PlayerManager.getInstance();
         Player caller = pManager.getByName(callerName);
 
-        if (caller.getIdentityCard().isRevealed()) {
-            return false;
-        } else {
-            caller.getIdentityCard().setRevealed(true);
+        caller.revealIdentity();
 
-            if (caller.getIdentityCard().getIdentity().equals(Identity.VILLAGER)) {
-                RoundManager.getInstance().setIndexAtPlayer(callerName);
-            } else {
-                pManager.eliminate(callerName);
-            }
-            return true;
+        if (caller.getIdentityCard().getIdentity().equals(Identity.VILLAGER)) {
+            Set<String> possibleTargets = pManager.getInGamePlayers();
+            possibleTargets.remove(callerName);//player can't choose himself
+
+            String target = caller.choosePlayerFrom(possibleTargets);
+            rManager.setIndexAtPlayer(target);
+        } else {
+            pManager.eliminate(callerName);
+            rManager.incrementIndex();
         }
     }
 
     @Override
-    public String cantExecute() {
-        return "Your identity is already revealed.";
+    public boolean isExecutable(String callerName, HashMap<String, Object> args) {
+        return !PlayerManager.getInstance().getByName(callerName).getIdentityCard().isRevealed();
     }
 }

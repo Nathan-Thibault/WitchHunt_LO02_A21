@@ -1,6 +1,6 @@
 package fr.utt.lo02.witchhunt.io;
 
-import fr.utt.lo02.witchhunt.Identity;
+import fr.utt.lo02.witchhunt.WitchHunt;
 import fr.utt.lo02.witchhunt.card.CardManager;
 import fr.utt.lo02.witchhunt.card.IdentityCard;
 import fr.utt.lo02.witchhunt.player.Player;
@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.Set;
 
 public final class CommandLineInterface implements IOInterface {
 
@@ -25,7 +26,11 @@ public final class CommandLineInterface implements IOInterface {
     @Override
     public void clear() {
         waiting = false;
-        resetScreen();
+
+        if (WitchHunt.isTest())
+            System.out.println("\n---\n\n");
+        else
+            resetScreen();
     }
 
     @Override
@@ -44,6 +49,11 @@ public final class CommandLineInterface implements IOInterface {
                 .concat("                      ░                                                        \n")
                 .concat("\n"));
 
+        pause();
+    }
+
+    @Override
+    public void pause() {
         System.out.println("Press enter to continue.");
         try {
             System.in.read();//blocks until input data is available, i.e. until enter is pressed
@@ -59,7 +69,7 @@ public final class CommandLineInterface implements IOInterface {
 
         StringBuilder sb = new StringBuilder();
 
-        sb.append("List of the players in game :\n");
+        sb.append("\nList of the players in game :\n");
         for (String pName : pManager.getInGamePlayers()) {
             Player p = pManager.getByName(pName);
             IdentityCard ic = p.getIdentityCard();
@@ -72,33 +82,28 @@ public final class CommandLineInterface implements IOInterface {
             //score
             sb.append(", Score: ");
             sb.append(p.getScore());
+            //number of cards in hand
+            sb.append(", Cards in hand: ");
+            sb.append(p.getHand().size());
             //revealed cards if any
-            formatList(sb, ", Revealed cards: ", p.getRevealedCards());
-
+            formatSet(sb, ", Revealed cards: ", p.getRevealedCards());
             sb.append("]\n");
         }
 
         //list of discarded cards if any
-        formatList(sb, "List of discarded cards:\n", CardManager.getInstance().getDiscardedCards());
+        formatSet(sb, "\nList of discarded cards:\n", CardManager.getInstance().getDiscardedCards());
+        sb.append("\n");
 
-        System.out.print(sb);
-    }
-
-    @Override
-    public void playerTurn(String playerName) {
-        resetScreen();
-        System.out.println("It's ".concat(playerName).concat("'s turn:"));
+        System.out.println(sb);
     }
 
     @Override
     public void printInfo(String msg) {
-        resetScreen();
         System.out.println(msg);
     }
 
     @Override
     public void printError(String msg) {
-        resetScreen();
         System.err.println(msg);
     }
 
@@ -141,34 +146,8 @@ public final class CommandLineInterface implements IOInterface {
     }
 
     @Override
-    public Identity readIdentity() {
-        //TODO: try to refactor duplicated code with listOfOptions building
-        int minCode = 0;
-        int maxCode = 0;
-        StringBuilder listOfOptions = new StringBuilder();
-
-        listOfOptions.append("Select an identity from the list bellow:\n");
-
-        for (Identity identity : Identity.values()) {
-            maxCode = identity.getCode();
-            if (minCode == 0)
-                minCode = identity.getCode();
-
-            listOfOptions.append(identity.getCode());
-            listOfOptions.append(" -> ");
-            listOfOptions.append(identity);
-            listOfOptions.append("\n");
-        }
-        System.out.print(listOfOptions);
-
-        int code = intBetween(minCode, maxCode);
-        IOController.getInstance().read("identity", Identity.getByCode(code));
-
-        return null;
-    }
-
-    @Override
-    public <T> T readFromList(ArrayList<T> list) {
+    public <T> T readFromSet(Set<T> set) {
+        ArrayList<T> list = new ArrayList<>(set);
         StringBuilder listOfOptions = new StringBuilder();
 
         for (int i = 0; i < list.size(); i++) {
@@ -232,7 +211,7 @@ public final class CommandLineInterface implements IOInterface {
         }
     }
 
-    private void formatList(StringBuilder sb, String msg, ArrayList<String> list) {
+    private void formatSet(StringBuilder sb, String msg, Set<String> list) {
         if (!list.isEmpty()) {
             sb.append(msg);
             sb.append("{");
@@ -240,7 +219,7 @@ public final class CommandLineInterface implements IOInterface {
                 sb.append(str);
                 sb.append(", ");
             }
-            sb.delete(sb.length() - 3, sb.length() - 1);//remove last ", "
+            sb.delete(sb.length() - 2, sb.length());//remove last ", "
             sb.append("}");
         }
     }

@@ -2,10 +2,11 @@ package fr.utt.lo02.witchhunt.card.effect.action;
 
 import fr.utt.lo02.witchhunt.Identity;
 import fr.utt.lo02.witchhunt.RoundManager;
+import fr.utt.lo02.witchhunt.io.IOController;
 import fr.utt.lo02.witchhunt.player.Player;
 import fr.utt.lo02.witchhunt.player.PlayerManager;
 
-import java.util.ArrayList;
+import java.util.Set;
 import java.util.HashMap;
 
 public final class RevealPlayer extends Action {
@@ -15,11 +16,11 @@ public final class RevealPlayer extends Action {
     }
 
     @Override
-    public boolean execute(String callerName, HashMap<String, Object> args) {
+    public void execute(String callerName, HashMap<String, Object> args) {
         PlayerManager pManager = PlayerManager.getInstance();
         Player caller = pManager.getByName(callerName);
 
-        ArrayList<String> possibleTargets = pManager.getUnrevealedPlayers();
+        Set<String> possibleTargets = pManager.getUnrevealedPlayers();
         possibleTargets.remove(callerName);
         String targetName = caller.choosePlayerFrom(possibleTargets);
         Player target = pManager.getByName(targetName);
@@ -27,17 +28,18 @@ public final class RevealPlayer extends Action {
         target.getIdentityCard().setRevealed(true);
         if (target.getIdentityCard().getIdentity().equals(Identity.WITCH)) {
             caller.addToScore(2);
-            pManager.eliminate(targetName);
+            target.revealIdentity();
+            IOController.getInstance().printInfo(callerName.concat(" gains two points and takes next turn."));
             RoundManager.getInstance().setIndexAtPlayer(callerName);
         } else {
             caller.addToScore(-2);
+            IOController.getInstance().printInfo(callerName.concat(" loses two points and ").concat(targetName).concat(" takes next turn."));
             RoundManager.getInstance().setIndexAtPlayer(targetName);
         }
-        return true;
     }
 
     @Override
-    public String cantExecute() {
-        return null;
+    public boolean isExecutable(String callerName, HashMap<String, Object> args) {
+        return true;
     }
 }

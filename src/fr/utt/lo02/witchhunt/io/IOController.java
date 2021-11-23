@@ -1,10 +1,10 @@
 package fr.utt.lo02.witchhunt.io;
 
-import fr.utt.lo02.witchhunt.Identity;
 import fr.utt.lo02.witchhunt.player.strategy.Strategy;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 public final class IOController implements IOInterface {
 
@@ -60,16 +60,19 @@ public final class IOController implements IOInterface {
     }
 
     @Override
-    public void displayGameInfos() {
-        for (IOInterface ioInterface : interfaces) {
-            ioInterface.displayGameInfos();
+    public void pause() {
+        for(IOInterface ioInterface: interfaces){
+            new Thread(ioInterface::pause).start();
         }
+
+        startWaiting();
+        clear();
     }
 
     @Override
-    public void playerTurn(String playerName) {
+    public void displayGameInfos() {
         for (IOInterface ioInterface : interfaces) {
-            ioInterface.playerTurn(playerName);
+            ioInterface.displayGameInfos();
         }
     }
 
@@ -112,20 +115,9 @@ public final class IOController implements IOInterface {
     }
 
     @Override
-    public Identity readIdentity() {
+    public <T> T readFromSet(Set<T> set) {
         for (IOInterface ioInterface : interfaces) {
-            new Thread(ioInterface::readIdentity).start();
-        }
-
-        startWaiting();
-        clear();
-        return (Identity) readValues.get("identity");
-    }
-
-    @Override
-    public <T> T readFromList(ArrayList<T> list) {
-        for (IOInterface ioInterface : interfaces) {
-            new Thread(() -> ioInterface.readFromList(list)).start();
+            new Thread(() -> ioInterface.readFromSet(set)).start();
         }
 
         startWaiting();

@@ -4,7 +4,7 @@ import fr.utt.lo02.witchhunt.card.CardManager;
 import fr.utt.lo02.witchhunt.player.Player;
 import fr.utt.lo02.witchhunt.player.PlayerManager;
 
-import java.util.ArrayList;
+import java.util.Set;
 import java.util.HashMap;
 
 public final class TakeBackRevealed extends Action {
@@ -14,24 +14,24 @@ public final class TakeBackRevealed extends Action {
     }
 
     @Override
-    public boolean execute(String callerName, HashMap<String, Object> args) {
+    public void execute(String callerName, HashMap<String, Object> args) {
         CardManager cManager = CardManager.getInstance();
         Player caller = PlayerManager.getInstance().getByName(callerName);
 
-        ArrayList<String> revealedCards = caller.getOwnedCards();
+        Set<String> revealedCards = caller.getOwnedCards();
         revealedCards.removeAll(caller.getHand());
 
-        if (revealedCards.isEmpty()) {
-            return false;
-        } else {
-            String card = caller.chooseCardFrom(revealedCards);
-            cManager.getByName(card).setRevealed(false);
-            return true;
-        }
+        String card = caller.chooseCardFrom(revealedCards);
+        cManager.getByName(card).setRevealed(false);
     }
 
     @Override
-    public String cantExecute() {
-        return "You have no revealed cards.";
+    public boolean isExecutable(String callerName, HashMap<String, Object> args) {
+        Player caller = PlayerManager.getInstance().getByName(callerName);
+
+        Set<String> revealedCards = caller.getOwnedCards();
+        revealedCards.removeAll(caller.getHand());
+
+        return !revealedCards.isEmpty();
     }
 }

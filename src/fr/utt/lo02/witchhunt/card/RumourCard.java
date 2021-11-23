@@ -2,15 +2,19 @@ package fr.utt.lo02.witchhunt.card;
 
 import fr.utt.lo02.witchhunt.card.effect.CardEffect;
 import fr.utt.lo02.witchhunt.card.effect.EffectType;
+import fr.utt.lo02.witchhunt.io.IOController;
 
 public final class RumourCard extends Card {
 
+    private final String name;
     private final CardEffect witchEffect;
     private final CardEffect huntEffect;
     private final String cantBeChosenBy;
 
-    public RumourCard(CardEffect witchEffect, CardEffect huntEffect, String cantBeChosenBy) {
+    public RumourCard(String name, CardEffect witchEffect, CardEffect huntEffect, String cantBeChosenBy) {
         super(false);
+
+        this.name = name;
 
         if (witchEffect == null) {
             throw new NullPointerException("RumourCard constructor: witchEffect can't be null.");
@@ -31,15 +35,36 @@ public final class RumourCard extends Card {
         this.cantBeChosenBy = cantBeChosenBy;
     }
 
-    public boolean playWitchEffect(String callerName, String accuser) {
-        return witchEffect.play(callerName, accuser);
+    public void playWitchEffect(String callerName, String accuser) {
+        IOController.getInstance().printInfo(callerName.concat(" played ").concat(name).concat(":\n").concat(witchEffectDescription()));
+        setRevealed(true);
+        witchEffect.play(callerName, accuser);
     }
 
-    public boolean playHuntEffect(String callerName) {
-        return huntEffect.play(callerName);
+    public void playHuntEffect(String callerName) {
+        IOController.getInstance().printInfo(callerName.concat(" played ").concat(name).concat(":\n").concat(huntEffectDescription()));
+        setRevealed(true);
+        huntEffect.play(callerName);
+    }
+
+    public boolean canPlayWitchEffect(String callerName, String accuser) {
+        return witchEffect.isPlayable(callerName, accuser);
+    }
+
+    public boolean canPlayHuntEffect(String callerName) {
+        return huntEffect.isPlayable(callerName);
+    }
+
+    public String witchEffectDescription(){
+        return witchEffect.getDescription();
+    }
+
+    public String huntEffectDescription(){
+        return huntEffect.getDescription();
     }
 
     public String getCantBeChosenBy() {
+        //TODO: create verification using this when playing cards
         if (revealed) {
             return cantBeChosenBy;
         }

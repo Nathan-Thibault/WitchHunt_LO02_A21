@@ -15,19 +15,21 @@ public final class MakeAccuserDiscard extends Action {
     }
 
     @Override
-    public boolean execute(String callerName, HashMap<String, Object> args) {
+    public void execute(String callerName, HashMap<String, Object> args) {
         String accuserName = (String) Objects.requireNonNull(args.get("accuserName"), "MakeDiscard: missing accuserName argument");
         Player accuser = PlayerManager.getInstance().getByName(accuserName);
 
         //discard random card from accuser's hand
-        String card = Utils.randomFromList(accuser.getHand());
+        String card = Utils.randomFromSet(accuser.getHand());
         accuser.getOwnedCards().remove(card);
         CardManager.getInstance().discard(card);
-        return true;
     }
 
     @Override
-    public String cantExecute() {
-        return "There is no players with cards in hand to choose.";
+    public boolean isExecutable(String callerName, HashMap<String, Object> args) {
+        String accuserName = (String) Objects.requireNonNull(args.get("accuserName"), "MakeAccuserDiscard: missing accuserName argument");
+        Player accuser = PlayerManager.getInstance().getByName(accuserName);
+
+        return !accuser.getHand().isEmpty();
     }
 }

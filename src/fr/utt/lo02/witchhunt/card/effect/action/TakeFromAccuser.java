@@ -13,25 +13,23 @@ public final class TakeFromAccuser extends Action {
     }
 
     @Override
-    public boolean execute(String callerName, HashMap<String, Object> args) {
+    public void execute(String callerName, HashMap<String, Object> args) {
         PlayerManager pManager = PlayerManager.getInstance();
-        Player caller = pManager.getByName(callerName);
 
+        Player caller = pManager.getByName(callerName);
         String accuserName = (String) Objects.requireNonNull(args.get("accuserName"), "TakeFromAccuser : missing argument accuserName");
         Player accuser = pManager.getByName(accuserName);
 
-        if (accuser.getHand().isEmpty()) {
-            return false;
-        } else {
-            String card = caller.chooseCardFrom(accuser.getHand());
-            accuser.getOwnedCards().remove(card);
-            caller.getOwnedCards().add(card);
-            return true;
-        }
+        String card = caller.chooseCardFrom(accuser.getHand());
+        accuser.getOwnedCards().remove(card);
+        caller.getOwnedCards().add(card);
     }
 
     @Override
-    public String cantExecute() {
-        return "Your accuser has not card in hand.";
+    public boolean isExecutable(String callerName, HashMap<String, Object> args) {
+        String accuserName = (String) Objects.requireNonNull(args.get("accuserName"), "TakeFromAccuser : missing argument accuserName");
+        Player accuser = PlayerManager.getInstance().getByName(accuserName);
+
+        return !accuser.getHand().isEmpty();
     }
 }

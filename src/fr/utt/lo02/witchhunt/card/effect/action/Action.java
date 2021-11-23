@@ -10,7 +10,11 @@ public abstract class Action {
         this.description = description;
     }
 
-    public abstract boolean execute(String callerName, HashMap<String, Object> args);
+    public abstract void execute(String callerName, HashMap<String, Object> args);
 
-    public abstract String cantExecute();
+    public abstract boolean isExecutable(String callerName, HashMap<String, Object> args);
+
+    public String getDescription() {
+        return description;
+    }
 }

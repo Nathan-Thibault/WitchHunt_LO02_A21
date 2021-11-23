@@ -4,16 +4,35 @@ import fr.utt.lo02.witchhunt.card.CardManager;
 import fr.utt.lo02.witchhunt.io.IOController;
 import fr.utt.lo02.witchhunt.player.PlayerManager;
 import fr.utt.lo02.witchhunt.player.strategy.Strategy;
+import fr.utt.lo02.witchhunt.player.strategy.identity.RandomIdentityStrategy;
+import fr.utt.lo02.witchhunt.player.strategy.respond.RevealIfVillager;
+import fr.utt.lo02.witchhunt.player.strategy.turn.AlwaysAccuse;
 
 import java.util.HashMap;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class WitchHunt {
+
+    private static boolean test;
+
     public static void main(String[] args) {
+        test = false;
+
+        for (String arg : args) {
+            if (arg.equals("-test")) {
+                createTestGame();
+                test = true;
+            }
+        }
+
         IOController.getInstance().titleScreen();
-        createPlayers();
+
+        if (!test)
+            createPlayers();
+
         CardManager.getInstance();//create cards
+        PlayerManager.getInstance().shufflePlayers();
         RoundManager.getInstance().startNewRound();
     }
 
@@ -61,5 +80,26 @@ public class WitchHunt {
         }
         sb.deleteCharAt(sb.lastIndexOf(","));//remove useless last comma
         io.printInfo(sb.toString());
+        io.pause();
+    }
+
+    private static void createTestGame() {
+        PlayerManager pManager = PlayerManager.getInstance();
+
+        pManager.addPhysicalPlayer("Pierre");
+        pManager.addPhysicalPlayer("Paul");
+        pManager.addPhysicalPlayer("Jacques");
+
+        HashMap<Strategy.StrategyType, Class<? extends Strategy>> strategies = new HashMap<>();
+        strategies.put(Strategy.StrategyType.IDENTITY, RandomIdentityStrategy.class);
+        strategies.put(Strategy.StrategyType.RESPOND, RevealIfVillager.class);
+        strategies.put(Strategy.StrategyType.TURN, AlwaysAccuse.class);
+
+        pManager.createArtificialPlayer(strategies);
+        pManager.createArtificialPlayer(strategies);
+    }
+
+    public static boolean isTest() {
+        return test;
     }
 }

@@ -2,6 +2,7 @@ package fr.utt.lo02.witchhunt.card.effect.action;
 
 import fr.utt.lo02.witchhunt.Identity;
 import fr.utt.lo02.witchhunt.card.effect.CardEffect;
+import fr.utt.lo02.witchhunt.io.IOController;
 import fr.utt.lo02.witchhunt.player.ArtificialPlayer;
 import fr.utt.lo02.witchhunt.player.Player;
 import fr.utt.lo02.witchhunt.player.PlayerManager;
@@ -16,7 +17,7 @@ public final class LookAtIdentity extends Action {
     }
 
     @Override
-    public boolean execute(String callerName, HashMap<String, Object> args) {
+    public void execute(String callerName, HashMap<String, Object> args) {
         PlayerManager pManager = PlayerManager.getInstance();
         Player caller = pManager.getByName(callerName);
 
@@ -27,14 +28,12 @@ public final class LookAtIdentity extends Action {
         if (caller instanceof ArtificialPlayer) {
             ((ArtificialPlayer) caller).savePlayerIdentity(target, targetIdentity);
         } else {
-            System.out.println(effect.getTarget().concat(" is a ").concat(targetIdentity.toString()));
+            IOController.getInstance().printInfo(effect.getTarget().concat(" is a ").concat(targetIdentity.toString()));
         }
-
-        return false;
     }
 
     @Override
-    public String cantExecute() {
-        return null;
+    public boolean isExecutable(String callerName, HashMap<String, Object> args) {
+        return true;
     }
 }

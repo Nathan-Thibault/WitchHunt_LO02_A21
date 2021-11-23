@@ -15,22 +15,20 @@ public final class RandomlyTakeCardFrom extends Action {
     }
 
     @Override
-    public boolean execute(String callerName, HashMap<String, Object> args) {
+    public void execute(String callerName, HashMap<String, Object> args) {
         PlayerManager pManager = PlayerManager.getInstance();
         Player caller = pManager.getByName(callerName);
 
         CardEffect effect = (CardEffect) Objects.requireNonNull(args.get("effect"), "RandomlyTakeCardFrom : missing argument effect");
         Player target = pManager.getByName(Objects.requireNonNull(effect.getTarget(), "RandomlyTakeCardFrom : target is can't be null"));
 
-        String card = Utils.randomFromList(target.getHand());
+        String card = Utils.randomFromSet(target.getHand());
         target.getOwnedCards().remove(card);
         caller.getOwnedCards().add(card);
-
-        return true;
     }
 
     @Override
-    public String cantExecute() {
-        return null;
+    public boolean isExecutable(String callerName, HashMap<String, Object> args) {
+        return true;
     }
 }

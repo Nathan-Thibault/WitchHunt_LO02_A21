@@ -13,21 +13,16 @@ public final class Discard extends Action {
     }
 
     @Override
-    public boolean execute(String callerName, HashMap<String, Object> args) {
+    public void execute(String callerName, HashMap<String, Object> args) {
         Player caller = PlayerManager.getInstance().getByName(callerName);
 
-        if (caller.getHand().isEmpty()) {
-            return false;
-        } else {
-            String cardName = caller.chooseCardFrom(caller.getHand());
-            caller.getOwnedCards().remove(cardName);
-            CardManager.getInstance().discard(cardName);
-            return true;
-        }
+        String cardName = caller.chooseCardFrom(caller.getHand());
+        caller.getOwnedCards().remove(cardName);
+        CardManager.getInstance().discard(cardName);
     }
 
     @Override
-    public String cantExecute() {
-        return "You have no card in hand.";
+    public boolean isExecutable(String callerName, HashMap<String, Object> args) {
+        return PlayerManager.getInstance().getByName(callerName).getHand().isEmpty();
     }
 }

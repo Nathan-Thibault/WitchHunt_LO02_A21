@@ -1,18 +1,17 @@
 package fr.utt.lo02.witchhunt.io;
 
-import fr.utt.lo02.witchhunt.Identity;
 import fr.utt.lo02.witchhunt.player.strategy.Strategy;
 
-import java.util.ArrayList;
+import java.util.Set;
 
 public interface IOInterface {
     void clear();
 
     void titleScreen();
 
-    void displayGameInfos();
+    void pause();
 
-    void playerTurn(String playerName);
+    void displayGameInfos();
 
     void printInfo(String msg);
 
@@ -22,7 +21,5 @@ public interface IOInterface {
 
     Class<? extends Strategy> readStrategy(Strategy.StrategyType strategyType);
 
-    Identity readIdentity();
-
-    <T> T readFromList(ArrayList<T> list);
+    <T> T readFromSet(Set<T> list);
 }
