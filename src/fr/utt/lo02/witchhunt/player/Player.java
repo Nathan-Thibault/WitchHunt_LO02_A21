@@ -1,12 +1,13 @@
 package fr.utt.lo02.witchhunt.player;
 
 import fr.utt.lo02.witchhunt.Identity;
-import fr.utt.lo02.witchhunt.RoundManager;
-import fr.utt.lo02.witchhunt.card.CardManager;
+import fr.utt.lo02.witchhunt.managers.RoundManager;
+import fr.utt.lo02.witchhunt.managers.CardManager;
 import fr.utt.lo02.witchhunt.card.IdentityCard;
 import fr.utt.lo02.witchhunt.card.RumourCard;
 import fr.utt.lo02.witchhunt.card.effect.EffectType;
 import fr.utt.lo02.witchhunt.io.IOController;
+import fr.utt.lo02.witchhunt.managers.PlayerManager;
 
 import java.util.HashSet;
 import java.util.Set;

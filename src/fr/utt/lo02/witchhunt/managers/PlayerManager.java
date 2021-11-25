@@ -1,5 +1,8 @@
-package fr.utt.lo02.witchhunt.player;
+package fr.utt.lo02.witchhunt.managers;
 
+import fr.utt.lo02.witchhunt.player.ArtificialPlayer;
+import fr.utt.lo02.witchhunt.player.PhysicalPlayer;
+import fr.utt.lo02.witchhunt.player.Player;
 import fr.utt.lo02.witchhunt.player.strategy.Strategy;
 
 import java.util.ArrayList;

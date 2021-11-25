@@ -1,10 +1,10 @@
 package fr.utt.lo02.witchhunt.io;
 
 import fr.utt.lo02.witchhunt.WitchHunt;
-import fr.utt.lo02.witchhunt.card.CardManager;
+import fr.utt.lo02.witchhunt.managers.CardManager;
 import fr.utt.lo02.witchhunt.card.IdentityCard;
 import fr.utt.lo02.witchhunt.player.Player;
-import fr.utt.lo02.witchhunt.player.PlayerManager;
+import fr.utt.lo02.witchhunt.managers.PlayerManager;
 import fr.utt.lo02.witchhunt.player.strategy.Strategy;
 import fr.utt.lo02.witchhunt.player.strategy.StrategyEnum;
 
