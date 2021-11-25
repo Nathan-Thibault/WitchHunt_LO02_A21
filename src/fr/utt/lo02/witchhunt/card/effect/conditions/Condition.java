@@ -2,6 +2,9 @@ package fr.utt.lo02.witchhunt.card.effect.conditions;
 
 import fr.utt.lo02.witchhunt.player.Player;
 
+/**
+ * The <b>Condition</b> class is a generic representation of a condition to play a {@link fr.utt.lo02.witchhunt.card.effect.CardEffect}.
+ */
 public abstract class Condition {
     /**
      * Description of the condition.
