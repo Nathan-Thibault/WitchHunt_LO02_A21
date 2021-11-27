@@ -136,7 +136,7 @@ public final class PhysicalPlayer extends Player {
         if (!hand.isEmpty()) {
             CardManager cardManager = CardManager.getInstance();
 
-            sb.append("List of your cards an their ");
+            sb.append("List of your cards and their ");
             sb.append(witchEffect ? "witch" : "hunt");
             sb.append(" effect:\n");
 

@@ -36,13 +36,13 @@ public final class RumourCard extends Card {
     }
 
     public void playWitchEffect(String callerName, String accuser) {
-        IOController.getInstance().printInfo(callerName.concat(" played ").concat(name).concat(":\n").concat(witchEffectDescription()));
+        IOController.getInstance().printInfo(callerName.concat(" plays ").concat(name).concat(":\n").concat(witchEffectDescription()));
         setRevealed(true);
         witchEffect.play(callerName, accuser);
     }
 
     public void playHuntEffect(String callerName) {
-        IOController.getInstance().printInfo(callerName.concat(" played ").concat(name).concat(":\n").concat(huntEffectDescription()));
+        IOController.getInstance().printInfo(callerName.concat(" plays ").concat(name).concat(":\n").concat(huntEffectDescription()));
         setRevealed(true);
         huntEffect.play(callerName);
     }
