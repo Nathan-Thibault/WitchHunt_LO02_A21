@@ -1,6 +1,6 @@
-package fr.utt.lo02.witchhunt.card.effect.action;
+package fr.utt.lo02.witchhunt.card.effect.actions;
 
-import fr.utt.lo02.witchhunt.RoundManager;
+import fr.utt.lo02.witchhunt.managers.RoundManager;
 
 import java.util.HashMap;
 

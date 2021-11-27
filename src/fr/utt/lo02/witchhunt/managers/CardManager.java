@@ -1,13 +1,13 @@
-package fr.utt.lo02.witchhunt.card;
+package fr.utt.lo02.witchhunt.managers;
 
 import com.sun.jdi.ClassNotPreparedException;
 import fr.utt.lo02.witchhunt.Utils;
+import fr.utt.lo02.witchhunt.card.RumourCard;
 import fr.utt.lo02.witchhunt.card.effect.RumourCardBuilder;
-import fr.utt.lo02.witchhunt.card.effect.action.*;
-import fr.utt.lo02.witchhunt.card.effect.condition.Condition;
-import fr.utt.lo02.witchhunt.card.effect.condition.RevealedARumourCard;
-import fr.utt.lo02.witchhunt.card.effect.condition.RevealedAsVillager;
-import fr.utt.lo02.witchhunt.player.PlayerManager;
+import fr.utt.lo02.witchhunt.card.effect.actions.*;
+import fr.utt.lo02.witchhunt.card.effect.conditions.Condition;
+import fr.utt.lo02.witchhunt.card.effect.conditions.RevealedARumourCard;
+import fr.utt.lo02.witchhunt.card.effect.conditions.RevealedAsVillager;
 
 import java.util.ArrayList;
 import java.util.Collections;
