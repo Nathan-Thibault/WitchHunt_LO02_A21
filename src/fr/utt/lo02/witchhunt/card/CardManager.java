@@ -47,7 +47,7 @@ public final class CardManager {
 
         allRumourCards.put("Evil Eye", new RumourCard("Evil Eye",
                 new CardEffect(EffectType.WITCH, new ChooseNextPlayer(null), new MustAccuse()),
-                new CardEffect(EffectType.HUNT, new ChooseNextPlayer("unrevealed"), new MustAccuse()), null));
+                new CardEffect(EffectType.HUNT, new ChooseNextPlayer(null), new MustAccuse()), null));
 
         allRumourCards.put("Hooked Nose", new RumourCard("Hooked Nose",
                 new CardEffect(EffectType.WITCH, new TakeFromAccuser(), new TakeTurn()),
