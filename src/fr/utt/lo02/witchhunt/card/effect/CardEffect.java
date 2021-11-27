@@ -8,7 +8,6 @@ import fr.utt.lo02.witchhunt.managers.PlayerManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -52,24 +51,6 @@ public final class CardEffect {
      * retrieved by a second action later.
      */
     private String targetName;
-
-    //TODO: make a builder for CardEffect ?
-
-    public CardEffect(EffectType type, Action action) {
-        this(type, new ArrayList<>(List.of(action)), null);
-    }
-
-    public CardEffect(EffectType type, Action action, Condition condition) {
-        this(type, new ArrayList<>(List.of(action)), new ArrayList<>(List.of(condition)));
-    }
-
-    public CardEffect(EffectType type, Action firstAction, Action secondAction) {
-        this(type, new ArrayList<>(List.of(firstAction, secondAction)), null);
-    }
-
-    public CardEffect(EffectType type, Action firstAction, Action secondAction, Condition condition) {
-        this(type, new ArrayList<>(List.of(firstAction, secondAction)), new ArrayList<>(List.of(condition)));
-    }
 
     /**
      * Constructs a new <b>CardEffect</b>.
@@ -214,7 +195,7 @@ public final class CardEffect {
         HashMap<String, Object> args = new HashMap<>();
 
         switch (action.getClass().getSimpleName()) {
-            case "ChooseNextPlayer", "LookAtIdentity", "RandomlyTakeCardFrom" -> args.put("effect", this);
+            case "ChooseNextPlayer", "LookAtIdentity", "RandomlyTakeCardFrom", "MustAccuse" -> args.put("effect", this);
             case "MakeAccuserDiscard", "TakeFromAccuser" -> args.put("accuserName", accuserName);
             default -> args = null;
         }

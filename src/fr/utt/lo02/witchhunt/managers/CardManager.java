@@ -2,9 +2,7 @@ package fr.utt.lo02.witchhunt.managers;
 
 import com.sun.jdi.ClassNotPreparedException;
 import fr.utt.lo02.witchhunt.Utils;
-import fr.utt.lo02.witchhunt.card.RumourCard;
-import fr.utt.lo02.witchhunt.card.effect.CardEffect;
-import fr.utt.lo02.witchhunt.card.effect.EffectType;
+import fr.utt.lo02.witchhunt.card.effect.RumourCardBuilder;
 import fr.utt.lo02.witchhunt.card.effect.actions.*;
 import fr.utt.lo02.witchhunt.card.effect.conditions.RevealedARumourCard;
 import fr.utt.lo02.witchhunt.card.effect.conditions.RevealedAsVillager;
@@ -12,66 +10,102 @@ import fr.utt.lo02.witchhunt.card.effect.conditions.RevealedAsVillager;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.Map;
 
 public final class CardManager {
 
     private static CardManager instance;
 
-    private final LinkedHashMap<String, RumourCard> allRumourCards = new LinkedHashMap<>();
+    private final HashMap<String, RumourCard> allRumourCards = new HashMap<>();
     private final HashSet<String> discardedCards = new HashSet<>();
     private ArrayList<String> cardsToDeal;
     private int numberOfCardsPerPlayer;
 
     private CardManager() {
-        allRumourCards.put("Angry Mob", new RumourCard("Angry Mob",
-                new CardEffect(EffectType.WITCH, new TakeTurn()),
-                new CardEffect(EffectType.HUNT, new RevealPlayer(), new RevealedAsVillager()), null));
+        Action chooseNext = new ChooseNextPlayer(null);
+        Action mustAccuse = new MustAccuse();
+        Action takeBack = new TakeBackRevealed();
+        Action takeTurn = new TakeTurn();
 
-        allRumourCards.put("Black Cat", new RumourCard("Black Cat",
-                new CardEffect(EffectType.WITCH, new TakeTurn()),
-                new CardEffect(EffectType.HUNT, new SwitchWithDiscarded(), new TakeTurn()), null));
+        Condition revealed = new RevealedAsVillager();
+        Condition revealedCard = new RevealedARumourCard();
 
-        allRumourCards.put("Broomstick", new RumourCard("Broomstick",
-                new CardEffect(EffectType.WITCH, new TakeTurn()),
-                new CardEffect(EffectType.HUNT, new ChooseNextPlayer(null)), "Angry Mob"));
+        RumourCardBuilder angryMob = new RumourCardBuilder("Angry Mob");
+        angryMob.addWitchAction(takeTurn);
+        angryMob.addHuntAction(new RevealPlayer());
+        angryMob.addHuntCondition(revealed);
+        allRumourCards.put("Angry Mob", angryMob.build());
 
-        allRumourCards.put("Cauldron", new RumourCard("Cauldron",
-                new CardEffect(EffectType.WITCH, new MakeAccuserDiscard(), new TakeTurn()),
-                new CardEffect(EffectType.HUNT, new Reveal()), null));
+        RumourCardBuilder blackCat = new RumourCardBuilder("Black Cat");
+        blackCat.addWitchAction(takeTurn);
+        blackCat.addHuntAction(new SwitchWithDiscarded());
+        blackCat.addHuntAction(takeTurn);
+        allRumourCards.put("Black Cat", blackCat.build());
 
-        allRumourCards.put("Ducking Stool", new RumourCard("Ducking Stool",
-                new CardEffect(EffectType.WITCH, new ChooseNextPlayer(null)),
-                new CardEffect(EffectType.HUNT, new MakeRevealOrDiscard()), null));
+        RumourCardBuilder broomstick = new RumourCardBuilder("Broomstick");
+        broomstick.addWitchAction(takeTurn);
+        broomstick.addHuntAction(chooseNext);
+        broomstick.addCantBeChosenBy("Angry Mob");
+        allRumourCards.put("Broomstick", broomstick.build());
 
-        allRumourCards.put("Evil Eye", new RumourCard("Evil Eye",
-                new CardEffect(EffectType.WITCH, new ChooseNextPlayer(null), new MustAccuse()),
-                new CardEffect(EffectType.HUNT, new ChooseNextPlayer(null), new MustAccuse()), null));
+        RumourCardBuilder cauldron = new RumourCardBuilder("Cauldron");
+        cauldron.addWitchAction(new MakeAccuserDiscard());
+        cauldron.addWitchAction(takeTurn);
+        cauldron.addHuntAction(new Reveal());
+        allRumourCards.put("Cauldron", cauldron.build());
 
-        allRumourCards.put("Hooked Nose", new RumourCard("Hooked Nose",
-                new CardEffect(EffectType.WITCH, new TakeFromAccuser(), new TakeTurn()),
-                new CardEffect(EffectType.HUNT, new ChooseNextPlayer("cards"), new RandomlyTakeCardFrom()), null));
+        RumourCardBuilder duckingStool = new RumourCardBuilder("Ducking Stool");
+        duckingStool.addWitchAction(chooseNext);
+        duckingStool.addHuntAction(new MakeRevealOrDiscard());
+        allRumourCards.put("Ducking Stool", duckingStool.build());
 
-        allRumourCards.put("Pet Newt", new RumourCard("Pet Newt",
-                new CardEffect(EffectType.WITCH, new TakeTurn()),
-                new CardEffect(EffectType.HUNT, new TakeAnyRevealed(), new ChooseNextPlayer(null)), null));
+        RumourCardBuilder evilEye = new RumourCardBuilder("Evil Eye");
+        evilEye.addWitchAction(chooseNext);
+        evilEye.addWitchAction(mustAccuse);
+        evilEye.addHuntAction(chooseNext);
+        evilEye.addHuntAction(mustAccuse);
+        allRumourCards.put("Evil Eye", evilEye.build());
 
-        allRumourCards.put("Pointed Hat", new RumourCard("Pointed Hat",
-                new CardEffect(EffectType.WITCH, new TakeBackRevealed(), new TakeTurn(), new RevealedARumourCard()),
-                new CardEffect(EffectType.HUNT, new TakeBackRevealed(), new ChooseNextPlayer(null), new RevealedARumourCard()), null));
+        RumourCardBuilder hookedNose = new RumourCardBuilder("Hooked Nose");
+        hookedNose.addWitchAction(new TakeFromAccuser());
+        hookedNose.addWitchAction(takeTurn);
+        hookedNose.addHuntAction(new ChooseNextPlayer("cards"));
+        hookedNose.addHuntAction(new RandomlyTakeCardFrom());
+        allRumourCards.put("Hooked Nose", hookedNose.build());
 
-        allRumourCards.put("The Inquisition", new RumourCard("The Inquisition",
-                new CardEffect(EffectType.WITCH, new Discard(), new TakeTurn()),
-                new CardEffect(EffectType.HUNT, new ChooseNextPlayer("unrevealed"), new LookAtIdentity()), null));
+        RumourCardBuilder petNewt = new RumourCardBuilder("Pet Newt");
+        petNewt.addWitchAction(takeTurn);
+        petNewt.addHuntAction(new TakeAnyRevealed());
+        petNewt.addHuntAction(chooseNext);
+        allRumourCards.put("Pet Newt", petNewt.build());
 
-        allRumourCards.put("Toad", new RumourCard("Toad",
-                new CardEffect(EffectType.WITCH, new TakeTurn()),
-                new CardEffect(EffectType.HUNT, new Reveal()), null));
+        RumourCardBuilder pointedHat = new RumourCardBuilder("Pointed Hat");
+        pointedHat.addWitchAction(takeBack);
+        pointedHat.addWitchAction(takeTurn);
+        pointedHat.addWitchCondition(revealedCard);
+        pointedHat.addHuntAction(takeBack);
+        pointedHat.addHuntAction(chooseNext);
+        pointedHat.addHuntCondition(revealedCard);
+        allRumourCards.put("Pointed Hat", pointedHat.build());
 
-        allRumourCards.put("Wart", new RumourCard("Wart",
-                new CardEffect(EffectType.WITCH, new TakeTurn()),
-                new CardEffect(EffectType.HUNT, new ChooseNextPlayer(null)), "Ducking Stool"));
+        RumourCardBuilder theInquisition = new RumourCardBuilder("The Inquisition");
+        theInquisition.addWitchAction(new Discard());
+        theInquisition.addWitchAction(takeTurn);
+        theInquisition.addHuntAction(new ChooseNextPlayer("unrevealed"));
+        theInquisition.addHuntAction(new LookAtIdentity());
+        allRumourCards.put("The Inquisition", theInquisition.build());
+
+        RumourCardBuilder toad = new RumourCardBuilder("Toad");
+        toad.addWitchAction(takeTurn);
+        toad.addHuntAction(new Reveal());
+        allRumourCards.put("Toad", toad.build());
+
+        RumourCardBuilder wart = new RumourCardBuilder("Wart");
+        wart.addWitchAction(takeTurn);
+        wart.addHuntAction(chooseNext);
+        wart.addCantBeChosenBy("Ducking Stool");
+        allRumourCards.put("Wart", wart.build());
     }
 
     public static CardManager getInstance() {
@@ -118,8 +152,13 @@ public final class CardManager {
     }
 
     public void resetDealSystem() {
+        discardedCards.clear();//remove all discarded cards
+
         cardsToDeal = new ArrayList<>(allRumourCards.keySet());
         Collections.shuffle(cardsToDeal);
+
+        for (String card : cardsToDeal)//un-reveal every card
+            getByName(card).setRevealed(false);
 
         //Discard cards until there is an integer amount of cards to deal per player
         int numberOfPlayers = PlayerManager.getInstance().getAllPlayers().size();

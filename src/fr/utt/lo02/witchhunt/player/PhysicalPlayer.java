@@ -137,7 +137,7 @@ public final class PhysicalPlayer extends Player {
         if (!hand.isEmpty()) {
             CardManager cardManager = CardManager.getInstance();
 
-            sb.append("List of your cards an their ");
+            sb.append("List of your cards and their ");
             sb.append(witchEffect ? "witch" : "hunt");
             sb.append(" effect:\n");
 
@@ -146,10 +146,17 @@ public final class PhysicalPlayer extends Player {
                 sb.append(cardName);
                 sb.append(":\n");
 
+                String lines;
                 if (witchEffect)
-                    sb.append(cardManager.getByName(cardName).witchEffectDescription());
+                    lines = cardManager.getByName(cardName).witchEffectDescription();
                 else
-                    sb.append(cardManager.getByName(cardName).huntEffectDescription());
+                    lines = cardManager.getByName(cardName).huntEffectDescription();
+
+                for (String line : lines.split("\n")) {
+                    sb.append("    ");
+                    sb.append(line);
+                    sb.append("\n");
+                }
             }
 
             sb.append("\n");

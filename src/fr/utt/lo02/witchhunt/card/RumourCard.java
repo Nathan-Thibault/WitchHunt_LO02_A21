@@ -62,7 +62,7 @@ public final class RumourCard extends Card {
      * @param accuser    name of the player who accused the possessor of the card
      */
     public void playWitchEffect(String callerName, String accuser) {
-        IOController.getInstance().printInfo(callerName.concat(" played ").concat(name).concat(":\n").concat(witchEffectDescription()));
+        IOController.getInstance().printInfo(callerName.concat(" plays ").concat(name).concat(":\n").concat(witchEffectDescription()));
         setRevealed(true);
         witchEffect.play(callerName, accuser);
     }
@@ -75,7 +75,7 @@ public final class RumourCard extends Card {
      * @param callerName name of the player who posses the card
      */
     public void playHuntEffect(String callerName) {
-        IOController.getInstance().printInfo(callerName.concat(" played ").concat(name).concat(":\n").concat(huntEffectDescription()));
+        IOController.getInstance().printInfo(callerName.concat(" plays ").concat(name).concat(":\n").concat(huntEffectDescription()));
         setRevealed(true);
         huntEffect.play(callerName);
     }

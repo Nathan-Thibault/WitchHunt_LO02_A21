@@ -23,6 +23,6 @@ public final class Discard extends Action {
 
     @Override
     public boolean isExecutable(String callerName, HashMap<String, Object> args) {
-        return PlayerManager.getInstance().getByName(callerName).getHand().isEmpty();
+        return !PlayerManager.getInstance().getByName(callerName).getHand().isEmpty();
     }
 }
