@@ -156,6 +156,7 @@ public final class RoundManager {
             }
 
             IOController.getInstance().printInfo(sb.toString());
+            System.exit(0);
         } else {
             // no winner yet, play a new round
             IOController.getInstance().printInfo("There is no winner yet, a new round will start.");
