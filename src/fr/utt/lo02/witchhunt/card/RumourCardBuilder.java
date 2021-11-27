@@ -1,6 +1,7 @@
-package fr.utt.lo02.witchhunt.card.effect;
+package fr.utt.lo02.witchhunt.card;
 
-import fr.utt.lo02.witchhunt.card.RumourCard;
+import fr.utt.lo02.witchhunt.card.effect.CardEffect;
+import fr.utt.lo02.witchhunt.card.effect.EffectType;
 import fr.utt.lo02.witchhunt.card.effect.actions.Action;
 import fr.utt.lo02.witchhunt.card.effect.conditions.Condition;
 
