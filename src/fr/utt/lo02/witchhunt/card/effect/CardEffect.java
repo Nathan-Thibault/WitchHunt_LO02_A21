@@ -8,7 +8,6 @@ import fr.utt.lo02.witchhunt.player.PlayerManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Objects;
 
 public final class CardEffect {
@@ -18,23 +17,6 @@ public final class CardEffect {
     private final ArrayList<Condition> conditions;
 
     private String targetName;
-
-    //TODO: make a builder for CardEffect ?
-    public CardEffect(EffectType type, Action action) {
-        this(type, new ArrayList<>(List.of(action)), null);
-    }
-
-    public CardEffect(EffectType type, Action action, Condition condition) {
-        this(type, new ArrayList<>(List.of(action)), new ArrayList<>(List.of(condition)));
-    }
-
-    public CardEffect(EffectType type, Action firstAction, Action secondAction) {
-        this(type, new ArrayList<>(List.of(firstAction, secondAction)), null);
-    }
-
-    public CardEffect(EffectType type, Action firstAction, Action secondAction, Condition condition) {
-        this(type, new ArrayList<>(List.of(firstAction, secondAction)), new ArrayList<>(List.of(condition)));
-    }
 
     public CardEffect(EffectType type, ArrayList<Action> actions, ArrayList<Condition> conditions) throws NullPointerException {
         this.type = Objects.requireNonNull(type, "CardEffect constructor: type can't be null.");
