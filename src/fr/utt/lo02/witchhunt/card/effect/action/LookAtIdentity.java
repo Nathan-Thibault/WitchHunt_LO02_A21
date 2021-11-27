@@ -19,8 +19,9 @@ public final class LookAtIdentity extends Action {
     @Override
     public void execute(String callerName, HashMap<String, Object> args) {
         PlayerManager pManager = PlayerManager.getInstance();
-        Player caller = pManager.getByName(callerName);
+        IOController io = IOController.getInstance();
 
+        Player caller = pManager.getByName(callerName);
         CardEffect effect = (CardEffect) Objects.requireNonNull(args.get("effect"), "LookAtIdentity : missing argument effect");
         String target = Objects.requireNonNull(effect.getTarget(), "LookAtIdentity : target can't be null");
         Identity targetIdentity = pManager.getByName(target).getIdentityCard().getIdentity();
@@ -28,7 +29,8 @@ public final class LookAtIdentity extends Action {
         if (caller instanceof ArtificialPlayer) {
             ((ArtificialPlayer) caller).savePlayerIdentity(target, targetIdentity);
         } else {
-            IOController.getInstance().printInfo(effect.getTarget().concat(" is a ").concat(targetIdentity.toString()));
+            io.printInfo(effect.getTarget().concat(" is a ").concat(targetIdentity.toString()));
+            io.pause();
         }
     }
 
