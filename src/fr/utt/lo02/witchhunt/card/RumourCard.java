@@ -25,7 +25,7 @@ public final class RumourCard extends Card {
      * @param name        unique name used to identify the card
      * @param witchEffect the {@link CardEffect} of type {@link EffectType#WITCH}
      * @param huntEffect  the {@link CardEffect} of type {@link EffectType#HUNT}
-     * @param cantChoose
+     * @param cantChoose  name of another <b>RumourCard</b>, see {@link RumourCard#getCantChose()
      * @throws NullPointerException     if the name, the witchEffect or the huntEffect is <code>null</code>
      * @throws IllegalArgumentException if the {@link EffectType} isn't corresponding for witchEffect or huntEffect
      */
@@ -102,28 +102,43 @@ public final class RumourCard extends Card {
     }
 
     /**
-     * Gets the description of the witch effect of the <b>RumourCard</b>
+     * Gets the description of the <b>RumourCard</b> for its witch effect
      *
      * @return the description of the {@link CardEffect} of type {@link EffectType#WITCH}
      */
     public String witchEffectDescription() {
-        return witchEffect.getDescription();
+        return effectDescription(true);
     }
 
     /**
-     * Gets the description of the hunt effect of the <b>RumourCard</b>
+     * Gets the description of the <b>RumourCard</b> for its hunt effect
      *
-     * @return the description of the {@link CardEffect} of type {@link EffectType#HUNT}
+     * @return the description of the {@link CardEffect} of type {@link EffectType#HUNT} plus
      */
     public String huntEffectDescription() {
-        return huntEffect.getDescription();
+        return effectDescription(false);
+    }
+
+    private String effectDescription(boolean witch) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(witch ? witchEffect.getDescription() : huntEffect.getDescription());
+        if (cantChoose != null) {
+            sb.append("* While revealed, you cannot be chosen by the ");
+            sb.append(cantChoose);
+            sb.append(".\n");
+        }
+        return sb.toString();
     }
 
     /**
-     * @return
+     * Gets name of another <b>RumourCard</b> which will be "immune" against the one being created.
+     * <p>
+     * The owner of the <b>RumourCard</b> from which this method is called will not be able to plays its effects
+     * against the player who has the card with the returned name, if it's revealed.
+     *
+     * @return the name of the immune card
      */
     public String getCantChose() {
-        //TODO: create verification using this when playing card
         if (revealed) {
             return cantChoose;
         }

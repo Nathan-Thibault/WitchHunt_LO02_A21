@@ -18,7 +18,7 @@ public final class RumourCardBuilder {
     private final ArrayList<Action> huntActions = new ArrayList<>(2);
     private ArrayList<Condition> huntConditions = new ArrayList<>(1);
 
-    private String cantBeChosenBy = null;
+    private String cantChoose = null;
 
     public RumourCardBuilder(String cardName) throws NullPointerException {
         this.cardName = Objects.requireNonNull(cardName);
@@ -40,8 +40,8 @@ public final class RumourCardBuilder {
         huntConditions.add(c);
     }
 
-    public void addCantBeChosenBy(String otherCardName) {
-        cantBeChosenBy = otherCardName;
+    public void addCantChoose(String otherCardName) {
+        cantChoose = otherCardName;
     }
 
     public RumourCard build() throws IllegalStateException {
@@ -52,6 +52,6 @@ public final class RumourCardBuilder {
         if (huntActions.isEmpty()) throw new IllegalStateException("RumourCardBuilder: hunt effect has no action yet.");
         if (huntConditions.isEmpty()) huntConditions = null;
 
-        return new RumourCard(cardName, new CardEffect(EffectType.WITCH, witchActions, witchConditions), new CardEffect(EffectType.HUNT, huntActions, huntConditions), cantBeChosenBy);
+        return new RumourCard(cardName, new CardEffect(EffectType.WITCH, witchActions, witchConditions), new CardEffect(EffectType.HUNT, huntActions, huntConditions), cantChoose);
     }
 }
