@@ -22,7 +22,7 @@ public final class RumourCard extends Card {
     /**
      * Constructs a new <b>RumourCard</b>.
      *
-     * @param name        the unique name used to identify the card
+     * @param name        unique name used to identify the card
      * @param witchEffect the {@link CardEffect} of type {@link EffectType#WITCH}
      * @param huntEffect  the {@link CardEffect} of type {@link EffectType#HUNT}
      * @param cantChoose

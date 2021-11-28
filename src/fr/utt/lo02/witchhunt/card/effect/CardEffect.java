@@ -45,10 +45,8 @@ public final class CardEffect {
     /**
      * Name of the player targeted by the <b>CardEffect</b>.
      * <p>
-     * Some actions are dependant of each other and an action may need
-     * a target previously chosen in another action. This field stores
-     * the name of the target chosen in a first action, so it can be
-     * retrieved by a second action later.
+     * Some actions are dependant of each other and an action may need a target previously chosen in another action.
+     * This field stores the name of the target chosen in a first action, so it can be retrieved by a second action later.
      */
     private String targetName;
 
