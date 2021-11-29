@@ -17,19 +17,19 @@ public final class RumourCard extends Card {
     private final String name;
     private final CardEffect witchEffect;
     private final CardEffect huntEffect;
-    private final String cantChoose;
+    private final String cantGetChosenBy;
 
     /**
      * Constructs a new <b>RumourCard</b>.
      *
-     * @param name        unique name used to identify the card
-     * @param witchEffect the {@link CardEffect} of type {@link EffectType#WITCH}
-     * @param huntEffect  the {@link CardEffect} of type {@link EffectType#HUNT}
-     * @param cantChoose  name of another <b>RumourCard</b>, see {@link RumourCard#getCantChose()
+     * @param name            unique name used to identify the card
+     * @param witchEffect     the {@link CardEffect} of type {@link EffectType#WITCH}
+     * @param huntEffect      the {@link CardEffect} of type {@link EffectType#HUNT}
+     * @param cantGetChosenBy name of another <b>RumourCard</b>, see {@link RumourCard#getCantGetChosenBy()
      * @throws NullPointerException     if the name, the witchEffect or the huntEffect is <code>null</code>
      * @throws IllegalArgumentException if the {@link EffectType} isn't corresponding for witchEffect or huntEffect
      */
-    public RumourCard(String name, CardEffect witchEffect, CardEffect huntEffect, String cantChoose) throws NullPointerException, IllegalArgumentException {
+    public RumourCard(String name, CardEffect witchEffect, CardEffect huntEffect, String cantGetChosenBy) throws NullPointerException, IllegalArgumentException {
         super();
 
         this.name = Objects.requireNonNull(name, "RumourCard constructor: name can't be null");
@@ -50,7 +50,7 @@ public final class RumourCard extends Card {
             this.huntEffect = huntEffect;
         }
 
-        this.cantChoose = cantChoose;
+        this.cantGetChosenBy = cantGetChosenBy;
     }
 
     /**
@@ -122,25 +122,25 @@ public final class RumourCard extends Card {
     private String effectDescription(boolean witch) {
         StringBuilder sb = new StringBuilder();
         sb.append(witch ? witchEffect.getDescription() : huntEffect.getDescription());
-        if (cantChoose != null) {
+        if (cantGetChosenBy != null) {
             sb.append("* While revealed, you cannot be chosen by the ");
-            sb.append(cantChoose);
+            sb.append(cantGetChosenBy);
             sb.append(".\n");
         }
         return sb.toString();
     }
 
     /**
-     * Gets name of another <b>RumourCard</b> which will be "immune" against the one being created.
+     * Gets the name of another <b>RumourCard</b> which this one is "immune" against.
      * <p>
-     * The owner of the <b>RumourCard</b> from which this method is called will not be able to plays its effects
-     * against the player who has the card with the returned name, if it's revealed.
+     * The owner of the <b>RumourCard</b> with the returned name by this method will not be able to plays its effects
+     * against the player who has the card from which this method is called, if it's revealed.
      *
-     * @return the name of the immune card
+     * @return name of the card this one is immune against
      */
-    public String getCantChose() {
+    public String getCantGetChosenBy() {
         if (revealed) {
-            return cantChoose;
+            return cantGetChosenBy;
         }
         return null;
     }

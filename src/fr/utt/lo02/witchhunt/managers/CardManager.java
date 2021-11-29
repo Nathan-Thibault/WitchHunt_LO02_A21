@@ -37,7 +37,7 @@ public final class CardManager {
         angryMob.addWitchAction(takeTurn);
         angryMob.addHuntAction(new RevealPlayer());
         angryMob.addHuntCondition(revealed);
-        angryMob.addCantChoose("Broomstick");//Broomstick can't get chosen by angry mob
+        angryMob.addCantGetChosenBy("Broomstick");//Broomstick can't get chosen by angry mob
         allRumourCards.put("Angry Mob", angryMob.build());
 
         RumourCardBuilder blackCat = new RumourCardBuilder("Black Cat");
@@ -60,7 +60,7 @@ public final class CardManager {
         RumourCardBuilder duckingStool = new RumourCardBuilder("Ducking Stool");
         duckingStool.addWitchAction(chooseNext);
         duckingStool.addHuntAction(new MakeRevealOrDiscard());
-        duckingStool.addCantChoose("Wart");//Wart can't be chosen by ducking stool
+        duckingStool.addCantGetChosenBy("Wart");//Wart can't be chosen by ducking stool
         allRumourCards.put("Ducking Stool", duckingStool.build());
 
         RumourCardBuilder evilEye = new RumourCardBuilder("Evil Eye");
