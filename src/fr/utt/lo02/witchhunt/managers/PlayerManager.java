@@ -105,6 +105,14 @@ public final class PlayerManager {
         return playersWithCards;
     }
 
+    public String getOwnerOfCard(String cardName) {
+        for (Map.Entry<String, Player> entry : players.entrySet()) {
+            if (entry.getValue().getOwnedCards().contains(cardName))
+                return entry.getKey();
+        }
+        return null;
+    }
+
     public void eliminate(String playerName) {
         inGamePlayers.remove(playerName);
     }

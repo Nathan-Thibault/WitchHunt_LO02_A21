@@ -1,7 +1,9 @@
 package fr.utt.lo02.witchhunt.card.effect;
 
+import fr.utt.lo02.witchhunt.card.RumourCard;
 import fr.utt.lo02.witchhunt.card.effect.actions.Action;
 import fr.utt.lo02.witchhunt.card.effect.conditions.Condition;
+import fr.utt.lo02.witchhunt.managers.CardManager;
 import fr.utt.lo02.witchhunt.managers.PlayerManager;
 import fr.utt.lo02.witchhunt.managers.RoundManager;
 import fr.utt.lo02.witchhunt.player.Player;
@@ -18,50 +20,33 @@ import java.util.Objects;
  * The class offers methods to check if the <b>CardEffect</b> is playable and methods to play it.
  */
 public final class CardEffect {
-
-    /**
-     * The type of the effect.
-     * <p>
-     * The {@link EffectType} determines in which situations the <b>CardEffect</b> can be played.
-     * It also identifies the <b>CardEffect</b> on a card, as every card as one effect of each type.
-     */
     private final EffectType type;
-
-    /**
-     * List of the actions constituting the <b>CardEffect</b>.
-     * <p>
-     * There can be as many {@link Action} as wanted but at least one is needed.
-     */
     private final ArrayList<Action> actions;
-
-    /**
-     * List of the conditions constituting the <b>CardEffect</b>.
-     * <p>
-     * There can be as many {@link Condition} as wanted.
-     * If there is none, this field should be <code>null</code>.
-     */
     private final ArrayList<Condition> conditions;
+    private final String ownerCard;
 
     /**
      * Name of the player targeted by the <b>CardEffect</b>.
      * <p>
-     * Some actions are dependant of each other and an action may need a target previously chosen in another action.
-     * This field stores the name of the target chosen in a first action, so it can be retrieved by a second action later.
      */
     private String targetName;
 
     /**
      * Constructs a new <b>CardEffect</b>.
      *
-     * @param type       type of the effect
-     * @param actions    list of actions to constitute the effect
-     * @param conditions list of conditions to constitute the effect, may be <code>null</code>
+     * @param type       type of the effect, the {@link EffectType} determines in which situations the <b>CardEffect</b> can be played.
+     *                   It also identifies the <b>CardEffect</b> on a card, as every card as one effect of each type.
+     * @param actions    list of {@link Action} to constitute the effect, there can be as many actions as wanted but at least one is needed.
+     * @param conditions list of {@link Condition} to constitute the effect, there can be as many conditions as wanted.
+     *                   If there is none, this field should be <code>null</code>.
+     * @param ownerCard  name of the card containing this effect
      * @throws NullPointerException if the type or the actions list are <code>null</code>
      */
-    public CardEffect(EffectType type, ArrayList<Action> actions, ArrayList<Condition> conditions) throws NullPointerException {
+    public CardEffect(EffectType type, ArrayList<Action> actions, ArrayList<Condition> conditions, String ownerCard) throws NullPointerException {
         this.type = Objects.requireNonNull(type, "CardEffect constructor: type can't be null.");
         this.actions = Objects.requireNonNull(actions, "CardEffect constructor: actions can't be null.");
         this.conditions = conditions;
+        this.ownerCard = Objects.requireNonNull(ownerCard, "CardEffect constructor: ownerCard can't be null.");
     }
 
     /**
@@ -134,6 +119,7 @@ public final class CardEffect {
     /**
      * Sets the target of the <b>CardEffect</b>.
      * <p>
+     * Some actions are dependant of each other and an action may need a target previously chosen in another action.
      * This method allows en action to set the target for another action to retrieve it later.
      *
      * @param playerName the players name to target
@@ -145,6 +131,7 @@ public final class CardEffect {
     /**
      * Gets the target of the <b>CardEffect</b>.
      * <p>
+     * Some actions are dependant of each other and an action may need a target previously chosen in another action.
      * This method allows an action to get the target set by another, already executed action.
      *
      * @return the players name targeted
@@ -190,7 +177,17 @@ public final class CardEffect {
     }
 
     private HashMap<String, Object> buildArgs(Action action, String accuserName) {
+        CardManager cManager = CardManager.getInstance();
         HashMap<String, Object> args = new HashMap<>();
+
+        //for every revealed card check if it's "immune" against the card owning this effect
+        //if so, gets its owner and build an arg "protectedPlayer" with it
+        args.put("protectedPlayer", null);
+        for (String cardName : cManager.getRevealedNonDiscardedCards()) {
+            String cantGetChosenBy = cManager.getByName(cardName).getCantGetChosenBy();
+            if (cantGetChosenBy != null && cantGetChosenBy.equals(ownerCard))
+                args.put("protectedPlayer", PlayerManager.getInstance().getOwnerOfCard(cardName));
+        }
 
         switch (action.getClass().getSimpleName()) {
             case "ChooseNextPlayer", "LookAtIdentity", "RandomlyTakeCardFrom", "MustAccuse" -> args.put("effect", this);

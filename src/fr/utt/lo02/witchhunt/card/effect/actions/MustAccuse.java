@@ -25,6 +25,10 @@ public final class MustAccuse extends Action {
 
         Set<String> possibleTargets = pManager.getUnrevealedPlayers();
         possibleTargets.remove(target);//target can't choose herself as its own target
+
+        //remove the player with the card "immune" against the one playing this action if not null
+        possibleTargets.remove((String) args.get("protectedPlayer"));
+
         if (possibleTargets.size() > 1)//if there is at least two unrevealed players, target can choose someone else than caller
             possibleTargets.remove(callerName);
 

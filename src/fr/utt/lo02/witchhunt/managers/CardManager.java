@@ -37,7 +37,6 @@ public final class CardManager {
         angryMob.addWitchAction(takeTurn);
         angryMob.addHuntAction(new RevealPlayer());
         angryMob.addHuntCondition(revealed);
-        angryMob.addCantGetChosenBy("Broomstick");//Broomstick can't get chosen by angry mob
         allRumourCards.put("Angry Mob", angryMob.build());
 
         RumourCardBuilder blackCat = new RumourCardBuilder("Black Cat");
@@ -49,6 +48,7 @@ public final class CardManager {
         RumourCardBuilder broomstick = new RumourCardBuilder("Broomstick");
         broomstick.addWitchAction(takeTurn);
         broomstick.addHuntAction(chooseNext);
+        broomstick.addCantGetChosenBy("Angry Mob");
         allRumourCards.put("Broomstick", broomstick.build());
 
         RumourCardBuilder cauldron = new RumourCardBuilder("Cauldron");
@@ -60,7 +60,6 @@ public final class CardManager {
         RumourCardBuilder duckingStool = new RumourCardBuilder("Ducking Stool");
         duckingStool.addWitchAction(chooseNext);
         duckingStool.addHuntAction(new MakeRevealOrDiscard());
-        duckingStool.addCantGetChosenBy("Wart");//Wart can't be chosen by ducking stool
         allRumourCards.put("Ducking Stool", duckingStool.build());
 
         RumourCardBuilder evilEye = new RumourCardBuilder("Evil Eye");
@@ -107,6 +106,7 @@ public final class CardManager {
         RumourCardBuilder wart = new RumourCardBuilder("Wart");
         wart.addWitchAction(takeTurn);
         wart.addHuntAction(chooseNext);
+        wart.addCantGetChosenBy("Ducking Stool");
         allRumourCards.put("Wart", wart.build());
     }
 

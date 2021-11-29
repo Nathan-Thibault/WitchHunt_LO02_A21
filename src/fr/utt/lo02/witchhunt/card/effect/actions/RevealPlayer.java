@@ -21,7 +21,11 @@ public final class RevealPlayer extends Action {
         Player caller = pManager.getByName(callerName);
 
         Set<String> possibleTargets = pManager.getUnrevealedPlayers();
-        possibleTargets.remove(callerName);
+        possibleTargets.remove(callerName);//Player can't choose himself
+
+        //remove the player with the card "immune" against the one playing this action if not null
+        possibleTargets.remove((String) args.get("protectedPlayer"));
+
         String targetName = caller.choosePlayerFrom(possibleTargets);
         Player target = pManager.getByName(targetName);
 

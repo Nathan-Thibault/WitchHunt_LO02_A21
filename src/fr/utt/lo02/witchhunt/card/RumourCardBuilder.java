@@ -52,6 +52,6 @@ public final class RumourCardBuilder {
         if (huntActions.isEmpty()) throw new IllegalStateException("RumourCardBuilder: hunt effect has no action yet.");
         if (huntConditions.isEmpty()) huntConditions = null;
 
-        return new RumourCard(cardName, new CardEffect(EffectType.WITCH, witchActions, witchConditions), new CardEffect(EffectType.HUNT, huntActions, huntConditions), cantGetChosenBy);
+        return new RumourCard(cardName, new CardEffect(EffectType.WITCH, witchActions, witchConditions, cardName), new CardEffect(EffectType.HUNT, huntActions, huntConditions, cardName), cantGetChosenBy);
     }
 }

@@ -121,12 +121,12 @@ public final class RumourCard extends Card {
 
     private String effectDescription(boolean witch) {
         StringBuilder sb = new StringBuilder();
-        sb.append(witch ? witchEffect.getDescription() : huntEffect.getDescription());
         if (cantGetChosenBy != null) {
             sb.append("* While revealed, you cannot be chosen by the ");
             sb.append(cantGetChosenBy);
             sb.append(".\n");
         }
+        sb.append(witch ? witchEffect.getDescription() : huntEffect.getDescription());
         return sb.toString();
     }
 
@@ -139,9 +139,6 @@ public final class RumourCard extends Card {
      * @return name of the card this one is immune against
      */
     public String getCantGetChosenBy() {
-        if (revealed) {
-            return cantGetChosenBy;
-        }
-        return null;
+        return cantGetChosenBy;
     }
 }

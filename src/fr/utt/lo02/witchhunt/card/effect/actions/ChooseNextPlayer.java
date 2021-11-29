@@ -26,7 +26,32 @@ public final class ChooseNextPlayer extends Action {
 
         CardEffect effect = (CardEffect) Objects.requireNonNull(args.get("effect"), "ChooseNextPlayer : missing argument effect");
 
+        Set<String> possibleTargets = buildPossibleTargets(callerName);
+
+        //remove the player with the "immune" card against the one playing this action if not null
+        possibleTargets.remove((String) args.get("protectedPlayer"));
+
+        String target = caller.choosePlayerFrom(possibleTargets);
+
+        effect.setTarget(target);
+        RoundManager.getInstance().setIndexAtPlayer(target);
+    }
+
+    @Override
+    public boolean isExecutable(String callerName, HashMap<String, Object> args) {
+        Set<String> possibleTargets = buildPossibleTargets(callerName);
+
+        //remove the player with the card "immune" against the one playing this action if not null
+        possibleTargets.remove((String) args.get("protectedPlayer"));
+
+        return !possibleTargets.isEmpty();
+    }
+
+    private Set<String> buildPossibleTargets(String callerName) {
+        PlayerManager pManager = PlayerManager.getInstance();
+
         Set<String> possibleTargets;
+
         if (requirement == null) {
             possibleTargets = pManager.getInGamePlayers();
         } else {
@@ -38,17 +63,6 @@ public final class ChooseNextPlayer extends Action {
         }
         possibleTargets.remove(callerName);//a player can never choose himself as the target
 
-        String target = caller.choosePlayerFrom(possibleTargets);
-
-        effect.setTarget(target);
-        RoundManager.getInstance().setIndexAtPlayer(target);
-    }
-
-    @Override
-    public boolean isExecutable(String callerName, HashMap<String, Object> args) {
-        if (requirement != null)
-            return (requirement.equals("cards") && !PlayerManager.getInstance().getPlayersWithHand().isEmpty()) || requirement.equals("unrevealed");
-        else
-            return true;
+        return possibleTargets;
     }
 }
