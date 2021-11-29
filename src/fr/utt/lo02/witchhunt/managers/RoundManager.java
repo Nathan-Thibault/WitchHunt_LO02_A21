@@ -62,7 +62,6 @@ public final class RoundManager {
     }
 
     public void accuse(String accuser, String target) {
-        setIndexAtPlayer(target);
         PlayerManager.getInstance().getByName(target).respondAccusation(accuser);
     }
 
@@ -86,8 +85,14 @@ public final class RoundManager {
         checkForWinner();
     }
 
-    public void setIndexAtPlayer(String playerName) {
-        index = PlayerManager.getInstance().getInGamePlayers().stream().toList().lastIndexOf(playerName);
+    public void setIndexAtPlayer(String playerName) throws IllegalArgumentException {
+        index = 0;
+        for (String p : PlayerManager.getInstance().getInGamePlayers()) {
+            if (p.equals(playerName))
+                return;
+            index++;
+        }
+        throw new IllegalArgumentException("RoundManager setIndexAtPlayer: playerName not found.");
     }
 
     public void incrementIndex() {
