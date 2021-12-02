@@ -10,6 +10,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * <b>RoundManager</b> provides methods to manage the progress of the game.
+ * <p>
+ * <b>RoundManager</b> is a singleton because it has to be accessed from many parts of the project.
+ */
 public final class RoundManager {
 
     private static RoundManager instance;
@@ -21,17 +26,33 @@ public final class RoundManager {
     private RoundManager() {
     }
 
+    /**
+     * Gets the unique instance of <b>RoundManager</b>.
+     * <p>
+     * If the instance is null, this method creates it.
+     *
+     * @return the instance of <b>RoundManager</b>
+     */
     public static RoundManager getInstance() {
         if (instance == null)
             instance = new RoundManager();
         return instance;
     }
 
+    /**
+     * Prepares the game before making the first player play.
+     * <p>
+     * This method first resets the deal system and the players for a new round.
+     * Then starts a new round, makes players choose their identity for the round.
+     * And finally makes the first player play.
+     *
+     * @see CardManager#resetDealSystem()
+     * @see PlayerManager#resetAll()
+     * @see RoundManager#identityRound()
+     */
     public void startNewRound() {
-        PlayerManager pManager = PlayerManager.getInstance();
-
         CardManager.getInstance().resetDealSystem();
-        pManager.resetAll();
+        PlayerManager.getInstance().resetAll();
 
         roundCount++;
         IOController.getInstance().printInfo("Le round ".concat(String.valueOf(roundCount)).concat(" commence !"));
@@ -46,14 +67,22 @@ public final class RoundManager {
         next();
     }
 
+    /**
+     * Makes next player play or end the round.
+     * <p>
+     * If there's only one player remaining unrevealed then ends the round.
+     * Else, makes the next player play his turn.
+     */
     public void next() {
         PlayerManager pManager = PlayerManager.getInstance();
 
         List<String> unrevealedPlayers = pManager.getUnrevealedPlayers().stream().toList();
 
         if (unrevealedPlayers.size() == 1) {
+            //only one player remains unrevealed, end the round
             endRound(unrevealedPlayers.get(0));
         } else {
+            //makes player at index play
             String nextPlayer = pManager.getInGamePlayers().stream().toList().get(index);
 
             pManager.getByName(nextPlayer).playTurn();
@@ -61,11 +90,51 @@ public final class RoundManager {
         }
     }
 
+    /**
+     * Makes the targeted {@link Player} respond an accusation.
+     *
+     * @param accuser the name of the player who accused the target
+     * @param target  the name of the targeted {@link Player}
+     * @see Player#respondAccusation(String)
+     */
     public void accuse(String accuser, String target) {
         PlayerManager.getInstance().getByName(target).respondAccusation(accuser);
     }
 
-    public void endRound(String lastUnrevealedName) {
+    /**
+     * Sets the next player to play as a specific one.
+     *
+     * @param playerName name of the player to be next
+     * @throws IllegalArgumentException if the name of the player isn't found in the list of players in game
+     * @see PlayerManager#getInGamePlayers()
+     */
+    public void setIndexAtPlayer(String playerName) throws IllegalArgumentException {
+        index = 0;
+        for (String p : PlayerManager.getInstance().getInGamePlayers()) {
+            if (p.equals(playerName))
+                return;
+            index++;
+        }
+        throw new IllegalArgumentException("RoundManager setIndexAtPlayer: playerName not found.");
+    }
+
+    /**
+     * Sets the next player to play.
+     */
+    public void incrementIndex() {
+        index++;
+        if (index > PlayerManager.getInstance().getInGamePlayers().size())
+            index = 0;
+    }
+
+    /**
+     * Reveals the last player remaining unrevealed,
+     * give him points according to his identity, then check for winners.
+     *
+     * @param lastUnrevealedName name of the last player remaining unrevealed
+     * @see RoundManager#identityRound()
+     */
+    private void endRound(String lastUnrevealedName) {
         PlayerManager pManager = PlayerManager.getInstance();
 
         startingPlayer = lastUnrevealedName;
@@ -85,22 +154,9 @@ public final class RoundManager {
         checkForWinner();
     }
 
-    public void setIndexAtPlayer(String playerName) throws IllegalArgumentException {
-        index = 0;
-        for (String p : PlayerManager.getInstance().getInGamePlayers()) {
-            if (p.equals(playerName))
-                return;
-            index++;
-        }
-        throw new IllegalArgumentException("RoundManager setIndexAtPlayer: playerName not found.");
-    }
-
-    public void incrementIndex() {
-        index++;
-        if (index > PlayerManager.getInstance().getInGamePlayers().size())
-            index = 0;
-    }
-
+    /**
+     * Makes all players choose their identity for the round.
+     */
     private void identityRound() {
         PlayerManager pManager = PlayerManager.getInstance();
 
@@ -119,6 +175,11 @@ public final class RoundManager {
         }
     }
 
+    /**
+     * Checks if a player as enough points to win.
+     * If there's one or more, then display a message to indicate the winner
+     * and end the game. Else, start a new round.
+     */
     private void checkForWinner() {
         PlayerManager pManager = PlayerManager.getInstance();
 
