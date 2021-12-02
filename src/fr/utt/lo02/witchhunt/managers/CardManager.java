@@ -15,6 +15,24 @@ import java.util.HashSet;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * <b>CardManager</b> stores all the game cards and provides methods to manipulate them.
+ * <p>
+ * Cards ({@link RumourCard}) are stored in an HashMap with their name as key.
+ * This allows to manipulate only strings for most of the operations affecting the cards
+ * and only get the {@link RumourCard} when needed with its name.
+ * <p>
+ * Since all cards are created in the constructor of <b>CardManager</b>,
+ * it is a singleton because they should not be duplicated.
+ * Moreover, being a singleton allows access to it from anywhere in the project, which is needed.
+ * <p>
+ * <b>CardManager</b> provides methods:
+ * <ul>
+ *     <li>to get cards whether they are revealed or not, discarded or not, etc.</li>
+ *     <li>to discard and take discarded cards</li>
+ *     <li>to deal cards</li>
+ * </ul>
+ */
 public final class CardManager {
 
     private static CardManager instance;
@@ -110,6 +128,13 @@ public final class CardManager {
         allRumourCards.put("Wart", wart.build());
     }
 
+    /**
+     * Gets the unique instance of <b>CardManager</b>.
+     * <p>
+     * If the instance is null, this method creates it.
+     *
+     * @return the instance of <b>CardManager</b>
+     */
     public static CardManager getInstance() {
         if (instance == null) {
             instance = new CardManager();
@@ -117,21 +142,47 @@ public final class CardManager {
         return instance;
     }
 
+    /**
+     * Gets a {@link RumourCard} with its name.
+     *
+     * @param name the name of the card wanted
+     * @return the card, or <code>null</code> if the name given does not exist
+     */
     public RumourCard getByName(String name) {
         return allRumourCards.get(name);
     }
 
+    /**
+     * Sets a card as revealed and discarded.
+     *
+     * @param name the name of the card to discard
+     */
     public void discard(String name) {
         discardedCards.add(name);
         getByName(name).setRevealed(true);
     }
 
+    /**
+     * Sets a card as not revealed and not discarded.
+     *
+     * @param name the name of the card to un-discard
+     */
     public void takeFromDiscarded(String name) {
         discardedCards.remove(name);
         getByName(name).setRevealed(false);
     }
 
-    public HashSet<String> dealHand() {
+    /**
+     * Gets a hand of cards to give to a {@link fr.utt.lo02.witchhunt.player.Player} at the start of a round.
+     * <p>
+     * Randomly gets the right amount of cards to deal from the list of not yet dealt cards.
+     * Must not be called before {@link CardManager#resetDealSystem()} as the amount of cards to deal
+     * and the list of cards not yet dealt are defined by it.
+     *
+     * @return a set of card names
+     * @throws ClassNotPreparedException if called before {@link CardManager#resetDealSystem()}
+     */
+    public HashSet<String> dealHand() throws ClassNotPreparedException {
         if (cardsToDeal == null)
             throw new ClassNotPreparedException("CardManager dealHand: deal system not reset, cannot deal hand");
 
@@ -153,6 +204,15 @@ public final class CardManager {
         return hand;
     }
 
+    /**
+     * Prepare the class to deal the hands of cards to players.
+     * <p>
+     * This method has to be called before {@link CardManager#dealHand()}.
+     * <p>
+     * It first sets the list cards not yet dealt. Then, discard some
+     * cards to have an integer amount of cards to deal per player.
+     * And finally, sets the amount of cards to deal per player.
+     */
     public void resetDealSystem() {
         discardedCards.clear();//remove all discarded cards
 
@@ -172,6 +232,11 @@ public final class CardManager {
         numberOfCardsPerPlayer = cardsToDeal.size() / numberOfPlayers;
     }
 
+    /**
+     * Gets the cards that are revealed but not discarded.
+     *
+     * @return a set of card names
+     */
     public HashSet<String> getRevealedNonDiscardedCards() {
         HashSet<String> revealedCards = new HashSet<>();
 
@@ -183,6 +248,11 @@ public final class CardManager {
         return revealedCards;
     }
 
+    /**
+     * Gets the discarded cards.
+     *
+     * @return a set of card names
+     */
     public HashSet<String> getDiscardedCards() {
         return discardedCards;
     }
