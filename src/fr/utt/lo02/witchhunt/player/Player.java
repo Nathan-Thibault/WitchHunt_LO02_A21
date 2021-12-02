@@ -125,6 +125,10 @@ public abstract class Player {
         ownedCards = CardManager.getInstance().dealHand();
     }
 
+    public String getName() {
+        return name;
+    }
+
     public void addToScore(int addend) {
         score += addend;
     }
