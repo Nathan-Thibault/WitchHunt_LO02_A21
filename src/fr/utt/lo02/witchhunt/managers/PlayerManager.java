@@ -33,13 +33,31 @@ import java.util.Map;
  * </ul>
  */
 public final class PlayerManager {
-
+    /**
+     * Unique instance of <b>PlayerManager</b>.
+     */
     private static PlayerManager instance;
 
+    /**
+     * Ordered map of all players.
+     * <p>
+     * Has the name ({@link String}) as key of a {@link Player} as value.
+     */
     private LinkedHashMap<String, Player> players = new LinkedHashMap<>();
+    /**
+     * Ordered set of players not eliminated for the current round.
+     * <p>
+     * The order is the same as the one in {@link PlayerManager#players}.
+     */
     private LinkedHashSet<String> inGamePlayers = new LinkedHashSet<>();
+    /**
+     * Number of artificial players created.
+     */
     private int artificialPlayerCount;
 
+    /**
+     * Constructor.
+     */
     private PlayerManager() {
         artificialPlayerCount = 0;
     }
@@ -107,7 +125,7 @@ public final class PlayerManager {
     }
 
     /**
-     * Gets the owner ({@link Player} of a specific card.
+     * Gets the owner ({@link Player}) of a specific card.
      * <p>
      * This method doesn't check if a card with the given name exists,
      * if the card does not exist, it will return <code>null</code>.

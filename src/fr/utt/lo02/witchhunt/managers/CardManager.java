@@ -34,9 +34,14 @@ import java.util.Map;
  * </ul>
  */
 public final class CardManager {
-
+    /**
+     * Unique instance of <b>CardManager</b>
+     */
     private static CardManager instance;
 
+    /**
+     *
+     */
     private final HashMap<String, RumourCard> allRumourCards = new HashMap<>();
     private final HashSet<String> discardedCards = new HashSet<>();
     private ArrayList<String> cardsToDeal;
