@@ -139,6 +139,8 @@ public final class RumourCard extends Card {
      * @return name of the card this one is immune against
      */
     public String getCantGetChosenBy() {
-        return cantGetChosenBy;
+        if (revealed)
+            return cantGetChosenBy;
+        return null;
     }
 }

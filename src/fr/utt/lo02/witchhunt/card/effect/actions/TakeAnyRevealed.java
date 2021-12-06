@@ -28,6 +28,7 @@ public final class TakeAnyRevealed extends Action {
         Player owner = Objects.requireNonNull(PlayerManager.getInstance().getOwnerOf(card));
 
         owner.getOwnedCards().remove(card);
+        CardManager.getInstance().getByName(card).setRevealed(false);
         caller.getOwnedCards().add(card);
     }
 

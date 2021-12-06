@@ -55,7 +55,7 @@ public final class RoundManager {
         PlayerManager.getInstance().resetAll();
 
         roundCount++;
-        IOController.getInstance().printInfo("Le round ".concat(String.valueOf(roundCount)).concat(" commence !"));
+        IOController.getInstance().printInfo("Round ".concat(String.valueOf(roundCount)).concat(" starts !"));
 
         identityRound();
 

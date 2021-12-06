@@ -174,7 +174,7 @@ public final class PlayerManager {
      * @see PlayerManager#eliminate(String)
      */
     public LinkedHashSet<String> getInGamePlayers() {
-        return inGamePlayers;
+        return new LinkedHashSet<>(inGamePlayers);
     }
 
     /**

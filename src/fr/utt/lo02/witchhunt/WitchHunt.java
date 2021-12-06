@@ -63,35 +63,37 @@ public class WitchHunt {
 
         int a = io.readIntBetween(Math.max(3 - p, 0), 6 - p);
 
-        io.printInfo("Do you want to choose the strategies of the artificial players ?\n0 -> yes\n1 -> no, choose them at random");
-        int chooseStrat = io.readIntBetween(0, 1);
+        if (a > 0) {
+            io.printInfo("Do you want to choose the strategies of the artificial players ?\n0 -> yes\n1 -> no, choose them at random");
+            int chooseStrat = io.readIntBetween(0, 1);
 
-        if (chooseStrat == 0) {
-            for (int i = 0; i < a; i++) {
-                io.printInfo("Choose strategies for artificial player ".concat(Integer.toString(i)));
+            if (chooseStrat == 0) {
+                for (int i = 0; i < a; i++) {
+                    io.printInfo("Choose strategies for artificial player ".concat(Integer.toString(i)));
 
-                HashMap<Strategy.StrategyType, Class<? extends Strategy>> strategies = new HashMap<>();
+                    HashMap<Strategy.StrategyType, Class<? extends Strategy>> strategies = new HashMap<>();
 
-                for (Strategy.StrategyType sType : Strategy.StrategyType.values()) {
-                    io.printInfo("Select a strategy from the list bellow for the " + sType.getName() + ":\n");
-                    StrategyEnum sEnum = io.readFromSet(StrategyEnum.getAllOfType(sType));
+                    for (Strategy.StrategyType sType : Strategy.StrategyType.values()) {
+                        io.printInfo("Select a strategy from the list bellow for the " + sType.getName() + ":\n");
+                        StrategyEnum sEnum = io.readFromSet(StrategyEnum.getAllOfType(sType));
 
-                    strategies.put(sType, sEnum.getStrategyClass());
+                        strategies.put(sType, sEnum.getStrategyClass());
+                    }
+
+                    pManager.createArtificialPlayer(strategies);
                 }
+            } else {
+                for (int i = 0; i < a; i++) {
+                    HashMap<Strategy.StrategyType, Class<? extends Strategy>> strategies = new HashMap<>();
 
-                pManager.createArtificialPlayer(strategies);
-            }
-        } else {
-            for (int i = 0; i < a; i++) {
-                HashMap<Strategy.StrategyType, Class<? extends Strategy>> strategies = new HashMap<>();
+                    for (Strategy.StrategyType sType : Strategy.StrategyType.values()) {
+                        StrategyEnum sEnum = Utils.randomFromSet(StrategyEnum.getAllOfType(sType));
 
-                for (Strategy.StrategyType sType : Strategy.StrategyType.values()) {
-                    StrategyEnum sEnum = Utils.randomFromSet(StrategyEnum.getAllOfType(sType));
+                        strategies.put(sType, sEnum.getStrategyClass());
+                    }
 
-                    strategies.put(sType, sEnum.getStrategyClass());
+                    pManager.createArtificialPlayer(strategies);
                 }
-
-                pManager.createArtificialPlayer(strategies);
             }
         }
 
