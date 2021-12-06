@@ -161,12 +161,13 @@ public final class CardEffect {
         StringBuilder sb = new StringBuilder();
 
         for (Action action : actions) {
+            sb.append("> ");
             sb.append(action.getDescription());
             sb.append("\n");
         }
 
         if (conditions != null) {
-            sb.append("Condition(s):\n");
+            sb.append("* Condition(s):\n");
             for (Condition condition : conditions) {
                 sb.append(condition.getDescription());
                 sb.append("\n");
@@ -192,7 +193,6 @@ public final class CardEffect {
         switch (action.getClass().getSimpleName()) {
             case "ChooseNextPlayer", "LookAtIdentity", "RandomlyTakeCardFrom", "MustAccuse" -> args.put("effect", this);
             case "MakeAccuserDiscard", "TakeFromAccuser" -> args.put("accuserName", accuserName);
-            default -> args = null;
         }
 
         return args;

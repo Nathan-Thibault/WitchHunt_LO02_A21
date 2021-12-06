@@ -10,6 +10,7 @@ import fr.utt.lo02.witchhunt.io.IOController;
 import fr.utt.lo02.witchhunt.managers.PlayerManager;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public abstract class Player {
@@ -19,8 +20,8 @@ public abstract class Player {
     protected IdentityCard identityCard;
     protected HashSet<String> ownedCards;
 
-    public Player(String name) {
-        this.name = name;
+    public Player(String name) throws NullPointerException {
+        this.name = Objects.requireNonNull(name, "Player constructor: name can't be null.");
         identityCard = null;
         score = 0;
     }
@@ -44,15 +45,15 @@ public abstract class Player {
         IOController io = IOController.getInstance();
 
         identityCard.setRevealed(true);
-        io.printInfo(name.concat(" was a ").concat(identityCard.getIdentity().toString()).concat("!"));
+        io.printInfo(name + " was a " + identityCard.getIdentity() + "!");
 
         if (identityCard.getIdentity() == Identity.WITCH) {
             pManager.getByName(accuser).addToScore(1);
             pManager.eliminate(name);
-            io.printInfo(name.concat(" is out of the game until the end of the round.\n").concat(accuser).concat(" gains one point and takes another turn."));
+            io.printInfo(name + " is out of the game until the end of the round.\n" + accuser + " gains one point and takes another turn.");
             rManager.setIndexAtPlayer(accuser);
         } else {
-            io.printInfo(accuser.concat(" gains no point and ").concat(name).concat(" takes next turn."));
+            io.printInfo(accuser + " gains no point and " + name + " takes next turn.");
             rManager.setIndexAtPlayer(name);
         }
 
