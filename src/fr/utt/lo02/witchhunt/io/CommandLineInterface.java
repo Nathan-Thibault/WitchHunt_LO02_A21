@@ -69,11 +69,12 @@ public final class CommandLineInterface implements IOInterface {
 
         StringBuilder sb = new StringBuilder();
 
-        sb.append("\nList of the players:\n");
+        sb.append("List of the players:\n");
         for (String pName : pManager.getAllPlayers()) {
             Player p = pManager.getByName(pName);
             IdentityCard ic = p.getIdentityCard();
 
+            sb.append("  - ");
             //player name
             sb.append(pName);
             //identity
@@ -91,7 +92,7 @@ public final class CommandLineInterface implements IOInterface {
         }
 
         //list of discarded cards if any
-        formatSet(sb, "\nList of discarded cards:\n", CardManager.getInstance().getDiscardedCards());
+        formatSet(sb, "\nList of discarded cards:\n    ", CardManager.getInstance().getDiscardedCards());
         sb.append("\n");
 
         System.out.println(sb);
@@ -112,37 +113,6 @@ public final class CommandLineInterface implements IOInterface {
         IOController.getInstance().read("int", intBetween(min, max));
 
         return 0;
-    }
-
-    @Override
-    public Class<? extends Strategy> readStrategy(Strategy.StrategyType strategyType) {
-        //TODO: try to refactor duplicated code with listOfOptions building
-        int minCode = 0;
-        int maxCode = 0;
-        StringBuilder listOfOptions = new StringBuilder();
-
-        listOfOptions.append("Select a strategy from the list bellow for the ");
-        listOfOptions.append(strategyType.getName());
-        listOfOptions.append(":\n");
-
-        for (StrategyEnum strategy : StrategyEnum.values()) {
-            if (strategy.getType().equals(strategyType)) {
-                maxCode = strategy.getCode();
-                if (minCode == 0)
-                    minCode = strategy.getCode();
-
-                listOfOptions.append(strategy.getCode());
-                listOfOptions.append(" -> ");
-                listOfOptions.append(strategy.getDescription());
-                listOfOptions.append("\n");
-            }
-        }
-        System.out.print(listOfOptions);
-
-        int code = intBetween(minCode, maxCode);
-        IOController.getInstance().read("strategy", StrategyEnum.getByCode(code).getStrategyClass());
-
-        return null;
     }
 
     @Override

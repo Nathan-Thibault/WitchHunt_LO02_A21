@@ -102,19 +102,6 @@ public final class IOController implements IOInterface {
     }
 
     @Override
-    public Class<? extends Strategy> readStrategy(Strategy.StrategyType strategyType) {
-        for (IOInterface ioInterface : interfaces) {
-            new Thread(() -> ioInterface.readStrategy(strategyType)).start();
-        }
-
-        startWaiting();
-        clear();
-
-        @SuppressWarnings("unchecked") final Class<? extends Strategy> strategy = (Class<? extends Strategy>) readValues.get("strategy");
-        return strategy;
-    }
-
-    @Override
     public <T> T readFromSet(Set<T> set) {
         for (IOInterface ioInterface : interfaces) {
             new Thread(() -> ioInterface.readFromSet(set)).start();

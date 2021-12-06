@@ -8,6 +8,9 @@ import fr.utt.lo02.witchhunt.player.strategy.respond.NeverReveal;
 import fr.utt.lo02.witchhunt.player.strategy.respond.RevealIfVillager;
 import fr.utt.lo02.witchhunt.player.strategy.turn.AlwaysAccuse;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public enum StrategyEnum {
     //identity
     RANDOMIDENTITY(RandomIdentityStrategy.class, Strategy.StrategyType.IDENTITY, "The artificial player will choose his identity at random."),
@@ -21,7 +24,6 @@ public enum StrategyEnum {
     ALWAYSACCUSE(AlwaysAccuse.class, Strategy.StrategyType.TURN, "The artificial player will always accuse another player.");
 
     private final Class<? extends Strategy> sClass;
-    private int code;
     private final Strategy.StrategyType type;
     private final String description;
 
@@ -31,40 +33,27 @@ public enum StrategyEnum {
         this.description = description;
     }
 
-    public static StrategyEnum getByCode(int code) throws IllegalArgumentException {
+    public static Set<StrategyEnum> getAllOfType(Strategy.StrategyType type) {
+        Set<StrategyEnum> strategies = new HashSet<>();
+
         for (StrategyEnum s : StrategyEnum.values()) {
-            if (s.getCode() == code)
-                return s;
+            if (s.getType() == type)
+                strategies.add(s);
         }
-        throw new IllegalArgumentException("StrategyEnum getByCode: couldn't find a strategy with this code");
+
+        return strategies;
     }
 
     public Class<? extends Strategy> getStrategyClass() {
         return sClass;
     }
 
-    private void setCode(int c){
-        this.code = c;
-    }
-
-    public int getCode() {
-        return code;
-    }
-
     public Strategy.StrategyType getType() {
         return type;
     }
 
-    public String getDescription() {
+    @Override
+    public String toString() {
         return description;
-    }
-
-    static {
-        //attribute a unique code to each strategy (in increasing order)
-        int codeCount = 1;
-        for (StrategyEnum s: StrategyEnum.values()) {
-            s.setCode(codeCount);
-            codeCount++;
-        }
     }
 }

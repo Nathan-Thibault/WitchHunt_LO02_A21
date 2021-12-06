@@ -19,7 +19,5 @@ public interface IOInterface {
 
     int readIntBetween(int min, int max);
 
-    Class<? extends Strategy> readStrategy(Strategy.StrategyType strategyType);
-
     <T> T readFromSet(Set<T> list);
 }
