@@ -5,8 +5,6 @@ import fr.utt.lo02.witchhunt.managers.CardManager;
 import fr.utt.lo02.witchhunt.card.IdentityCard;
 import fr.utt.lo02.witchhunt.player.Player;
 import fr.utt.lo02.witchhunt.managers.PlayerManager;
-import fr.utt.lo02.witchhunt.player.strategy.Strategy;
-import fr.utt.lo02.witchhunt.player.strategy.StrategyEnum;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -1,7 +1,5 @@
 package fr.utt.lo02.witchhunt.io;
 
-import fr.utt.lo02.witchhunt.player.strategy.Strategy;
-
 import java.util.Set;
 
 public interface IOInterface {
