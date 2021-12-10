@@ -1,7 +1,5 @@
 package fr.utt.lo02.witchhunt.io;
 
-import fr.utt.lo02.witchhunt.player.strategy.Strategy;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;

@@ -161,9 +161,9 @@ public final class PhysicalPlayer extends Player {
 
             for (String cardName : ownedCards) {
                 RumourCard card = cardManager.getByName(cardName);
-                sb.append("-");
+                sb.append("- ");
                 sb.append(cardName);
-                sb.append("(");
+                sb.append(" (");
                 sb.append(card.isRevealed() ? "revealed" : "in hand");
                 sb.append("):\n");
 
