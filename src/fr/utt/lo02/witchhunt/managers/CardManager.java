@@ -40,13 +40,35 @@ public final class CardManager {
     private static CardManager instance;
 
     /**
-     *
+     * Map of all cards.
+     * <p>
+     * Has the name ({@link String}) as key of a {@link RumourCard} as value.
      */
     private final HashMap<String, RumourCard> allRumourCards = new HashMap<>();
+    /**
+     * Set containing the names of the discarded cards.
+     */
     private final HashSet<String> discardedCards = new HashSet<>();
+    /**
+     * Shuffled list containing the names of cards to be dealt.
+     * <p>
+     * It's first initialized in {@link CardManager#resetDealSystem()}
+     * and then used in {@link CardManager#dealHand()}.
+     */
     private ArrayList<String> cardsToDeal;
+    /**
+     * Number of cards to deal per player.
+     * <p>
+     * It's first initialized in {@link CardManager#resetDealSystem()}
+     * and then used in {@link CardManager#dealHand()}.
+     */
     private int numberOfCardsPerPlayer;
 
+    /**
+     * Constructor to be called only once.
+     * <p>
+     * Builds all the cards and put them in {@link CardManager#allRumourCards}.
+     */
     private CardManager() {
         Action chooseNext = new ChooseNextPlayer(null);
         Action mustAccuse = new MustAccuse();

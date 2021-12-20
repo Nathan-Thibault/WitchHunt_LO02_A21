@@ -16,15 +16,28 @@ import java.util.List;
  * <b>RoundManager</b> is a singleton because it has to be accessed from many parts of the project.
  */
 public final class RoundManager {
-
+    /**
+     * Unique instance of <b>RoundManager</b>.
+     */
     private static RoundManager instance;
 
+    /**
+     * Number indicating which player's turn it is.
+     */
     private int index;
+    /**
+     * Name of the player to play first next round.
+     */
     private String startingPlayer;
+    /**
+     * Number of round played.
+     */
     private int roundCount = 0;
 
-    private RoundManager() {
-    }
+    /**
+     * Constructor.
+     */
+    private RoundManager() {}
 
     /**
      * Gets the unique instance of <b>RoundManager</b>.
