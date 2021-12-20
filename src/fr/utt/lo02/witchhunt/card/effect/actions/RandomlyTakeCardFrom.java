@@ -8,6 +8,10 @@ import fr.utt.lo02.witchhunt.managers.PlayerManager;
 import java.util.HashMap;
 import java.util.Objects;
 
+/**
+ * <b>RandomlyTakeCardFrom</b> represents the <i>"Before their turn, take a random card
+ * from their hand and add it to your hand."</i> action on rumour cards.
+ */
 public final class RandomlyTakeCardFrom extends Action {
 
     public RandomlyTakeCardFrom() {

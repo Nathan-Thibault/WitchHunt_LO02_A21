@@ -3,6 +3,10 @@ package fr.utt.lo02.witchhunt.card.effect.conditions;
 import fr.utt.lo02.witchhunt.Identity;
 import fr.utt.lo02.witchhunt.player.Player;
 
+/**
+ * <b>RevealedAsVillager</b> represents the <i>"Only playable if you have
+ * been revealed as a Villager."</i> condition on rumour cards.
+ */
 public final class RevealedAsVillager extends Condition {
 
     public RevealedAsVillager() {

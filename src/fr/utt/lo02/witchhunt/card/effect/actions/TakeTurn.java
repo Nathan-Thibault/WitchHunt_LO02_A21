@@ -4,6 +4,9 @@ import fr.utt.lo02.witchhunt.managers.RoundManager;
 
 import java.util.HashMap;
 
+/**
+ * <b>TakeTurn</b> represents the <i>"Take next turn."</i> action on rumour cards.
+ */
 public final class TakeTurn extends Action {
 
     public TakeTurn() {

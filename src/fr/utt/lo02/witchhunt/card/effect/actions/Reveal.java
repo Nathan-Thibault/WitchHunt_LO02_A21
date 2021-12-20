@@ -8,6 +8,13 @@ import fr.utt.lo02.witchhunt.managers.PlayerManager;
 import java.util.HashMap;
 import java.util.Set;
 
+/**
+ * <b>Reveal</b> represents the <i>"Reveal your identity"</i> action on rumour cards.
+ * <p>
+ * <i>Reveal your identity.
+ * <b>Witch</b>: Player to your left takes next turn.
+ * <b>Villager</b>: Choose next player.</i>
+ */
 public final class Reveal extends Action {
 
     public Reveal() {

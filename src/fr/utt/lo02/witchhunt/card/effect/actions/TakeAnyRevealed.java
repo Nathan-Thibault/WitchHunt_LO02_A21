@@ -8,6 +8,10 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.Objects;
 
+/**
+ * <b>TakeAnyRevealed</b> represents the <i>"Take a revealed Rumour card from
+ * any other player into your hand."</i> action on rumour cards.
+ */
 public final class TakeAnyRevealed extends Action {
 
     public TakeAnyRevealed() {

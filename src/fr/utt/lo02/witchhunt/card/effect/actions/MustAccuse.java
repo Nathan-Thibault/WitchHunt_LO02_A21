@@ -9,6 +9,10 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * <b>MustAccuse</b> represents the <i>"On their turn they must accuse a
+ * player other than you, if possible."</i> action on rumour cards.
+ */
 public final class MustAccuse extends Action {
 
     public MustAccuse() {
@@ -32,7 +36,7 @@ public final class MustAccuse extends Action {
         if (possibleTargets.size() > 1)//if there is at least two unrevealed players, target can choose someone else than caller
             possibleTargets.remove(callerName);
 
-        IOController.getInstance().printInfo(target.concat(" you are forced to accuse someone else than ").concat(callerName));
+        IOController.getInstance().printInfo(target + " you are forced to accuse someone else than " + callerName);
         String targetOfTarget = pManager.getByName(target).choosePlayerFrom(possibleTargets);
         rManager.accuse(target, targetOfTarget);
     }

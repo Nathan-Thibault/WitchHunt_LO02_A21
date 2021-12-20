@@ -6,6 +6,9 @@ import fr.utt.lo02.witchhunt.managers.PlayerManager;
 
 import java.util.HashMap;
 
+/**
+ * <b>Discard</b> represents the <i>"Discard a card from your hand."</i> action on rumour cards.
+ */
 public final class Discard extends Action {
 
     public Discard() {

@@ -1,6 +1,5 @@
 package fr.utt.lo02.witchhunt.card.effect;
 
-import fr.utt.lo02.witchhunt.card.RumourCard;
 import fr.utt.lo02.witchhunt.card.effect.actions.Action;
 import fr.utt.lo02.witchhunt.card.effect.conditions.Condition;
 import fr.utt.lo02.witchhunt.managers.CardManager;
@@ -177,6 +176,14 @@ public final class CardEffect {
         return sb.toString();
     }
 
+    /**
+     * Builds the arguments to pass to the {@link Action#execute(String, HashMap)}
+     * and {@link Action#isExecutable(String, HashMap)} methods.
+     *
+     * @param action      the action to build arguments for
+     * @param accuserName name of the player accusing the player playing the action, may be <code>null</code>
+     * @return a {@link HashMap} containing the arguments with strings as keys
+     */
     private HashMap<String, Object> buildArgs(Action action, String accuserName) {
         CardManager cManager = CardManager.getInstance();
         HashMap<String, Object> args = new HashMap<>();

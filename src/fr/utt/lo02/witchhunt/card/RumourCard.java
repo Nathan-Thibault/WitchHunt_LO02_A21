@@ -13,10 +13,21 @@ import java.util.Objects;
  * The class offers methods to use its effects.
  */
 public final class RumourCard extends Card {
-
+    /**
+     * Name of the <b>RumourCard</b>.
+     */
     private final String name;
+    /**
+     * Witch effect of the <b>RumourCard</b>.
+     */
     private final CardEffect witchEffect;
+    /**
+     * Hunt effect of the <b>RumourCard</b>.
+     */
     private final CardEffect huntEffect;
+    /**
+     * Name of another <b>RumourCard</b> this one can't get chosen by if revealed.
+     */
     private final String cantGetChosenBy;
 
     /**
@@ -119,6 +130,13 @@ public final class RumourCard extends Card {
         return effectDescription(false);
     }
 
+    /**
+     * Builds the description of the <b>RumourCard</b> for either its hunt or witch effect.
+     *
+     * @param witch <code>true</code> to build the description for the witch effect,
+     *              <code>false</code> for the hunt effect
+     * @return the description as a string
+     */
     private String effectDescription(boolean witch) {
         StringBuilder sb = new StringBuilder();
         if (cantGetChosenBy != null) {

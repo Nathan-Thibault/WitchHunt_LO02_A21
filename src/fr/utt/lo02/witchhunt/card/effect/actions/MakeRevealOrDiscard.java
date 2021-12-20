@@ -10,13 +10,25 @@ import fr.utt.lo02.witchhunt.managers.PlayerManager;
 import java.util.Set;
 import java.util.HashMap;
 
+/**
+ * <b>MakeRevealOrDiscard</b> represents the <i>"Choose a player. They must reveal their
+ * identity or discard a card from their hand."</i> action on rumour cards.
+ * <p>
+ * <i>Choose a player. They must reveal their
+ * identity or discard a card from their hand.
+ * <b>Witch</b>: You gain 1pt. You take next turn.
+ * <b>Villager</b>: You lose 1pt. They take next turn.
+ * <b>If they discard</b>: They take next turn.</i>
+ */
 public final class MakeRevealOrDiscard extends Action {
 
     public MakeRevealOrDiscard() {
-        super("Choose a player. They must reveal their\nidentity or discard a card from their hand."
-                .concat("\nWitch: You gain 1pt. You take next turn.")
-                .concat("\nVillager: You lose 1pt. They take next turn.")
-                .concat("\nIf they discard: They take next turn."));
+        super("""
+                Choose a player. They must reveal their
+                identity or discard a card from their hand.
+                Witch: You gain 1pt. You take next turn.
+                Villager: You lose 1pt. They take next turn.
+                If they discard: They take next turn.""");
     }
 
     @Override
@@ -41,7 +53,7 @@ public final class MakeRevealOrDiscard extends Action {
         if (b) {
             target.revealIdentity();
             if (target.getIdentityCard().getIdentity().equals(Identity.VILLAGER)) {
-                io.printInfo(callerName.concat(" loses a point and ").concat(targetName).concat(" takes next turn."));
+                io.printInfo(callerName + " loses a point and " + targetName + " takes next turn.");
                 caller.addToScore(-1);
                 rManager.setIndexAtPlayer(targetName);
             } else {
@@ -52,7 +64,7 @@ public final class MakeRevealOrDiscard extends Action {
         } else {
             String card = target.chooseCardFrom(target.getHand());
 
-            io.printInfo(targetName.concat("  discarded ").concat(card).concat(". He takes next turn."));
+            io.printInfo(targetName + "  discarded " + card + ". He takes next turn.");
 
             target.getOwnedCards().remove(card);
             CardManager.getInstance().discard(card);

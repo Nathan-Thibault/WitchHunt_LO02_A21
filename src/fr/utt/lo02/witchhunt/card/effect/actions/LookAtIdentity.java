@@ -10,6 +10,9 @@ import fr.utt.lo02.witchhunt.managers.PlayerManager;
 import java.util.HashMap;
 import java.util.Objects;
 
+/**
+ * <b>LookAtIdentity</b> represents the <i>"Before their turn, secretly look at their identity"</i> action on rumour cards.
+ */
 public final class LookAtIdentity extends Action {
 
     public LookAtIdentity() {

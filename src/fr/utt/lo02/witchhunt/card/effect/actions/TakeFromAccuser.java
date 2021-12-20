@@ -7,6 +7,10 @@ import fr.utt.lo02.witchhunt.managers.PlayerManager;
 import java.util.HashMap;
 import java.util.Objects;
 
+/**
+ * <b>TakeFromAccuser</b> represents the <i>"Take one card from the hand of
+ * the player who accused you."</i> action on rumour cards.
+ */
 public final class TakeFromAccuser extends Action {
 
     public TakeFromAccuser() {

@@ -8,6 +8,10 @@ import fr.utt.lo02.witchhunt.managers.PlayerManager;
 import java.util.HashMap;
 import java.util.Objects;
 
+/**
+ * <b>MakeAccuserDiscard</b> represents the <i>"The player who accused you discards
+ * a random card from their hand."</i> action on rumour cards.
+ */
 public final class MakeAccuserDiscard extends Action {
 
     public MakeAccuserDiscard() {

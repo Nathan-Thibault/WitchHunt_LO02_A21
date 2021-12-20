@@ -9,6 +9,13 @@ import fr.utt.lo02.witchhunt.managers.PlayerManager;
 import java.util.Set;
 import java.util.HashMap;
 
+/**
+ * <b>RevealPlayer</b> represents the <i>"Reveal another player's identity."</i> action on rumour cards.
+ * <p>
+ * <i>Reveal another player's identity.
+ * <b>Witch</b>: You gain 2pts. You take next turn.
+ * <b>Villager</b>: You lose 2pts. They take next turn.</i>
+ */
 public final class RevealPlayer extends Action {
 
     public RevealPlayer() {

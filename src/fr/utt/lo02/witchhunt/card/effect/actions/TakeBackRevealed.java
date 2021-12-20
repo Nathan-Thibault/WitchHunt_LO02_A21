@@ -7,6 +7,10 @@ import fr.utt.lo02.witchhunt.managers.PlayerManager;
 import java.util.Set;
 import java.util.HashMap;
 
+/**
+ * <b>TakeBackRevealed</b> represents the <i>"Take one of your own revealed
+ * Rumour cards into your hand."</i> action on rumour cards.
+ */
 public final class TakeBackRevealed extends Action {
 
     public TakeBackRevealed() {

@@ -6,6 +6,10 @@ import fr.utt.lo02.witchhunt.managers.PlayerManager;
 
 import java.util.HashMap;
 
+/**
+ * <b>SwitchWithDiscarded</b> represents the <i>"Add one discarded card to your
+ * hand, and then discard this card."</i> action on rumour cards.
+ */
 public final class SwitchWithDiscarded extends Action {
 
     public SwitchWithDiscarded() {
