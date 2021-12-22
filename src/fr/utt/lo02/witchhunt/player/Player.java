@@ -9,6 +9,10 @@ import fr.utt.lo02.witchhunt.card.effect.EffectType;
 import fr.utt.lo02.witchhunt.io.IOController;
 import fr.utt.lo02.witchhunt.managers.PlayerManager;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -19,11 +23,32 @@ public abstract class Player {
     protected int score;
     protected IdentityCard identityCard;
     protected HashSet<String> ownedCards;
+    protected JPanel panel;
+    protected JButton button;
 
     public Player(String name) throws NullPointerException {
         this.name = Objects.requireNonNull(name, "Player constructor: name can't be null.");
+
+        panel = new JPanel();
+        button = new JButton();
+        try {
+            BufferedImage img = ImageIO.read(Objects.requireNonNull(getClass().getResource("/resources/images/player_icon.png")));
+            ImageIcon imgIcon = new ImageIcon(img);
+            button.setIcon(imgIcon);
+        } catch (NullPointerException | IOException e) {
+            e.printStackTrace();
+        }
+
+        new BoxLayout(panel, BoxLayout.Y_AXIS);
+        panel.add(new JTextField(name));
+        panel.add(button);
+
         identityCard = null;
         score = 0;
+    }
+
+    public JPanel getPanel() {
+        return panel;
     }
 
     public void revealIdentity() {

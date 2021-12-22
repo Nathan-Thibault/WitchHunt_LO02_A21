@@ -14,7 +14,8 @@ public final class IOController implements IOInterface {
     private volatile boolean waiting = false;
 
     private IOController() {
-        interfaces.add(new CommandLineInterface());
+        interfaces.add(new CLI());
+        interfaces.add(new GUI());
     }
 
     public static IOController getInstance() {
@@ -25,6 +26,7 @@ public final class IOController implements IOInterface {
     }
 
     public void stopWaiting() {
+        clear();
         waiting = false;
     }
 
@@ -50,7 +52,7 @@ public final class IOController implements IOInterface {
     @Override
     public void titleScreen() {
         for (IOInterface ioInterface : interfaces) {
-            new Thread(ioInterface::titleScreen).start();
+            ioInterface.titleScreen();
         }
 
         startWaiting();
@@ -59,8 +61,8 @@ public final class IOController implements IOInterface {
 
     @Override
     public void pause() {
-        for(IOInterface ioInterface: interfaces){
-            new Thread(ioInterface::pause).start();
+        for (IOInterface ioInterface : interfaces) {
+            ioInterface.titleScreen();
         }
 
         startWaiting();
@@ -91,7 +93,7 @@ public final class IOController implements IOInterface {
     @Override
     public int readIntBetween(int min, int max) {
         for (IOInterface ioInterface : interfaces) {
-            new Thread(() -> ioInterface.readIntBetween(min, max)).start();
+            ioInterface.readIntBetween(min, max);
         }
 
         startWaiting();
@@ -102,13 +104,13 @@ public final class IOController implements IOInterface {
     @Override
     public <T> T readFromSet(Set<T> set) {
         for (IOInterface ioInterface : interfaces) {
-            new Thread(() -> ioInterface.readFromSet(set)).start();
+            ioInterface.readFromSet(set);
         }
 
         startWaiting();
         clear();
 
-        @SuppressWarnings("unchecked") final T from_list = (T) readValues.get("from_list");
-        return from_list;
+        @SuppressWarnings("unchecked") final T from_set = (T) readValues.get("from_set");
+        return from_set;
     }
 }

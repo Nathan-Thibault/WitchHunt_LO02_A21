@@ -8,22 +8,21 @@ import fr.utt.lo02.witchhunt.managers.PlayerManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Scanner;
 import java.util.Set;
 
-public final class CommandLineInterface implements IOInterface {
+public final class CLI implements IOInterface {
 
     private final boolean windowsConsole;
-    private boolean waiting;
+    private Thread thread = null;
 
-    public CommandLineInterface() {
+    public CLI() {
         windowsConsole = System.console() != null && System.getProperty("os.name").contains("Windows");
     }
 
     @Override
     public void clear() {
-        waiting = false;
+        if (thread != null) thread.interrupt();
 
         if (WitchHunt.isTest())
             System.out.println("\n---\n\n");
@@ -54,13 +53,23 @@ public final class CommandLineInterface implements IOInterface {
 
     @Override
     public void pause() {
-        System.out.println("Press enter to continue.");
-        try {
-            System.in.read();//blocks until input data is available, i.e. until enter is pressed
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        IOController.getInstance().stopWaiting();
+        if (thread != null) thread.interrupt();
+        thread = new Thread(() -> {
+            System.out.println("Press enter to continue.");
+            try {
+                //blocks until input data is available, i.e. until enter is pressed
+                while (System.in.available() < 1) {
+                    Thread.sleep(200);
+                }
+                System.in.read();
+            } catch (InterruptedException ignored) {
+                //sleep interrupted
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            IOController.getInstance().stopWaiting();
+        });
+        thread.start();
     }
 
     @Override
@@ -110,7 +119,9 @@ public final class CommandLineInterface implements IOInterface {
 
     @Override
     public int readIntBetween(int min, int max) {
-        IOController.getInstance().read("int", intBetween(min, max));
+        if (thread != null) thread.interrupt();
+        thread = new Thread(() -> IOController.getInstance().read("int", intBetween(min, max)));
+        thread.start();
 
         return 0;
     }
@@ -128,13 +139,17 @@ public final class CommandLineInterface implements IOInterface {
         }
         System.out.print(listOfOptions);
 
-        int code = intBetween(0, list.size() - 1);
-        IOController.getInstance().read("from_list", list.get(code));
+        if (thread != null) thread.interrupt();
+        thread = new Thread(() -> {
+            int code = intBetween(0, list.size() - 1);
+            IOController.getInstance().read("from_set", list.get(code));
+        });
+        thread.start();
 
         return null;
     }
 
-    private int intBetween(int min, int max) throws NullPointerException {
+    private int intBetween(int min, int max) {
         String message = "Please enter an integer between "
                 .concat(Integer.toString(min))
                 .concat(" and ")
@@ -144,8 +159,7 @@ public final class CommandLineInterface implements IOInterface {
         Scanner sc = new Scanner(System.in);
 
         Integer result = null;
-        waiting = true;
-        while (waiting && result == null) {
+        while (result == null) {
             System.out.println(message);
             if (sc.hasNextInt()) {
                 result = sc.nextInt();
@@ -158,7 +172,7 @@ public final class CommandLineInterface implements IOInterface {
             }
         }
 
-        return Objects.requireNonNull(result);
+        return result;
     }
 
     private void resetScreen() {
