@@ -24,9 +24,9 @@ public final class MakeAccuserDiscard extends Action {
         Player accuser = PlayerManager.getInstance().getByName(accuserName);
 
         //discard random card from accuser's hand
-        String card = Utils.randomFromSet(accuser.getHand());
-        accuser.getOwnedCards().remove(card);
-        CardManager.getInstance().discard(card);
+        String cardName = Utils.randomFromSet(accuser.getHand());
+        accuser.removeFromOwnedCards(cardName);
+        CardManager.getInstance().discard(cardName);
     }
 
     @Override

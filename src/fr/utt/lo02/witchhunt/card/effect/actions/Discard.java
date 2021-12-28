@@ -20,7 +20,7 @@ public final class Discard extends Action {
         Player caller = PlayerManager.getInstance().getByName(callerName);
 
         String cardName = caller.chooseCardFrom(caller.getHand());
-        caller.getOwnedCards().remove(cardName);
+        caller.removeFromOwnedCards(cardName);
         CardManager.getInstance().discard(cardName);
     }
 

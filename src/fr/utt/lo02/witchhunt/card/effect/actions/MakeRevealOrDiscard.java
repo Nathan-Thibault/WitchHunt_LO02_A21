@@ -62,12 +62,12 @@ public final class MakeRevealOrDiscard extends Action {
                 rManager.setIndexAtPlayer(callerName);
             }
         } else {
-            String card = target.chooseCardFrom(target.getHand());
+            String cardName = target.chooseCardFrom(target.getHand());
 
-            io.printInfo(targetName + "  discarded " + card + ". He takes next turn.");
+            io.printInfo(targetName + "  discarded " + cardName + ". He takes next turn.");
 
-            target.getOwnedCards().remove(card);
-            CardManager.getInstance().discard(card);
+            target.removeFromOwnedCards(cardName);
+            CardManager.getInstance().discard(cardName);
 
             rManager.setIndexAtPlayer(targetName);
         }
