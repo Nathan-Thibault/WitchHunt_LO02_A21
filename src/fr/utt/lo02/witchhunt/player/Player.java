@@ -9,47 +9,40 @@ import fr.utt.lo02.witchhunt.card.effect.EffectType;
 import fr.utt.lo02.witchhunt.io.IOController;
 import fr.utt.lo02.witchhunt.managers.PlayerManager;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 public abstract class Player {
-
     protected final String name;
-    protected int score;
+    private int score;
+    private HashSet<String> ownedCards;
     protected IdentityCard identityCard;
-    protected HashSet<String> ownedCards;
-    protected JPanel panel;
-    protected JButton button;
+    private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 
     public Player(String name) throws NullPointerException {
         this.name = Objects.requireNonNull(name, "Player constructor: name can't be null.");
-
-        panel = new JPanel();
-        button = new JButton();
-        try {
-            BufferedImage img = ImageIO.read(Objects.requireNonNull(getClass().getResource("/resources/images/player_icon.png")));
-            ImageIcon imgIcon = new ImageIcon(img);
-            button.setIcon(imgIcon);
-        } catch (NullPointerException | IOException e) {
-            e.printStackTrace();
-        }
-
-        new BoxLayout(panel, BoxLayout.Y_AXIS);
-        panel.add(new JTextField(name));
-        panel.add(button);
 
         identityCard = null;
         score = 0;
     }
 
-    public JPanel getPanel() {
-        return panel;
-    }
+    public abstract void playTurn();
+
+    public abstract void respondAccusation(String accuser);
+
+    public abstract void chooseIdentity();
+
+    /**
+     * @return true to reveal and false to discard
+     */
+    public abstract boolean chooseToRevealOrDiscard();
+
+    public abstract String chooseCardFrom(Set<String> listOfCardNames);
+
+    public abstract String choosePlayerFrom(Set<String> listOfPlayerNames);
 
     public void revealIdentity() {
         IOController io = IOController.getInstance();
@@ -86,18 +79,6 @@ public abstract class Player {
         rManager.next();
     }
 
-    public void setIdentity(Identity identity) {
-        identityCard = new IdentityCard(identity);
-    }
-
-    public IdentityCard getIdentityCard() {
-        return identityCard;
-    }
-
-    public HashSet<String> getHand() {
-        return getRevealedCards(false);
-    }
-
     public HashSet<String> getPlayableCards(EffectType type, String accuser) {
         CardManager cManager = CardManager.getInstance();
         HashSet<String> cards = new HashSet<>();
@@ -116,16 +97,8 @@ public abstract class Player {
         return cards;
     }
 
-    public HashSet<String> getPlayableCards() {
-        return getPlayableCards(EffectType.HUNT, null);
-    }
-
-    public HashSet<String> getPlayableCards(String accuser) {
-        return getPlayableCards(EffectType.WITCH, accuser);
-    }
-
-    public HashSet<String> getOwnedCards() {
-        return ownedCards;
+    public HashSet<String> getHand() {
+        return getRevealedCards(false);
     }
 
     public HashSet<String> getRevealedCards() {
@@ -147,34 +120,77 @@ public abstract class Player {
     }
 
     public void reset() {
-        identityCard = null;
-        ownedCards = CardManager.getInstance().dealHand();
+        setIdentityCard(null);
+        setOwnedCards(CardManager.getInstance().dealHand());
     }
 
-    public String getName() {
-        return name;
+    public HashSet<String> getPlayableCards() {
+        return getPlayableCards(EffectType.HUNT, null);
+    }
+
+    public HashSet<String> getPlayableCards(String accuser) {
+        return getPlayableCards(EffectType.WITCH, accuser);
+    }
+
+    public void removeFromOwnedCards(String nameOfCardToRemove) {
+        HashSet<String> newOwnedCards = getOwnedCards();
+        newOwnedCards.remove(nameOfCardToRemove);
+        setOwnedCards(newOwnedCards);
+    }
+
+    public void addToOwnedCards(String nameOfCardToAdd) {
+        HashSet<String> newOwnedCards = getOwnedCards();
+        newOwnedCards.add(nameOfCardToAdd);
+        setOwnedCards(newOwnedCards);
+    }
+
+    public HashSet<String> getOwnedCards() {
+        return new HashSet<>(ownedCards);
+    }
+
+    public void setOwnedCards(HashSet<String> newOwnedCards) {
+        HashSet<String> oldOwnedCards = ownedCards;
+        ownedCards = newOwnedCards;
+        pcs.firePropertyChange("ownedCards", oldOwnedCards, ownedCards);
     }
 
     public void addToScore(int addend) {
-        score += addend;
+        setScore(score + addend);
     }
 
     public int getScore() {
         return score;
     }
 
-    public abstract void playTurn();
+    public void setScore(int newScore) {
+        int oldScore = score;
+        score = newScore;
+        pcs.firePropertyChange("score", oldScore, score);
+    }
 
-    public abstract void respondAccusation(String accuser);
+    public void setIdentity(Identity identity) {
+        setIdentityCard(new IdentityCard(identity));
+    }
 
-    public abstract void chooseIdentity();
+    public IdentityCard getIdentityCard() {
+        return identityCard;
+    }
 
-    /**
-     * @return true to reveal and false to discard
-     */
-    public abstract boolean chooseToRevealOrDiscard();
+    public void setIdentityCard(IdentityCard newIdentityCard) {
+        IdentityCard oldIdentityCard = identityCard;
+        identityCard = newIdentityCard;
+        pcs.firePropertyChange("identityCard", oldIdentityCard, identityCard);
+    }
 
-    public abstract String chooseCardFrom(Set<String> listOfCardNames);
+    public String getName() {
+        return name;
+    }
 
-    public abstract String choosePlayerFrom(Set<String> listOfPlayerNames);
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        pcs.addPropertyChangeListener(listener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        pcs.removePropertyChangeListener(listener);
+    }
 }

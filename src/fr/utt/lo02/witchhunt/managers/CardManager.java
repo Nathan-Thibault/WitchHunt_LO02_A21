@@ -8,6 +8,7 @@ import fr.utt.lo02.witchhunt.card.effect.actions.*;
 import fr.utt.lo02.witchhunt.card.effect.conditions.Condition;
 import fr.utt.lo02.witchhunt.card.effect.conditions.RevealedARumourCard;
 import fr.utt.lo02.witchhunt.card.effect.conditions.RevealedAsVillager;
+import fr.utt.lo02.witchhunt.io.CardView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -282,5 +283,11 @@ public final class CardManager {
      */
     public HashSet<String> getDiscardedCards() {
         return discardedCards;
+    }
+
+    public void createViews() {
+        for (RumourCard card : allRumourCards.values()) {
+            card.setCardView(new CardView(card));
+        }
     }
 }

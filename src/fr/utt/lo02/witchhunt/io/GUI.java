@@ -1,5 +1,6 @@
 package fr.utt.lo02.witchhunt.io;
 
+import fr.utt.lo02.witchhunt.managers.CardManager;
 import fr.utt.lo02.witchhunt.managers.PlayerManager;
 import fr.utt.lo02.witchhunt.player.Player;
 
@@ -12,27 +13,38 @@ import java.util.Set;
 
 public final class GUI implements IOInterface {
 
+    private final JPanel mainPanel;
+    private final JPanel playersPanel;
     private final JFrame frame;
-    private JPanel panel;
 
     public GUI() {
         frame = new JFrame();
+        mainPanel = new JPanel();
+        playersPanel = new JPanel();
+
+        CardManager.getInstance().createViews();
+
+        playersPanel.setLayout(new BoxLayout(playersPanel, BoxLayout.X_AXIS));
+        PlayerManager pManager = PlayerManager.getInstance();
+        for (String pName : pManager.getAllPlayers()) {
+            Player p = pManager.getByName(pName);
+            playersPanel.add(new PlayerView(p));
+        }
+
         frame.setTitle("WitchHunt");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);//center the frame on screen
-        panel = new JPanel();
-        frame.add(panel);
+        frame.add(mainPanel);
+        frame.pack();
         frame.setVisible(true);
     }
 
     private void switchPanel(JPanel newPanel) {
-        frame.remove(panel);
-        frame.add(newPanel);
+        mainPanel.removeAll();
+        mainPanel.add(newPanel);
+        mainPanel.invalidate();
+        mainPanel.validate();
         frame.pack();
-        frame.invalidate();
-        frame.revalidate();
-
-        panel = newPanel;
     }
 
     @Override
@@ -40,7 +52,6 @@ public final class GUI implements IOInterface {
         JPanel panel = new JPanel();
 
         JLabel l = new JLabel("Nothing to display for now.");
-        panel.setSize(l.getSize());
         panel.add(l);
 
         switchPanel(panel);
@@ -75,22 +86,7 @@ public final class GUI implements IOInterface {
 
     @Override
     public void displayGameInfos() {
-        PlayerManager pManager = PlayerManager.getInstance();
-
-        JPanel panel = new JPanel();
-        JPanel players = new JPanel();
-
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        players.setLayout(new BoxLayout(players, BoxLayout.X_AXIS));
-
-        for (String pName : pManager.getAllPlayers()) {
-            Player p = pManager.getByName(pName);
-            players.add(p.getPanel());
-        }
-
-        panel.add(players);
-
-        switchPanel(panel);
+        switchPanel(playersPanel);
     }
 
     @Override
