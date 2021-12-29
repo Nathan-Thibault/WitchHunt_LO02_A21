@@ -71,7 +71,7 @@ public abstract class Player {
             pManager.getByName(accuser).addToScore(1);
             pManager.eliminate(name);
 
-            sb.append("was a Witch !\n");
+            sb.append(" was a Witch!\n");
             sb.append(name);
             sb.append(" is out of the game until the end of the round.\n");
             sb.append(accuser);
@@ -80,7 +80,7 @@ public abstract class Player {
             io.printInfo(sb.toString());
             rManager.setIndexAtPlayer(accuser);
         } else {
-            sb.append("is a Villager.\n");
+            sb.append(" is a Villager.\n");
             sb.append(accuser);
             sb.append(" gains no point and ");
             sb.append(name);
