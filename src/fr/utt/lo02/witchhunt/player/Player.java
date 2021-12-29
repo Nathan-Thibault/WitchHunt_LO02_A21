@@ -49,10 +49,10 @@ public abstract class Player {
 
         identityCard.setRevealed(true);
         if (identityCard.getIdentity() == Identity.WITCH) {
-            io.printInfo(name.concat(" was a witch."));
+            io.printInfo(name.concat(" was a Witch."));
             PlayerManager.getInstance().eliminate(name);
         } else {
-            io.printInfo(name.concat(" is a villager."));
+            io.printInfo(name.concat(" is a Villager."));
         }
         io.pause();
     }
@@ -63,15 +63,30 @@ public abstract class Player {
         IOController io = IOController.getInstance();
 
         identityCard.setRevealed(true);
-        io.printInfo(name + " was a " + identityCard.getIdentity() + "!");
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(name);
 
         if (identityCard.getIdentity() == Identity.WITCH) {
             pManager.getByName(accuser).addToScore(1);
             pManager.eliminate(name);
-            io.printInfo(name + " is out of the game until the end of the round.\n" + accuser + " gains one point and takes another turn.");
+
+            sb.append("was a Witch !\n");
+            sb.append(name);
+            sb.append(" is out of the game until the end of the round.\n");
+            sb.append(accuser);
+            sb.append(" gains one point and takes another turn.");
+
+            io.printInfo(sb.toString());
             rManager.setIndexAtPlayer(accuser);
         } else {
-            io.printInfo(accuser + " gains no point and " + name + " takes next turn.");
+            sb.append("is a Villager.\n");
+            sb.append(accuser);
+            sb.append(" gains no point and ");
+            sb.append(name);
+            sb.append(" takes next turn.");
+
+            io.printInfo(sb.toString());
             rManager.setIndexAtPlayer(name);
         }
 

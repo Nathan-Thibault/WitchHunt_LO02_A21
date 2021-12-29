@@ -54,7 +54,7 @@ public class WitchHunt {
                 pManager.addPhysicalPlayer(sc.nextLine());
                 io.printInfo("Player successfully added.");
             } catch (IllegalStateException | NoSuchElementException e) {
-                io.printError("An exception occurred. Please try again.");
+                io.printInfo("An exception occurred. Please try again.");
                 i--;
             }
         }

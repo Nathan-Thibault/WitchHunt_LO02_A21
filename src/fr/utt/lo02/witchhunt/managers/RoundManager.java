@@ -37,7 +37,8 @@ public final class RoundManager {
     /**
      * Constructor.
      */
-    private RoundManager() {}
+    private RoundManager() {
+    }
 
     /**
      * Gets the unique instance of <b>RoundManager</b>.
@@ -68,7 +69,7 @@ public final class RoundManager {
         PlayerManager.getInstance().resetAll();
 
         roundCount++;
-        IOController.getInstance().printInfo("Round ".concat(String.valueOf(roundCount)).concat(" starts !"));
+        IOController.getInstance().printInfo("Round " + roundCount + " starts !");
 
         identityRound();
 
@@ -158,11 +159,8 @@ public final class RoundManager {
         lastUnrevealed.revealIdentity();
         lastUnrevealed.addToScore(identity.equals(Identity.WITCH) ? 2 : 1);
 
-        IOController.getInstance().printInfo(startingPlayer
-                .concat(" was the last player unrevealed. He was a ")
-                .concat(identity.toString())
-                .concat(" so he gains ")
-                .concat(identity.equals(Identity.WITCH) ? "two points." : "one point."));
+        IOController.getInstance().printInfo(startingPlayer + " was the last player unrevealed. He was a "
+                + identity + " so he gains " + (identity.equals(Identity.WITCH) ? "two points." : "one point."));
 
         checkForWinner();
     }
