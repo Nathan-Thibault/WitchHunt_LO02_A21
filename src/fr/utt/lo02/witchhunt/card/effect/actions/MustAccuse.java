@@ -37,6 +37,7 @@ public final class MustAccuse extends Action {
             possibleTargets.remove(callerName);
 
         IOController.getInstance().printInfo(target + " you are forced to accuse someone else than " + callerName);
+        //TODO: use something else than io.printInfo
         String targetOfTarget = pManager.getByName(target).choosePlayerFrom(possibleTargets);
         rManager.accuse(target, targetOfTarget);
     }

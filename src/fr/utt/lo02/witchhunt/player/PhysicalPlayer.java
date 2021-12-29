@@ -36,6 +36,7 @@ public final class PhysicalPlayer extends Player {
 
         sb.append("\nChoose what to do from the options bellow:");
         io.printInfo(sb.toString());
+        //TODO: use something else than io.printInfo
 
         PlayerAction action = io.readFromSet(possibleActions);
 
@@ -57,6 +58,7 @@ public final class PhysicalPlayer extends Player {
 
                 io.displayGameInfos();
                 io.printInfo(sb.toString());
+                //TODO: use something else than io.printInfo
 
                 String cardName = chooseCardFrom(playableCards);
                 RumourCard card = CardManager.getInstance().getByName(cardName);
@@ -87,6 +89,7 @@ public final class PhysicalPlayer extends Player {
             sb.append("\nChoose what to do from the options bellow:");
             io.displayGameInfos();
             io.printInfo(sb.toString());
+            //TODO: use something else than io.printInfo
 
             PlayerAction action = io.readFromSet(PlayerAction.getActions(true));
 
@@ -100,6 +103,7 @@ public final class PhysicalPlayer extends Player {
 
                     io.displayGameInfos();
                     io.printInfo(sb.toString());
+                    //TODO: use something else than io.printInfo
 
                     String card = chooseCardFrom(playableCards);
 
@@ -110,6 +114,7 @@ public final class PhysicalPlayer extends Player {
         } else {//player has no cards, he is forced to reveal his identity
             sb.append("\nYou are forced to reveal because you can't play any card:");
             io.printInfo(sb.toString());
+            //TODO: use something else than io.printInfo
 
             revealIdentity(accuser);
         }
@@ -120,6 +125,7 @@ public final class PhysicalPlayer extends Player {
         IOController io = IOController.getInstance();
 
         io.printInfo(name.concat(" choose your identity from the list bellow:"));
+        //TODO: use something else than io.printInfo
         Identity identity = io.readFromSet(EnumSet.allOf(Identity.class));
         setIdentity(identity);
     }
@@ -129,6 +135,7 @@ public final class PhysicalPlayer extends Player {
         IOController io = IOController.getInstance();
 
         io.printInfo(name.concat(" you have to choose to reveal your identity or discard a card."));
+        //TODO: use something else than io.printInfo
         String action = io.readFromSet(Set.of("Discard", "Reveal"));
 
         return action.equals("Reveal");
@@ -146,6 +153,7 @@ public final class PhysicalPlayer extends Player {
         IOController io = IOController.getInstance();
 
         io.printInfo(name.concat(" choose a player from the list bellow:"));
+        //TODO: use something else than io.printInfo
         return io.readFromSet(listOfPlayerNames);
     }
 

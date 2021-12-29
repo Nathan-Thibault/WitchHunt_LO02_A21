@@ -4,12 +4,9 @@ import fr.utt.lo02.witchhunt.card.IdentityCard;
 import fr.utt.lo02.witchhunt.managers.CardManager;
 import fr.utt.lo02.witchhunt.player.Player;
 
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.BoxLayout;
+import javax.swing.*;
 import javax.swing.border.LineBorder;
-import java.awt.Component;
-import java.awt.Color;
+import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Set;
@@ -17,14 +14,18 @@ import java.util.Set;
 public final class PlayerView extends JPanel implements PropertyChangeListener {
 
     private final JLabel scoreLabel;
-    private final JPanel identityPanel;
-    private final JPanel cardsPanel;
+    private final JPanel topLeft;
+    private final JPanel topRight;
+    private final JPanel top;
+    private final JPanel cards;
 
     public PlayerView(Player player) {
         super();
-        identityPanel = new JPanel();
+        topLeft = new JPanel();
+        topRight = new JPanel();
+        top = new JPanel();
         scoreLabel = new JLabel();
-        cardsPanel = new JPanel();
+        cards = new JPanel();
 
         //name
         JLabel nameLabel = new JLabel();
@@ -36,17 +37,22 @@ public final class PlayerView extends JPanel implements PropertyChangeListener {
 
         //identity
         JLabel identityNotSet = new JLabel("Identity not yet chosen.");
-        identityPanel.add(identityNotSet);
+        topLeft.add(identityNotSet);
 
         //hand
-        cardsPanel.setLayout(new BoxLayout(cardsPanel, BoxLayout.X_AXIS));
+        cards.setLayout(new FlowLayout());
+
+        topRight.setLayout(new BoxLayout(topRight, BoxLayout.Y_AXIS));
+        topRight.add(nameLabel);
+        topRight.add(scoreLabel);
+
+        top.setLayout(new FlowLayout());
+        top.add(topLeft);
+        top.add(topRight);
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        add(nameLabel);
-        add(scoreLabel);
-        add(identityPanel);
-        add(cardsPanel);
-        setAlignmentX(Component.CENTER_ALIGNMENT);
+        add(top);
+        add(cards);
         setBorder(new LineBorder(new Color(125, 125, 125)));
 
         player.addPropertyChangeListener(this);
@@ -58,27 +64,27 @@ public final class PlayerView extends JPanel implements PropertyChangeListener {
         switch (propertyName) {
             case "identityCard" -> {
                 IdentityCard identityCard = (IdentityCard) e.getNewValue();
-                identityPanel.removeAll();
+                topLeft.removeAll();
                 if (identityCard != null) {
-                    identityPanel.add(new CardView(identityCard));
+                    topLeft.add(new CardView(identityCard));
                 } else {
                     JLabel identityNotSet = new JLabel("Identity not yet chosen.");
-                    identityPanel.add(identityNotSet);
+                    topLeft.add(identityNotSet);
                 }
-                identityPanel.invalidate();
-                identityPanel.validate();
+                topLeft.invalidate();
+                topLeft.validate();
             }
             case "ownedCards" -> {
                 CardManager cManager = CardManager.getInstance();
                 @SuppressWarnings("unchecked")
                 Set<String> ownedCards = (Set<String>) e.getNewValue();
 
-                cardsPanel.removeAll();
+                cards.removeAll();
                 for (String cardName : ownedCards) {
-                    cardsPanel.add(cManager.getByName(cardName).getCardView());
+                    cards.add(cManager.getByName(cardName).getCardView());
                 }
-                cardsPanel.invalidate();
-                cardsPanel.validate();
+                cards.invalidate();
+                cards.validate();
             }
             case "score" -> scoreLabel.setText("Score: " + e.getNewValue());
         }

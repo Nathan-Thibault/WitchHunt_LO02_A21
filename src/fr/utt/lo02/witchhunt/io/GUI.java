@@ -6,34 +6,39 @@ import fr.utt.lo02.witchhunt.player.Player;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Set;
 
 public final class GUI implements IOInterface {
-
+    private final JFrame frame;
     private final JPanel mainPanel;
     private final JPanel playersPanel;
-    private final JFrame frame;
+    private final JTextArea info;
 
     public GUI() {
         frame = new JFrame();
         mainPanel = new JPanel();
         playersPanel = new JPanel();
+        info = new JTextArea();
 
         CardManager.getInstance().createViews();
 
-        playersPanel.setLayout(new BoxLayout(playersPanel, BoxLayout.X_AXIS));
+        playersPanel.setLayout(new GridLayout(3, 2, 5, 5));
         PlayerManager pManager = PlayerManager.getInstance();
         for (String pName : pManager.getAllPlayers()) {
             Player p = pManager.getByName(pName);
             playersPanel.add(new PlayerView(p));
         }
 
+        info.setBorder(new LineBorder(new Color(125, 125, 125)));
+        info.setEditable(false);
+
         frame.setTitle("WitchHunt");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLocationRelativeTo(null);//center the frame on screen
         frame.add(mainPanel);
         frame.pack();
         frame.setVisible(true);
@@ -85,11 +90,17 @@ public final class GUI implements IOInterface {
 
     @Override
     public void displayGameInfos() {
-        switchPanel(playersPanel);
+        JPanel panel = new JPanel();
+        panel.setLayout(new FlowLayout());
+        panel.add(playersPanel);
+        panel.add(info);
+        switchPanel(panel);
     }
 
     @Override
     public void printInfo(String msg) {
+        info.setText(msg);
+        frame.pack();
     }
 
     @Override

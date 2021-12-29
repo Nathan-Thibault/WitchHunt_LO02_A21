@@ -26,6 +26,7 @@ public final class TakeFromAccuser extends Action {
         Player accuser = pManager.getByName(accuserName);
 
         IOController.getInstance().printInfo(callerName + " choose a card from the hand of " + accuserName + ".");
+        //TODO: use something else than io.printInfo
         String cardName = caller.chooseCardFrom(accuser.getHand());
         accuser.removeFromOwnedCards(cardName);
         caller.addToOwnedCards(cardName);
