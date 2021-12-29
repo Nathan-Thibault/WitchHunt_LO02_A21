@@ -4,12 +4,17 @@ import fr.utt.lo02.witchhunt.card.IdentityCard;
 import fr.utt.lo02.witchhunt.managers.CardManager;
 import fr.utt.lo02.witchhunt.player.Player;
 
-import javax.swing.*;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.BoxLayout;
 import javax.swing.border.LineBorder;
-import java.awt.*;
-import java.util.HashSet;
+import java.awt.Component;
+import java.awt.Color;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Set;
 
-public final class PlayerView extends JPanel {
+public final class PlayerView extends JPanel implements PropertyChangeListener {
 
     private final JLabel scoreLabel;
     private final JPanel identityPanel;
@@ -44,33 +49,38 @@ public final class PlayerView extends JPanel {
         setAlignmentX(Component.CENTER_ALIGNMENT);
         setBorder(new LineBorder(new Color(125, 125, 125)));
 
-        player.addPropertyChangeListener(new PlayerListener(this));
+        player.addPropertyChangeListener(this);
     }
 
-    public void updateIdentityCard(IdentityCard identityCard) {
-        identityPanel.removeAll();
-        if (identityCard != null) {
-            identityPanel.add(new CardView(identityCard));
-        } else {
-            JLabel identityNotSet = new JLabel("Identity not yet chosen.");
-            identityPanel.add(identityNotSet);
+    @Override
+    public void propertyChange(PropertyChangeEvent e) {
+        String propertyName = e.getPropertyName();
+        switch (propertyName) {
+            case "identityCard" -> {
+                IdentityCard identityCard = (IdentityCard) e.getNewValue();
+                identityPanel.removeAll();
+                if (identityCard != null) {
+                    identityPanel.add(new CardView(identityCard));
+                } else {
+                    JLabel identityNotSet = new JLabel("Identity not yet chosen.");
+                    identityPanel.add(identityNotSet);
+                }
+                identityPanel.invalidate();
+                identityPanel.validate();
+            }
+            case "ownedCards" -> {
+                CardManager cManager = CardManager.getInstance();
+                @SuppressWarnings("unchecked")
+                Set<String> ownedCards = (Set<String>) e.getNewValue();
+
+                cardsPanel.removeAll();
+                for (String cardName : ownedCards) {
+                    cardsPanel.add(cManager.getByName(cardName).getCardView());
+                }
+                cardsPanel.invalidate();
+                cardsPanel.validate();
+            }
+            case "score" -> scoreLabel.setText("Score: " + e.getNewValue());
         }
-        identityPanel.invalidate();
-        identityPanel.validate();
-    }
-
-    public void updateOwnedCards(HashSet<String> ownedCards) {
-        CardManager cManager = CardManager.getInstance();
-
-        cardsPanel.removeAll();
-        for (String cardName : ownedCards) {
-            cardsPanel.add(cManager.getByName(cardName).getCardView());
-        }
-        cardsPanel.invalidate();
-        cardsPanel.validate();
-    }
-
-    public void updateScore(int score) {
-        scoreLabel.setText("Score: " + score);
     }
 }

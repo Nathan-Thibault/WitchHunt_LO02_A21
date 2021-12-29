@@ -6,14 +6,17 @@ import fr.utt.lo02.witchhunt.card.IdentityCard;
 import fr.utt.lo02.witchhunt.card.RumourCard;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JButton;
+import javax.swing.ImageIcon;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Objects;
 
-public final class CardView extends JButton {
+public final class CardView extends JButton implements PropertyChangeListener {
     private ImageIcon frontFace;
     private ImageIcon backFace;
 
@@ -47,10 +50,12 @@ public final class CardView extends JButton {
 
         this.setIcon(backFace);
 
-        card.addPropertyChangeListener(new CardListener(this));
+        card.addPropertyChangeListener(this);
     }
 
-    public void update(boolean revealed) {
-        this.setIcon(revealed ? frontFace : backFace);
+    @Override
+    public void propertyChange(PropertyChangeEvent e) {
+        if (e.getPropertyName().equals("revealed"))
+            this.setIcon((boolean) e.getNewValue() ? frontFace : backFace);
     }
 }
