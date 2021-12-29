@@ -113,11 +113,6 @@ public final class CLI implements IOInterface {
     }
 
     @Override
-    public void printError(String msg) {
-        System.err.println(msg);
-    }
-
-    @Override
     public int readIntBetween(int min, int max) {
         if (thread != null) thread.interrupt();
         thread = new Thread(() -> IOController.getInstance().read("int", intBetween(min, max)));

@@ -81,7 +81,6 @@ public final class GUI implements IOInterface {
 
     @Override
     public void pause() {
-
     }
 
     @Override
@@ -91,11 +90,6 @@ public final class GUI implements IOInterface {
 
     @Override
     public void printInfo(String msg) {
-    }
-
-    @Override
-    public void printError(String msg) {
-
     }
 
     @Override

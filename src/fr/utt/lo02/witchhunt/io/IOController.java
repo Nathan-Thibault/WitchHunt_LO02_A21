@@ -84,13 +84,6 @@ public final class IOController implements IOInterface {
     }
 
     @Override
-    public void printError(String msg) {
-        for (IOInterface ioInterface : interfaces) {
-            ioInterface.printError(msg);
-        }
-    }
-
-    @Override
     public int readIntBetween(int min, int max) {
         for (IOInterface ioInterface : interfaces) {
             ioInterface.readIntBetween(min, max);
