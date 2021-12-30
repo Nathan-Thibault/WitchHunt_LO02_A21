@@ -84,9 +84,9 @@ public final class IOController implements IOInterface {
     }
 
     @Override
-    public int readIntBetween(int min, int max) {
+    public int readIntBetween(int min, int max, String message) {
         for (IOInterface ioInterface : interfaces) {
-            ioInterface.readIntBetween(min, max);
+            ioInterface.readIntBetween(min, max, message);
         }
 
         startWaiting();

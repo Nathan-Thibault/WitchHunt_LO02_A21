@@ -104,7 +104,24 @@ public final class GUI implements IOInterface {
     }
 
     @Override
-    public int readIntBetween(int min, int max) {
+    public int readIntBetween(int min, int max, String message) {
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel(message);
+        JSlider slider = new JSlider(JSlider.HORIZONTAL, min, max, min);
+        JButton button = new JButton("OK");
+
+        slider.setMajorTickSpacing(1);
+        slider.setPaintLabels(true);
+
+        button.addActionListener(e -> IOController.getInstance().read("int", slider.getValue()));
+
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.add(label);
+        panel.add(slider);
+        panel.add(button);
+
+        switchPanel(panel);
+
         return 0;
     }
 

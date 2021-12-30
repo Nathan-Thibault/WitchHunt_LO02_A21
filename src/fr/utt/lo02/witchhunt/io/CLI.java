@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public final class CLI implements IOInterface {
 
@@ -113,10 +114,9 @@ public final class CLI implements IOInterface {
     }
 
     @Override
-    public int readIntBetween(int min, int max) {
-        if (thread != null) thread.interrupt();
-        thread = new Thread(() -> IOController.getInstance().read("int", intBetween(min, max)));
-        thread.start();
+    public int readIntBetween(int min, int max, String message) {
+        System.out.println(message);
+        intBetween(min, max, result -> IOController.getInstance().read("int", result));
 
         return 0;
     }
@@ -134,40 +134,46 @@ public final class CLI implements IOInterface {
         }
         System.out.print(listOfOptions);
 
-        if (thread != null) thread.interrupt();
-        thread = new Thread(() -> {
-            int code = intBetween(0, list.size() - 1);
-            IOController.getInstance().read("from_set", list.get(code));
-        });
-        thread.start();
+        intBetween(0, list.size() - 1, result -> IOController.getInstance().read("from_set", list.get(result)));
 
         return null;
     }
 
-    private int intBetween(int min, int max) {
-        String message = "Please enter an integer between "
-                .concat(Integer.toString(min))
-                .concat(" and ")
-                .concat(Integer.toString(max))
-                .concat(" :");
+    private void intBetween(int min, int max, Consumer<Integer> onDone) {
+        if (thread != null) thread.interrupt();
 
-        Scanner sc = new Scanner(System.in);
+        thread = new Thread(() -> {
+            String message = "Please enter an integer between " + min + " and " + max + " :";
 
-        Integer result = null;
-        while (result == null) {
-            System.out.println(message);
-            if (sc.hasNextInt()) {
-                result = sc.nextInt();
-                if (result < min || result > max) {
-                    System.out.println(result.toString().concat(" is out of range."));
-                    result = null;
+            Scanner sc = new Scanner(System.in);
+            try {
+                Integer result = null;
+                while (result == null) {
+                    System.out.println(message);
+
+                    while (System.in.available() < 1) {
+                        Thread.sleep(200);
+                    }
+
+                    if (sc.hasNextInt()) {
+                        result = sc.nextInt();
+                        if (result < min || result > max) {
+                            System.out.println(result.toString().concat(" is out of range."));
+                            result = null;
+                        } else {
+                            onDone.accept(result);
+                        }
+                    } else if (sc.hasNext()) {
+                        System.out.println(sc.next().concat(" is not an integer."));
+                    }
                 }
-            } else if (sc.hasNext()) {
-                System.out.println(sc.next().concat(" is not an integer."));
+            } catch (InterruptedException ignored) {
+                //sleep interrupted
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        }
-
-        return result;
+        });
+        thread.start();
     }
 
     private void resetScreen() {

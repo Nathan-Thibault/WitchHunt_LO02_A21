@@ -41,9 +41,7 @@ public class WitchHunt {
     private static void createPlayers() {
         IOController io = IOController.getInstance();
 
-        io.printInfo("Choose the number of physical players you want.");
-
-        int p = io.readIntBetween(0, 6);
+        int p = io.readIntBetween(0, 6, "Choose the number of physical players you want.");
 
         Scanner sc = new Scanner(System.in);
         PlayerManager pManager = PlayerManager.getInstance();
@@ -59,13 +57,11 @@ public class WitchHunt {
             }
         }
 
-        io.printInfo("Now, choose the number of artificial players you want.");
-
-        int a = io.readIntBetween(Math.max(3 - p, 0), 6 - p);
+        int a = io.readIntBetween(Math.max(3 - p, 0), 6 - p, "Now, choose the number of artificial players you want.");
 
         if (a > 0) {
-            io.printInfo("Do you want to choose the strategies of the artificial players ?\n0 -> yes\n1 -> no, choose them at random");
-            int chooseStrat = io.readIntBetween(0, 1);
+            int chooseStrat = io.readIntBetween(0, 1,
+                    "Do you want to choose the strategies of the artificial players ?\n0 -> yes\n1 -> no, choose them at random");
 
             if (chooseStrat == 0) {
                 for (int i = 0; i < a; i++) {

@@ -13,7 +13,7 @@ public interface IOInterface {
 
     void printInfo(String msg);
 
-    int readIntBetween(int min, int max);
+    int readIntBetween(int min, int max, String message);
 
     <T> T readFromSet(Set<T> list);
 }
