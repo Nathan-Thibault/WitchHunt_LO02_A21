@@ -14,16 +14,12 @@ import java.util.Set;
 public final class PlayerView extends JPanel implements PropertyChangeListener {
 
     private final JLabel scoreLabel;
-    private final JPanel topLeft;
-    private final JPanel topRight;
-    private final JPanel top;
+    private final JPanel identity;
     private final JPanel cards;
 
     public PlayerView(Player player) {
         super();
-        topLeft = new JPanel();
-        topRight = new JPanel();
-        top = new JPanel();
+        identity = new JPanel();
         scoreLabel = new JLabel();
         cards = new JPanel();
 
@@ -37,22 +33,22 @@ public final class PlayerView extends JPanel implements PropertyChangeListener {
 
         //identity
         JLabel identityNotSet = new JLabel("Identity not yet chosen.");
-        topLeft.add(identityNotSet);
+        identity.add(identityNotSet);
 
         //hand
         cards.setLayout(new FlowLayout());
 
-        topRight.setLayout(new BoxLayout(topRight, BoxLayout.Y_AXIS));
-        topRight.add(nameLabel);
-        topRight.add(scoreLabel);
+        JPanel top = new JPanel();
+        top.setLayout(new BoxLayout(top, BoxLayout.Y_AXIS));
+        top.add(nameLabel);
+        top.add(scoreLabel);
 
-        top.setLayout(new FlowLayout());
-        top.add(topLeft);
-        top.add(topRight);
-
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        add(top);
-        add(cards);
+        BorderLayout layout = new BorderLayout();
+        layout.setHgap(20);
+        setLayout(layout);
+        add(identity, BorderLayout.WEST);
+        add(top, BorderLayout.NORTH);
+        add(cards, BorderLayout.CENTER);
         setBorder(new LineBorder(new Color(125, 125, 125)));
 
         player.addPropertyChangeListener(this);
@@ -64,15 +60,15 @@ public final class PlayerView extends JPanel implements PropertyChangeListener {
         switch (propertyName) {
             case "identityCard" -> {
                 IdentityCard identityCard = (IdentityCard) e.getNewValue();
-                topLeft.removeAll();
+                identity.removeAll();
                 if (identityCard != null) {
-                    topLeft.add(new CardView(identityCard));
+                    identity.add(new CardView(identityCard));
                 } else {
                     JLabel identityNotSet = new JLabel("Identity not yet chosen.");
-                    topLeft.add(identityNotSet);
+                    identity.add(identityNotSet);
                 }
-                topLeft.invalidate();
-                topLeft.validate();
+                identity.invalidate();
+                identity.validate();
             }
             case "ownedCards" -> {
                 CardManager cManager = CardManager.getInstance();

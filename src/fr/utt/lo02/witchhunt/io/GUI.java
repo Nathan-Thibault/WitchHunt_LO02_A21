@@ -15,50 +15,59 @@ import java.util.Set;
 
 public final class GUI implements IOInterface {
     private final JFrame frame;
-    private final JPanel mainPanel;
     private final JPanel playersPanel;
     private final JTextArea info;
+    private final JPanel actionPanel;
+    private JFrame popup;
 
     public GUI() {
         frame = new JFrame();
-        mainPanel = new JPanel();
         playersPanel = new JPanel();
+        actionPanel = new JPanel();
         info = new JTextArea();
 
         CardManager.getInstance().createViews();
 
         playersPanel.setLayout(new GridLayout(3, 2, 5, 5));
-        PlayerManager pManager = PlayerManager.getInstance();
-        for (String pName : pManager.getAllPlayers()) {
-            Player p = pManager.getByName(pName);
-            playersPanel.add(new PlayerView(p));
-        }
+
+        BorderLayout layout = new BorderLayout();
+        layout.setVgap(20);
+        actionPanel.setLayout(layout);
 
         info.setBorder(new LineBorder(new Color(125, 125, 125)));
         info.setEditable(false);
 
         frame.setTitle("WitchHunt");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(mainPanel);
-        frame.pack();
         frame.setVisible(true);
     }
 
-    private void switchPanel(JPanel newPanel) {
-        mainPanel.removeAll();
-        mainPanel.add(newPanel);
-        mainPanel.invalidate();
-        mainPanel.validate();
+    public void startGame() {
+        //TODO: do that more properly
+        PlayerManager pManager = PlayerManager.getInstance();
+        for (String pName : pManager.getAllPlayers()) {
+            Player p = pManager.getByName(pName);
+            playersPanel.add(new PlayerView(p));
+        }
+    }
+
+    private void switchPanel(JPanel panel) {
+        frame.setContentPane(panel);
         frame.pack();
+        frame.setLocationRelativeTo(null);
     }
 
     @Override
     public void clear() {
+        if (popup != null)
+            popup.dispose();
+
         JPanel panel = new JPanel();
 
         JLabel l = new JLabel("Nothing to display for now.");
         panel.add(l);
 
+        frame.setMinimumSize(new Dimension(300, 75));
         switchPanel(panel);
     }
 
@@ -85,16 +94,39 @@ public final class GUI implements IOInterface {
     }
 
     @Override
-    public void pause() {
+    public void pause(String msg) {
+        if (popup != null)
+            popup.dispose();
+
+        popup = new JFrame();
+        int confirmDialog = JOptionPane.showConfirmDialog(popup, msg, "WitchHunt", JOptionPane.OK_CANCEL_OPTION);
+        if (confirmDialog == JOptionPane.OK_OPTION)
+            IOController.getInstance().stopWaiting();
     }
 
     @Override
     public void displayGameInfos() {
         JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout());
-        panel.add(playersPanel);
-        panel.add(info);
+        BorderLayout layout = new BorderLayout();
+
+        layout.setHgap(20);
+        layout.setVgap(20);
+        panel.setLayout(layout);
+
+        JScrollPane infoScroll = new JScrollPane(info);
+        infoScroll.setPreferredSize(new Dimension(400, 100));
+
+        panel.add(infoScroll, BorderLayout.SOUTH);
+        panel.add(actionPanel, BorderLayout.EAST);
+        panel.add(playersPanel, BorderLayout.CENTER);
+
+        frame.setMinimumSize(new Dimension(1200, 800));
         switchPanel(panel);
+    }
+
+    @Override
+    public void playerInfos(String playerName) {
+        //TODO
     }
 
     @Override
@@ -111,14 +143,17 @@ public final class GUI implements IOInterface {
         JButton button = new JButton("OK");
 
         slider.setMajorTickSpacing(1);
+        slider.setPaintTicks(true);
         slider.setPaintLabels(true);
 
         button.addActionListener(e -> IOController.getInstance().read("int", slider.getValue()));
 
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.add(label);
-        panel.add(slider);
-        panel.add(button);
+        BorderLayout layout = new BorderLayout();
+        layout.setVgap(20);
+        panel.setLayout(layout);
+        panel.add(label, BorderLayout.NORTH);
+        panel.add(slider, BorderLayout.CENTER);
+        panel.add(button, BorderLayout.SOUTH);
 
         switchPanel(panel);
 
@@ -126,7 +161,24 @@ public final class GUI implements IOInterface {
     }
 
     @Override
-    public <T> T readFromSet(Set<T> list) {
+    public <T> T readFromSet(Set<T> set, String msg) {
+        JLabel label = new JLabel(msg);
+        label.setFont(label.getFont().deriveFont(15F));
+        @SuppressWarnings("unchecked")
+        JList<T> list = new JList<>((T[]) set.toArray());
+        list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        list.setSelectedIndex(0);
+        JButton button = new JButton("OK");
+
+        button.addActionListener(e -> IOController.getInstance().read("from_set", list.getSelectedValue()));
+
+        actionPanel.removeAll();
+        actionPanel.add(label, BorderLayout.NORTH);
+        actionPanel.add(list, BorderLayout.CENTER);
+        actionPanel.add(button, BorderLayout.SOUTH);
+        actionPanel.invalidate();
+        actionPanel.validate();
+
         return null;
     }
 }

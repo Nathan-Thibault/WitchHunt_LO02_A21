@@ -49,12 +49,11 @@ public abstract class Player {
 
         identityCard.setRevealed(true);
         if (identityCard.getIdentity() == Identity.WITCH) {
-            io.printInfo(name.concat(" was a Witch."));
+            io.pause(name.concat(" was a Witch."));
             PlayerManager.getInstance().eliminate(name);
         } else {
-            io.printInfo(name.concat(" is a Villager."));
+            io.pause(name.concat(" is a Villager."));
         }
-        io.pause();
     }
 
     public void revealIdentity(String accuser) {
@@ -77,7 +76,6 @@ public abstract class Player {
             sb.append(accuser);
             sb.append(" gains one point and takes another turn.");
 
-            io.printInfo(sb.toString());
             rManager.setIndexAtPlayer(accuser);
         } else {
             sb.append(" is a Villager.\n");
@@ -86,11 +84,10 @@ public abstract class Player {
             sb.append(name);
             sb.append(" takes next turn.");
 
-            io.printInfo(sb.toString());
             rManager.setIndexAtPlayer(name);
         }
 
-        io.pause();
+        io.pause(sb.toString());
         rManager.next();
     }
 

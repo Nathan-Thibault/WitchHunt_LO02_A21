@@ -35,6 +35,7 @@ public class WitchHunt {
 
         CardManager.getInstance();//create cards
         PlayerManager.getInstance().shufflePlayers();
+        IOController.getInstance().startGame();
         RoundManager.getInstance().startNewRound();
     }
 
@@ -70,8 +71,7 @@ public class WitchHunt {
                     HashMap<Strategy.StrategyType, Class<? extends Strategy>> strategies = new HashMap<>();
 
                     for (Strategy.StrategyType sType : Strategy.StrategyType.values()) {
-                        io.printInfo("Select a strategy from the list bellow for the " + sType.getName() + ":\n");
-                        StrategyEnum sEnum = io.readFromSet(StrategyEnum.getAllOfType(sType));
+                        StrategyEnum sEnum = io.readFromSet(StrategyEnum.getAllOfType(sType), "Select a strategy from the list bellow for the " + sType.getName() + ":");
 
                         strategies.put(sType, sEnum.getStrategyClass());
                     }
@@ -100,8 +100,7 @@ public class WitchHunt {
             sb.append(", ");
         }
         sb.deleteCharAt(sb.lastIndexOf(","));//remove useless last comma
-        io.printInfo(sb.toString());
-        io.pause();
+        io.pause(sb.toString());
     }
 
     private static void createTestGame() {

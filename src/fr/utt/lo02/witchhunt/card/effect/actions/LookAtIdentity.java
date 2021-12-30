@@ -32,9 +32,8 @@ public final class LookAtIdentity extends Action {
         if (caller instanceof ArtificialPlayer) {
             ((ArtificialPlayer) caller).savePlayerIdentity(target, targetIdentity);
         } else {
-            io.printInfo(effect.getTarget().concat(" is a ").concat(targetIdentity.toString()));
-            //TODO: use something else than io.printInfo
-            io.pause();
+            //TODO: message only for current player
+            io.pause(effect.getTarget() + " is a " + targetIdentity);
         }
     }
 

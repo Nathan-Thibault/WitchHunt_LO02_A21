@@ -60,9 +60,9 @@ public final class IOController implements IOInterface {
     }
 
     @Override
-    public void pause() {
+    public void pause(String msg) {
         for (IOInterface ioInterface : interfaces) {
-            ioInterface.pause();
+            ioInterface.pause(msg);
         }
 
         startWaiting();
@@ -73,6 +73,13 @@ public final class IOController implements IOInterface {
     public void displayGameInfos() {
         for (IOInterface ioInterface : interfaces) {
             ioInterface.displayGameInfos();
+        }
+    }
+
+    @Override
+    public void playerInfos(String playerName) {
+        for (IOInterface ioInterface : interfaces) {
+            ioInterface.playerInfos(playerName);
         }
     }
 
@@ -95,9 +102,9 @@ public final class IOController implements IOInterface {
     }
 
     @Override
-    public <T> T readFromSet(Set<T> set) {
+    public <T> T readFromSet(Set<T> set, String msg) {
         for (IOInterface ioInterface : interfaces) {
-            ioInterface.readFromSet(set);
+            ioInterface.readFromSet(set, msg);
         }
 
         startWaiting();
@@ -105,5 +112,12 @@ public final class IOController implements IOInterface {
 
         @SuppressWarnings("unchecked") final T from_set = (T) readValues.get("from_set");
         return from_set;
+    }
+
+    public void startGame() {
+        for (IOInterface ioInterface : interfaces) {
+            if (ioInterface instanceof GUI)
+                ((GUI) ioInterface).startGame();
+        }
     }
 }

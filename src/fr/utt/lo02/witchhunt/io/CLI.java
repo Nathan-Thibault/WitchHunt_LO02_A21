@@ -49,11 +49,13 @@ public final class CLI implements IOInterface {
 
                 """);
 
-        pause();
+        pause("");
     }
 
     @Override
-    public void pause() {
+    public void pause(String msg) {
+        System.out.println(msg);
+
         if (thread != null) thread.interrupt();
         thread = new Thread(() -> {
             System.out.println("Press enter to continue.");
@@ -109,20 +111,27 @@ public final class CLI implements IOInterface {
     }
 
     @Override
+    public void playerInfos(String playerName) {
+        //TODO
+    }
+
+    @Override
     public void printInfo(String msg) {
         System.out.println(msg);
     }
 
     @Override
-    public int readIntBetween(int min, int max, String message) {
-        System.out.println(message);
+    public int readIntBetween(int min, int max, String msg) {
+        System.out.println(msg);
         intBetween(min, max, result -> IOController.getInstance().read("int", result));
 
         return 0;
     }
 
     @Override
-    public <T> T readFromSet(Set<T> set) {
+    public <T> T readFromSet(Set<T> set, String msg) {
+        System.out.println(msg);
+
         ArrayList<T> list = new ArrayList<>(set);
         StringBuilder listOfOptions = new StringBuilder();
 

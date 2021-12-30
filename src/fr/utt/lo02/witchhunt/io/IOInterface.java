@@ -7,13 +7,15 @@ public interface IOInterface {
 
     void titleScreen();
 
-    void pause();
+    void pause(String msg);
 
     void displayGameInfos();
 
+    void playerInfos(String playerName);
+
     void printInfo(String msg);
 
-    int readIntBetween(int min, int max, String message);
+    int readIntBetween(int min, int max, String msg);
 
-    <T> T readFromSet(Set<T> list);
+    <T> T readFromSet(Set<T> list, String msg);
 }
