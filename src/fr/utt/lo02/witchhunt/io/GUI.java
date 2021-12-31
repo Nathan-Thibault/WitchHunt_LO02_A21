@@ -1,5 +1,6 @@
 package fr.utt.lo02.witchhunt.io;
 
+import fr.utt.lo02.witchhunt.card.RumourCard;
 import fr.utt.lo02.witchhunt.managers.CardManager;
 import fr.utt.lo02.witchhunt.managers.PlayerManager;
 import fr.utt.lo02.witchhunt.player.Player;
@@ -10,29 +11,34 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 public final class GUI implements IOInterface {
     private final JFrame frame;
-    private final JPanel playersPanel;
+    private final JPanel players;
+    private final JPanel discarded;
+    private final JPanel action;
     private final JTextArea info;
-    private final JPanel actionPanel;
     private JFrame popup;
 
     public GUI() {
+        CardManager.getInstance().addPropertyChangeListener(new CardManagerListener(this));
+
         frame = new JFrame();
-        playersPanel = new JPanel();
-        actionPanel = new JPanel();
+        players = new JPanel();
+        discarded = new JPanel();
+        action = new JPanel();
         info = new JTextArea();
 
-        CardManager.getInstance().createViews();
+        players.setLayout(new GridLayout(3, 2, 5, 5));
 
-        playersPanel.setLayout(new GridLayout(3, 2, 5, 5));
+        discarded.setLayout(new BorderLayout());
 
         BorderLayout layout = new BorderLayout();
         layout.setVgap(20);
-        actionPanel.setLayout(layout);
+        action.setLayout(layout);
 
         info.setBorder(new LineBorder(new Color(125, 125, 125)));
         info.setEditable(false);
@@ -47,8 +53,47 @@ public final class GUI implements IOInterface {
         PlayerManager pManager = PlayerManager.getInstance();
         for (String pName : pManager.getAllPlayers()) {
             Player p = pManager.getByName(pName);
-            playersPanel.add(new PlayerView(p));
+            players.add(new PlayerView(p));
         }
+    }
+
+    public void createCardViews() {
+        CardManager cManager = CardManager.getInstance();
+
+        for (String cardName : cManager.getAll()) {
+            RumourCard card = cManager.getByName(cardName);
+            card.setCardView(new CardView(card));
+        }
+    }
+
+    public void updateDiscarded(HashSet<String> discardedCards) {
+        discarded.removeAll();
+
+        if (discardedCards.isEmpty()) {
+            JLabel discardedLabel = new JLabel("There is no discarded cards.");
+            discardedLabel.setFont(discardedLabel.getFont().deriveFont(20F));
+
+            discarded.add(discardedLabel, BorderLayout.NORTH);
+        } else {
+            CardManager cManager = CardManager.getInstance();
+
+            JLabel discardedLabel = new JLabel("Discarded cards:");
+            discardedLabel.setFont(discardedLabel.getFont().deriveFont(20F));
+
+            JPanel cards = new JPanel();
+            cards.setLayout(new FlowLayout());
+
+            for (String cardName : discardedCards) {
+                RumourCard card = cManager.getByName(cardName);
+                cards.add(card.getCardView());
+            }
+
+            discarded.add(discardedLabel, BorderLayout.NORTH);
+            discarded.add(cards);
+        }
+
+        discarded.invalidate();
+        discarded.validate();
     }
 
     private void switchPanel(JPanel panel) {
@@ -102,6 +147,8 @@ public final class GUI implements IOInterface {
         int confirmDialog = JOptionPane.showConfirmDialog(popup, msg, "WitchHunt", JOptionPane.OK_CANCEL_OPTION);
         if (confirmDialog == JOptionPane.OK_OPTION)
             IOController.getInstance().stopWaiting();
+
+        //TODO remove cancel button on popup
     }
 
     @Override
@@ -117,8 +164,9 @@ public final class GUI implements IOInterface {
         infoScroll.setPreferredSize(new Dimension(400, 100));
 
         panel.add(infoScroll, BorderLayout.SOUTH);
-        panel.add(actionPanel, BorderLayout.EAST);
-        panel.add(playersPanel, BorderLayout.CENTER);
+        panel.add(action, BorderLayout.EAST);
+        panel.add(players, BorderLayout.CENTER);
+        panel.add(discarded, BorderLayout.NORTH);
 
         frame.setMinimumSize(new Dimension(1200, 800));
         switchPanel(panel);
@@ -172,12 +220,12 @@ public final class GUI implements IOInterface {
 
         button.addActionListener(e -> IOController.getInstance().read("from_set", list.getSelectedValue()));
 
-        actionPanel.removeAll();
-        actionPanel.add(label, BorderLayout.NORTH);
-        actionPanel.add(list, BorderLayout.CENTER);
-        actionPanel.add(button, BorderLayout.SOUTH);
-        actionPanel.invalidate();
-        actionPanel.validate();
+        action.removeAll();
+        action.add(label, BorderLayout.NORTH);
+        action.add(list, BorderLayout.CENTER);
+        action.add(button, BorderLayout.SOUTH);
+        action.invalidate();
+        action.validate();
 
         return null;
     }

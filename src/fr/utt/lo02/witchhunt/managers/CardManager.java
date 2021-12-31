@@ -8,12 +8,13 @@ import fr.utt.lo02.witchhunt.card.effect.actions.*;
 import fr.utt.lo02.witchhunt.card.effect.conditions.Condition;
 import fr.utt.lo02.witchhunt.card.effect.conditions.RevealedARumourCard;
 import fr.utt.lo02.witchhunt.card.effect.conditions.RevealedAsVillager;
-import fr.utt.lo02.witchhunt.io.CardView;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 /**
@@ -49,7 +50,7 @@ public final class CardManager {
     /**
      * Set containing the names of the discarded cards.
      */
-    private final HashSet<String> discardedCards = new HashSet<>();
+    private HashSet<String> discardedCards = new HashSet<>();
     /**
      * Shuffled list containing the names of cards to be dealt.
      * <p>
@@ -65,12 +66,37 @@ public final class CardManager {
      */
     private int numberOfCardsPerPlayer;
 
+    private boolean cardsCreated = false;
+
+    private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
+
     /**
      * Constructor to be called only once.
-     * <p>
-     * Builds all the cards and put them in {@link CardManager#allRumourCards}.
      */
     private CardManager() {
+    }
+
+    /**
+     * Gets the unique instance of <b>CardManager</b>.
+     * <p>
+     * If the instance is null, this method creates it.
+     *
+     * @return the instance of <b>CardManager</b>
+     */
+    public static CardManager getInstance() {
+        if (instance == null) {
+            instance = new CardManager();
+        }
+        return instance;
+    }
+
+    /**
+     * Builds all the cards and put them in {@link CardManager#allRumourCards}.
+     */
+    public void createCards() {
+        if (isCardsCreated())
+            return;
+
         Action chooseNext = new ChooseNextPlayer(null);
         Action mustAccuse = new MustAccuse();
         Action takeBack = new TakeBackRevealed();
@@ -154,20 +180,12 @@ public final class CardManager {
         wart.addHuntAction(chooseNext);
         wart.addCantGetChosenBy("Ducking Stool");
         allRumourCards.put("Wart", wart.build());
+
+        setCardsCreated(true);
     }
 
-    /**
-     * Gets the unique instance of <b>CardManager</b>.
-     * <p>
-     * If the instance is null, this method creates it.
-     *
-     * @return the instance of <b>CardManager</b>
-     */
-    public static CardManager getInstance() {
-        if (instance == null) {
-            instance = new CardManager();
-        }
-        return instance;
+    public HashSet<String> getAll() {
+        return new HashSet<>(allRumourCards.keySet());
     }
 
     /**
@@ -186,7 +204,10 @@ public final class CardManager {
      * @param name the name of the card to discard
      */
     public void discard(String name) {
+        HashSet<String> discardedCards = getDiscardedCards();
         discardedCards.add(name);
+        setDiscardedCards(discardedCards);
+
         getByName(name).setRevealed(true);
     }
 
@@ -196,7 +217,10 @@ public final class CardManager {
      * @param name the name of the card to un-discard
      */
     public void takeFromDiscarded(String name) {
+        HashSet<String> discardedCards = getDiscardedCards();
         discardedCards.remove(name);
+        setDiscardedCards(discardedCards);
+
         getByName(name).setRevealed(false);
     }
 
@@ -242,7 +266,7 @@ public final class CardManager {
      * And finally, sets the amount of cards to deal per player.
      */
     public void resetDealSystem() {
-        discardedCards.clear();//remove all discarded cards
+        setDiscardedCards(new HashSet<>());//remove all discarded cards
 
         cardsToDeal = new ArrayList<>(allRumourCards.keySet());
         Collections.shuffle(cardsToDeal);
@@ -282,12 +306,30 @@ public final class CardManager {
      * @return a set of card names
      */
     public HashSet<String> getDiscardedCards() {
-        return discardedCards;
+        return new HashSet<>(discardedCards);
     }
 
-    public void createViews() {
-        for (RumourCard card : allRumourCards.values()) {
-            card.setCardView(new CardView(card));
-        }
+    private void setDiscardedCards(HashSet<String> newDiscardedCards) {
+        HashSet<String> oldDiscardedCards = discardedCards;
+        discardedCards = newDiscardedCards;
+        pcs.firePropertyChange("discardedCards", oldDiscardedCards, discardedCards);
+    }
+
+    public boolean isCardsCreated() {
+        return cardsCreated;
+    }
+
+    private void setCardsCreated(boolean newCardsCreated) {
+        boolean oldCardsCreated = cardsCreated;
+        cardsCreated = newCardsCreated;
+        pcs.firePropertyChange("cardsCreated", oldCardsCreated, cardsCreated);
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        pcs.addPropertyChangeListener(listener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        pcs.removePropertyChangeListener(listener);
     }
 }

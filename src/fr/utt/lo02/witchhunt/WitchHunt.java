@@ -33,7 +33,7 @@ public class WitchHunt {
         if (!test)
             createPlayers();
 
-        CardManager.getInstance();//create cards
+        CardManager.getInstance().createCards();
         PlayerManager.getInstance().shufflePlayers();
         IOController.getInstance().startGame();
         RoundManager.getInstance().startNewRound();
