@@ -160,7 +160,7 @@ public abstract class Player {
         return new HashSet<>(ownedCards);
     }
 
-    public void setOwnedCards(HashSet<String> newOwnedCards) {
+    private void setOwnedCards(HashSet<String> newOwnedCards) {
         HashSet<String> oldOwnedCards = ownedCards;
         ownedCards = newOwnedCards;
         pcs.firePropertyChange("ownedCards", oldOwnedCards, ownedCards);
