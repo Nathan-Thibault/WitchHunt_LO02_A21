@@ -43,9 +43,7 @@ public final class GUI implements IOInterface {
 
         discarded.setLayout(new BorderLayout());
 
-        BorderLayout layout = new BorderLayout();
-        layout.setVgap(20);
-        action.setLayout(layout);
+        action.setLayout(new BorderLayout(1, 20));
 
         info.setBorder(new LineBorder(new Color(125, 125, 125)));
         info.setEditable(false);
@@ -55,8 +53,7 @@ public final class GUI implements IOInterface {
         frame.setVisible(true);
     }
 
-    public void startGame() {
-        //TODO: do that more properly
+    public void startGame() {//TODO: do that more properly
         PlayerManager pManager = PlayerManager.getInstance();
         for (String pName : pManager.getAllPlayers()) {
             Player p = pManager.getByName(pName);
@@ -67,7 +64,21 @@ public final class GUI implements IOInterface {
             players.add(playerView);
         }
 
-        displayGameInfos();
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout(20, 20));
+
+        JScrollPane infoScroll = new JScrollPane(info);
+        infoScroll.setPreferredSize(new Dimension(400, 100));
+
+        panel.add(infoScroll, BorderLayout.SOUTH);
+        panel.add(action, BorderLayout.WEST);
+        panel.add(currentPlayer, BorderLayout.CENTER);
+        panel.add(players, BorderLayout.NORTH);
+        panel.add(discarded, BorderLayout.EAST);
+
+        frame.setMinimumSize(new Dimension(1300, 800));
+        switchPanel(panel);
+
         gameStarted = true;
     }
 
@@ -171,33 +182,6 @@ public final class GUI implements IOInterface {
     }
 
     @Override
-    public void displayGameInfos() {
-        if (gameStarted) {
-            frame.pack();
-            return;
-        }
-
-        JPanel panel = new JPanel();
-        BorderLayout layout = new BorderLayout();
-
-        layout.setHgap(20);
-        layout.setVgap(20);
-        panel.setLayout(layout);
-
-        JScrollPane infoScroll = new JScrollPane(info);
-        infoScroll.setPreferredSize(new Dimension(400, 100));
-
-        panel.add(infoScroll, BorderLayout.SOUTH);
-        panel.add(action, BorderLayout.WEST);
-        panel.add(currentPlayer, BorderLayout.CENTER);
-        panel.add(players, BorderLayout.NORTH);
-        panel.add(discarded, BorderLayout.EAST);
-
-        frame.setMinimumSize(new Dimension(1300, 800));
-        switchPanel(panel);
-    }
-
-    @Override
     public void playerInfos(String playerName, String msg) {
         CardManager cManager = CardManager.getInstance();
 
@@ -249,9 +233,7 @@ public final class GUI implements IOInterface {
 
         button.addActionListener(e -> IOController.getInstance().read("int", slider.getValue()));
 
-        BorderLayout layout = new BorderLayout();
-        layout.setVgap(20);
-        panel.setLayout(layout);
+        panel.setLayout(new BorderLayout(1, 20));
         panel.add(label, BorderLayout.NORTH);
         panel.add(slider, BorderLayout.CENTER);
         panel.add(button, BorderLayout.SOUTH);
@@ -270,9 +252,7 @@ public final class GUI implements IOInterface {
 
         button.addActionListener(e -> IOController.getInstance().read("name", text.getText()));
 
-        BorderLayout layout = new BorderLayout();
-        layout.setVgap(20);
-        panel.setLayout(layout);
+        panel.setLayout(new BorderLayout(1, 20));
         panel.add(label, BorderLayout.NORTH);
         panel.add(text, BorderLayout.CENTER);
         panel.add(button, BorderLayout.SOUTH);

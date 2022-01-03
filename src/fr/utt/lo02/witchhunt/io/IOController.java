@@ -86,16 +86,6 @@ public final class IOController implements IOInterface {
     }
 
     @Override
-    public void displayGameInfos() {
-        for (IOInterface ioInterface : interfaces) {
-            if (ioInterface instanceof GUI)
-                SwingUtilities.invokeLater(ioInterface::displayGameInfos);
-            else
-                ioInterface.displayGameInfos();
-        }
-    }
-
-    @Override
     public void playerInfos(String playerName, String msg) {
         for (IOInterface ioInterface : interfaces) {
             if (ioInterface instanceof GUI)

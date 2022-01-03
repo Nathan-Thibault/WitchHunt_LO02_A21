@@ -76,7 +76,6 @@ public final class CLI implements IOInterface {
         thread.start();
     }
 
-    @Override
     public void displayGameInfos() {
         PlayerManager pManager = PlayerManager.getInstance();
 

@@ -9,8 +9,6 @@ public interface IOInterface {
 
     void pause(String msg);
 
-    void displayGameInfos();
-
     void playerInfos(String playerName, String msg);
 
     void printInfo(String msg);
