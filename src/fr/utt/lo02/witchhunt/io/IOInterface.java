@@ -11,7 +11,7 @@ public interface IOInterface {
 
     void displayGameInfos();
 
-    void playerInfos(String playerName);
+    void playerInfos(String playerName, String msg);
 
     void printInfo(String msg);
 

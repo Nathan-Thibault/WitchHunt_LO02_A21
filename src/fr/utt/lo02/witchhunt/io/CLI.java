@@ -111,7 +111,7 @@ public final class CLI implements IOInterface {
     }
 
     @Override
-    public void playerInfos(String playerName) {
+    public void playerInfos(String playerName, String msg) {
         //TODO
     }
 

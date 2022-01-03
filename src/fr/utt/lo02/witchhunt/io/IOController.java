@@ -77,9 +77,9 @@ public final class IOController implements IOInterface {
     }
 
     @Override
-    public void playerInfos(String playerName) {
+    public void playerInfos(String playerName, String msg) {
         for (IOInterface ioInterface : interfaces) {
-            ioInterface.playerInfos(playerName);
+            ioInterface.playerInfos(playerName, msg);
         }
     }
 

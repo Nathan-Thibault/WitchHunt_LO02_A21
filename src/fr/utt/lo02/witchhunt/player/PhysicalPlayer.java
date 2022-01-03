@@ -8,7 +8,6 @@ import fr.utt.lo02.witchhunt.io.IOController;
 import fr.utt.lo02.witchhunt.managers.PlayerManager;
 
 import java.util.EnumSet;
-import java.util.HashSet;
 import java.util.Set;
 
 public final class PhysicalPlayer extends Player {
@@ -34,9 +33,9 @@ public final class PhysicalPlayer extends Player {
 
         //display list of his cards if hand is not null
         buildSetOfCards(sb, false);
+        //TODO: dont put cards in msg (when playerInfos will be implemented in CLI)
 
-        io.printInfo(sb.toString());
-        //TODO: use something else than io.printInfo
+        io.playerInfos(name, sb.toString());
 
         PlayerAction action = io.readFromSet(possibleActions, "Choose what to do from the options bellow:");
 
@@ -83,12 +82,11 @@ public final class PhysicalPlayer extends Player {
 
         //display list of his cards if hand is not null
         buildSetOfCards(sb, true);
-
+        //TODO: dont put cards in msg (when playerInfos will be implemented in CLI)
 
         if (playableCards.size() > 0) {//player has cards to play, he has a choice
             io.displayGameInfos();
-            io.printInfo(sb.toString());
-            //TODO: use something else than io.printInfo
+            io.playerInfos(name, sb.toString());
 
             PlayerAction action = io.readFromSet(PlayerAction.getActions(true), "Choose what to do from the options bellow:");
 
@@ -101,8 +99,7 @@ public final class PhysicalPlayer extends Player {
                     sb.append(" choose a card to play it's witch effect from the list bellow.");
 
                     io.displayGameInfos();
-                    io.printInfo(sb.toString());
-                    //TODO: use something else than io.printInfo
+                    io.playerInfos(name, sb.toString());
 
                     String card = chooseCardFrom(playableCards);
 
@@ -112,8 +109,7 @@ public final class PhysicalPlayer extends Player {
             }
         } else {//player has no cards, he is forced to reveal his identity
             sb.append("\nYou are forced to reveal because you can't play any card:");
-            io.printInfo(sb.toString());
-            //TODO: use something else than io.printInfo
+            io.playerInfos(name, sb.toString());
 
             revealIdentity(accuser);
         }
@@ -123,8 +119,8 @@ public final class PhysicalPlayer extends Player {
     public void chooseIdentity() {
         IOController io = IOController.getInstance();
 
-        //io.printInfo(name.concat(" choose your identity from the list bellow:"));
-        //TODO: use something else than io.printInfo
+        io.playerInfos(name, "Choose your identity.");
+
         Identity identity = io.readFromSet(EnumSet.allOf(Identity.class), name.concat(" choose your identity from the list bellow:"));
         setIdentity(identity);
     }
@@ -133,8 +129,8 @@ public final class PhysicalPlayer extends Player {
     public boolean chooseToRevealOrDiscard() {
         IOController io = IOController.getInstance();
 
-        //io.printInfo(name.concat(" you have to choose to reveal your identity or discard a card."));
-        //TODO: use something else than io.printInfo
+        //io.playerInfos(name, "You are forced to reveal your identity or discard a card.");
+
         String action = io.readFromSet(Set.of("Discard", "Reveal"), name.concat(" you have to choose to reveal your identity or discard a card."));
 
         return action.equals("Reveal");
@@ -144,7 +140,8 @@ public final class PhysicalPlayer extends Player {
     public String chooseCardFrom(Set<String> setOfCardNames) {
         IOController io = IOController.getInstance();
 
-        //TODO: use something else than io.printInfo
+        //io.playerInfos
+
         return io.readFromSet(setOfCardNames, name.concat("choose a card from the list bellow:"));
     }
 
@@ -152,8 +149,8 @@ public final class PhysicalPlayer extends Player {
     public String choosePlayerFrom(Set<String> setOfPlayerNames) {
         IOController io = IOController.getInstance();
 
-        //io.printInfo(name.concat(" choose a player from the list bellow:"));
-        //TODO: use something else than io.printInfo
+        //io.playerInfos(name);
+
         return io.readFromSet(setOfPlayerNames, name.concat(" choose a player from the list bellow:"));
     }
 

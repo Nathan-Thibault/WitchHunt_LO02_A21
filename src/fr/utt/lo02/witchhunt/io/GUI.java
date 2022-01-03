@@ -17,6 +17,7 @@ import java.util.Set;
 
 public final class GUI implements IOInterface {
     private final JFrame frame;
+    private final JPanel currentPlayer;
     private final JPanel players;
     private final JPanel discarded;
     private final JPanel action;
@@ -27,12 +28,16 @@ public final class GUI implements IOInterface {
         CardManager.getInstance().addPropertyChangeListener(new CardManagerListener(this));
 
         frame = new JFrame();
+        currentPlayer = new JPanel();
         players = new JPanel();
         discarded = new JPanel();
         action = new JPanel();
         info = new JTextArea();
 
         players.setLayout(new GridLayout(3, 2, 5, 5));
+
+        currentPlayer.setLayout(new BoxLayout(currentPlayer, BoxLayout.Y_AXIS));
+        currentPlayer.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         discarded.setLayout(new BorderLayout());
 
@@ -152,11 +157,9 @@ public final class GUI implements IOInterface {
             popup.dispose();
 
         popup = new JFrame();
-        int confirmDialog = JOptionPane.showConfirmDialog(popup, msg, "WitchHunt", JOptionPane.OK_CANCEL_OPTION);
-        if (confirmDialog == JOptionPane.OK_OPTION)
-            IOController.getInstance().stopWaiting();
+        JOptionPane.showMessageDialog(popup, msg, "WitchHunt", JOptionPane.INFORMATION_MESSAGE);
 
-        //TODO remove cancel button on popup
+        IOController.getInstance().stopWaiting();//executed only after JOptionPane is closed
     }
 
     @Override
@@ -173,16 +176,42 @@ public final class GUI implements IOInterface {
 
         panel.add(infoScroll, BorderLayout.SOUTH);
         panel.add(action, BorderLayout.EAST);
+        panel.add(currentPlayer, BorderLayout.WEST);
         panel.add(players, BorderLayout.CENTER);
         panel.add(discarded, BorderLayout.NORTH);
 
-        frame.setMinimumSize(new Dimension(1200, 800));
+        frame.setMinimumSize(new Dimension(1300, 800));
         switchPanel(panel);
     }
 
     @Override
-    public void playerInfos(String playerName) {
-        //TODO
+    public void playerInfos(String playerName, String msg) {
+        CardManager cManager = CardManager.getInstance();
+
+        currentPlayer.removeAll();
+
+        JLabel name = new JLabel(playerName);
+        name.setFont(name.getFont().deriveFont(20F));
+
+        JTextArea message = new JTextArea(msg);
+        message.setEditable(false);
+
+        JPanel hand = new JPanel();
+        hand.setLayout(new FlowLayout());
+
+        for (String cardName : PlayerManager.getInstance().getByName(playerName).getHand()) {
+            CardView original = cManager.getByName(cardName).getCardView();
+            CardView cardView = new CardView(original, 200);
+            cardView.update(true);
+
+            hand.add(cardView);
+        }
+
+        currentPlayer.add(name);
+        currentPlayer.add(hand);
+
+        currentPlayer.invalidate();
+        currentPlayer.validate();
     }
 
     @Override
