@@ -31,6 +31,7 @@ public final class CardView extends JButton {
     private BufferedImage imgFront;
     private ImageIcon frontFace;
     private ImageIcon backFace;
+    private boolean revealed;
 
     public CardView(Card card) {
         super();
@@ -64,17 +65,38 @@ public final class CardView extends JButton {
         //popup with card in bigger size when clicking on it
         JButton parent = this;
         addActionListener(e -> {
-            BufferedImage img = card.isRevealed() ? imgFront : imgBack;
+            BufferedImage img = revealed ? imgFront : imgBack;
             Image resizedImg = img.getScaledInstance(img.getWidth() * 600 / img.getHeight(), 600, Image.SCALE_SMOOTH);
             JOptionPane.showMessageDialog(parent, new ImageIcon(resizedImg));
         });
 
         update(card.isRevealed());
+    }
 
-        card.addPropertyChangeListener(new CardListener(this));
+    //copy a CardView
+    public CardView(CardView model, int height){
+        this.imgFront = model.imgFront;
+        this.revealed = model.revealed;
+
+        Image imgF = imgFront.getScaledInstance(imgFront.getWidth() * height / imgFront.getHeight(), height, Image.SCALE_SMOOTH);
+        Image imgB = imgBack.getScaledInstance(imgBack.getWidth() * height / imgBack.getHeight(), height, Image.SCALE_SMOOTH);
+
+        frontFace = new ImageIcon(imgF);
+        backFace = new ImageIcon(imgB);
+
+        setMargin(new Insets(2, 2, 2, 2));
+
+        //popup with card in bigger size when clicking on it
+        JButton parent = this;
+        addActionListener(e -> {
+            BufferedImage img = revealed ? imgFront : imgBack;
+            Image resizedImg = img.getScaledInstance(img.getWidth() * 600 / img.getHeight(), 600, Image.SCALE_SMOOTH);
+            JOptionPane.showMessageDialog(parent, new ImageIcon(resizedImg));
+        });
     }
 
     public void update(boolean revealed) {
+        this.revealed = revealed;
         setIcon(revealed ? frontFace : backFace);
     }
 }
