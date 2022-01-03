@@ -53,7 +53,11 @@ public final class GUI implements IOInterface {
         PlayerManager pManager = PlayerManager.getInstance();
         for (String pName : pManager.getAllPlayers()) {
             Player p = pManager.getByName(pName);
-            players.add(new PlayerView(p));
+
+            PlayerView playerView = new PlayerView(p);
+            p.addPropertyChangeListener(new PlayerListener(playerView));
+
+            players.add(playerView);
         }
     }
 
@@ -62,7 +66,11 @@ public final class GUI implements IOInterface {
 
         for (String cardName : cManager.getAll()) {
             RumourCard card = cManager.getByName(cardName);
-            card.setCardView(new CardView(card));
+
+            CardView cardView = new CardView(card);
+            card.addPropertyChangeListener(new CardListener(cardView));
+
+            card.setCardView(cardView);
         }
     }
 

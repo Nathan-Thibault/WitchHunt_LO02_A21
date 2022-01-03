@@ -52,14 +52,15 @@ public final class PlayerView extends JPanel {
         add(top, BorderLayout.NORTH);
         add(cards, BorderLayout.CENTER);
         setBorder(new LineBorder(new Color(125, 125, 125)));
-
-        player.addPropertyChangeListener(new PlayerListener(this));
     }
 
     public void updateIdentityCard(IdentityCard identityCard) {
         identity.removeAll();
         if (identityCard != null) {
-            identity.add(new CardView(identityCard));
+            CardView cardView = new CardView(identityCard);
+            identityCard.addPropertyChangeListener(new CardListener(cardView));
+
+            identity.add(cardView);
         } else {
             JLabel identityNotSet = new JLabel("Identity not yet chosen.");
             identity.add(identityNotSet);
