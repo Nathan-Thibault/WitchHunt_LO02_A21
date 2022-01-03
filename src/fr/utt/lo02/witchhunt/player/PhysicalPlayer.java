@@ -25,17 +25,7 @@ public final class PhysicalPlayer extends Player {
         if (playableCards.isEmpty())//no playable cards, remove play hunt option from user
             possibleActions.remove(PlayerAction.PLAY_HUNT);
 
-        io.displayGameInfos();
-
-        StringBuilder sb = new StringBuilder();
-        sb.append(name);
-        sb.append(" it's your turn.\n");
-
-        //display list of his cards if hand is not null
-        buildSetOfCards(sb, false);
-        //TODO: dont put cards in msg (when playerInfos will be implemented in CLI)
-
-        io.playerInfos(name, sb.toString());
+        io.playerInfos(name, "It's your turn.");
 
         PlayerAction action = io.readFromSet(possibleActions, "Choose what to do from the options bellow:");
 
@@ -44,20 +34,13 @@ public final class PhysicalPlayer extends Player {
                 Set<String> possibleTargets = PlayerManager.getInstance().getUnrevealedPlayers();
                 possibleTargets.remove(name);//player can't choose himself
 
-                io.displayGameInfos();
+                io.playerInfos(name, "Choose a player to accuse.");
+
                 String target = choosePlayerFrom(possibleTargets);
                 RoundManager.getInstance().accuse(name, target);
             }
             case PLAY_HUNT -> {
-                sb = new StringBuilder();
-
-                buildSetOfCards(sb, false);
-                //TODO: dont put cards in msg (when playerInfos will be implemented in CLI)
-                sb.append(name);
-                sb.append(" choose a card to play it's hunt effect from the list bellow.");
-
-                io.displayGameInfos();
-                io.playerInfos(name, sb.toString());
+                io.playerInfos(name, "Choose a card to play it's hunt effect.");
 
                 String cardName = chooseCardFrom(playableCards);
                 RumourCard card = CardManager.getInstance().getByName(cardName);
@@ -74,32 +57,14 @@ public final class PhysicalPlayer extends Player {
 
         Set<String> playableCards = getPlayableCards(accuser);
 
-        StringBuilder sb = new StringBuilder();
-        sb.append(name);
-        sb.append(" you've been accused by ");
-        sb.append(accuser);
-        sb.append(".\n");
-
-        //display list of his cards if hand is not null
-        buildSetOfCards(sb, true);
-        //TODO: dont put cards in msg (when playerInfos will be implemented in CLI)
-
         if (playableCards.size() > 0) {//player has cards to play, he has a choice
-            io.displayGameInfos();
-            io.playerInfos(name, sb.toString());
+            io.playerInfos(name, "You have been accused by " + accuser + ".");
 
             PlayerAction action = io.readFromSet(PlayerAction.getActions(true), "Choose what to do from the options bellow:");
 
             switch (action) {
                 case PLAY_WITCH -> {
-                    sb = new StringBuilder();
-
-                    buildSetOfCards(sb, true);
-                    sb.append(name);
-                    sb.append(" choose a card to play it's witch effect from the list bellow.");
-
-                    io.displayGameInfos();
-                    io.playerInfos(name, sb.toString());
+                    io.playerInfos(name, "Choose a card to play it's witch effect.");
 
                     String card = chooseCardFrom(playableCards);
 
@@ -108,8 +73,7 @@ public final class PhysicalPlayer extends Player {
                 case REVEAL -> revealIdentity(accuser);
             }
         } else {//player has no cards, he is forced to reveal his identity
-            sb.append("\nYou are forced to reveal because you can't play any card:");
-            io.playerInfos(name, sb.toString());
+            io.playerInfos(name, "You are forced to reveal because you can't play any card.");
 
             revealIdentity(accuser);
         }
@@ -129,7 +93,7 @@ public final class PhysicalPlayer extends Player {
     public boolean chooseToRevealOrDiscard() {
         IOController io = IOController.getInstance();
 
-        //io.playerInfos(name, "You are forced to reveal your identity or discard a card.");
+        io.playerInfos(name, "You are forced to reveal your identity or discard a card.");
 
         String action = io.readFromSet(Set.of("Discard", "Reveal"), name.concat(" you have to choose to reveal your identity or discard a card."));
 
@@ -138,31 +102,21 @@ public final class PhysicalPlayer extends Player {
 
     @Override
     public String chooseCardFrom(Set<String> setOfCardNames) {
-        IOController io = IOController.getInstance();
-
-        //io.playerInfos
-
-        return io.readFromSet(setOfCardNames, name.concat("choose a card from the list bellow:"));
+        return IOController.getInstance().readFromSet(setOfCardNames, name.concat(" choose a card from the list bellow:"));
     }
 
     @Override
     public String choosePlayerFrom(Set<String> setOfPlayerNames) {
-        IOController io = IOController.getInstance();
-
-        //io.playerInfos(name);
-
-        return io.readFromSet(setOfPlayerNames, name.concat(" choose a player from the list bellow:"));
+        return IOController.getInstance().readFromSet(setOfPlayerNames, name.concat(" choose a player from the list bellow:"));
     }
 
-    private void buildSetOfCards(StringBuilder sb, boolean witchEffect) {
+    public void appendCards(StringBuilder sb) {
         Set<String> ownedCards = getOwnedCards();
 
         if (!ownedCards.isEmpty()) {
             CardManager cardManager = CardManager.getInstance();
 
-            sb.append("List of your cards and their ");
-            sb.append(witchEffect ? "witch" : "hunt");
-            sb.append(" effect:\n");
+            sb.append("List of your cards and their effects:\n");
 
             for (String cardName : ownedCards) {
                 RumourCard card = cardManager.getByName(cardName);
@@ -171,18 +125,10 @@ public final class PhysicalPlayer extends Player {
                 sb.append(" (");
                 sb.append(card.isRevealed() ? "revealed" : "in hand");
                 sb.append("):\n");
-
-                String lines;
-                if (witchEffect)
-                    lines = card.witchEffectDescription();
-                else
-                    lines = card.huntEffectDescription();
-
-                for (String line : lines.split("\n")) {
-                    sb.append("    ");
-                    sb.append(line);
-                    sb.append("\n");
-                }
+                sb.append(" WITCH:\n");
+                sb.append(card.witchEffectDescription());
+                sb.append(" HUNT:\n");
+                sb.append(card.huntEffectDescription());
             }
 
             sb.append("\n");

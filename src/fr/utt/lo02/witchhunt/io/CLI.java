@@ -3,6 +3,7 @@ package fr.utt.lo02.witchhunt.io;
 import fr.utt.lo02.witchhunt.WitchHunt;
 import fr.utt.lo02.witchhunt.managers.CardManager;
 import fr.utt.lo02.witchhunt.card.IdentityCard;
+import fr.utt.lo02.witchhunt.player.PhysicalPlayer;
 import fr.utt.lo02.witchhunt.player.Player;
 import fr.utt.lo02.witchhunt.managers.PlayerManager;
 
@@ -112,7 +113,18 @@ public final class CLI implements IOInterface {
 
     @Override
     public void playerInfos(String playerName, String msg) {
-        //TODO
+        displayGameInfos();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(playerName);
+        sb.append("\n");
+        sb.append(msg);
+        sb.append("\n\n");
+
+        PhysicalPlayer player = (PhysicalPlayer) PlayerManager.getInstance().getByName(playerName);
+        player.appendCards(sb);
+
+        System.out.println(sb);
     }
 
     @Override

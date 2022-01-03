@@ -204,10 +204,13 @@ public final class GUI implements IOInterface {
         currentPlayer.removeAll();
 
         JLabel name = new JLabel(playerName);
-        name.setFont(name.getFont().deriveFont(20F));
+        name.setFont(name.getFont().deriveFont(30F));
+        name.setHorizontalAlignment(SwingConstants.CENTER);
 
-        JTextArea message = new JTextArea(msg);
-        message.setEditable(false);
+        JLabel message = new JLabel();
+        message.setFont(message.getFont().deriveFont(15F));
+        message.setHorizontalAlignment(SwingConstants.CENTER);
+        message.setText(msg);
 
         JPanel hand = new JPanel();
         hand.setLayout(new FlowLayout());

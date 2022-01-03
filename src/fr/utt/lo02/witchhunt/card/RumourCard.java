@@ -143,7 +143,7 @@ public final class RumourCard extends Card {
     private String effectDescription(boolean witch) {
         StringBuilder sb = new StringBuilder();
         if (cantGetChosenBy != null) {
-            sb.append("* While revealed, you cannot be chosen by the ");
+            sb.append("    o While revealed, you cannot be chosen by the ");
             sb.append(cantGetChosenBy);
             sb.append(".\n");
         }
