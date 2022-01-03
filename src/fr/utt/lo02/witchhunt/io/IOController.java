@@ -102,6 +102,18 @@ public final class IOController implements IOInterface {
     }
 
     @Override
+    public String readName(int playerNum) {
+        for (IOInterface ioInterface : interfaces) {
+            ioInterface.readName(playerNum);
+        }
+
+        startWaiting();
+        clear();
+
+        return (String) readValues.get("name");
+    }
+
+    @Override
     public <T> T readFromSet(Set<T> set, String msg) {
         for (IOInterface ioInterface : interfaces) {
             ioInterface.readFromSet(set, msg);

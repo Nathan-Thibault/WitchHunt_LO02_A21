@@ -44,18 +44,11 @@ public class WitchHunt {
 
         int p = io.readIntBetween(0, 6, "Choose the number of physical players you want.");
 
-        Scanner sc = new Scanner(System.in);
         PlayerManager pManager = PlayerManager.getInstance();
 
         for (int i = 1; i <= p; i++) {
-            io.printInfo("Enter the name of the player ".concat(Integer.toString(i)).concat(" :"));
-            try {
-                pManager.addPhysicalPlayer(sc.nextLine());
-                io.printInfo("Player successfully added.");
-            } catch (IllegalStateException | NoSuchElementException e) {
-                io.printInfo("An exception occurred. Please try again.");
-                i--;
-            }
+            String name = io.readName(i);
+            pManager.addPhysicalPlayer(name);
         }
 
         int a = io.readIntBetween(Math.max(3 - p, 0), 6 - p, "Now, choose the number of artificial players you want.");

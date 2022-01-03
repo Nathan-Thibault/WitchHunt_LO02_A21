@@ -246,6 +246,27 @@ public final class GUI implements IOInterface {
     }
 
     @Override
+    public String readName(int playerNum) {
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel("Enter the name of the player " + playerNum + ":");
+        JTextArea text = new JTextArea("Player " + playerNum);
+        JButton button = new JButton("OK");
+
+        button.addActionListener(e -> IOController.getInstance().read("name", text.getText()));
+
+        BorderLayout layout = new BorderLayout();
+        layout.setVgap(20);
+        panel.setLayout(layout);
+        panel.add(label, BorderLayout.NORTH);
+        panel.add(text, BorderLayout.CENTER);
+        panel.add(button, BorderLayout.SOUTH);
+
+        switchPanel(panel);
+
+        return null;
+    }
+
+    @Override
     public <T> T readFromSet(Set<T> set, String msg) {
         JLabel label = new JLabel(msg);
         label.setFont(label.getFont().deriveFont(15F));

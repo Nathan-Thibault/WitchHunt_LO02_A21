@@ -129,6 +129,31 @@ public final class CLI implements IOInterface {
     }
 
     @Override
+    public String readName(int playerNum) {
+        if (thread != null) thread.interrupt();
+
+        thread = new Thread(() -> {
+            Scanner sc = new Scanner(System.in);
+
+            System.out.println("Enter the name of the player " + playerNum + ":");
+
+            try {
+                while (System.in.available() < 1) {
+                    Thread.sleep(200);
+                }
+                IOController.getInstance().read("name", sc.nextLine());
+            } catch (InterruptedException ignored) {
+                //sleep interrupted
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        thread.start();
+
+        return null;
+    }
+
+    @Override
     public <T> T readFromSet(Set<T> set, String msg) {
         System.out.println(msg);
 
