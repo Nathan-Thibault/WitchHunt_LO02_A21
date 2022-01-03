@@ -52,12 +52,12 @@ public final class PhysicalPlayer extends Player {
                 sb = new StringBuilder();
 
                 buildSetOfCards(sb, false);
+                //TODO: dont put cards in msg (when playerInfos will be implemented in CLI)
                 sb.append(name);
                 sb.append(" choose a card to play it's hunt effect from the list bellow.");
 
                 io.displayGameInfos();
-                io.printInfo(sb.toString());
-                //TODO: use something else than io.printInfo
+                io.playerInfos(name, sb.toString());
 
                 String cardName = chooseCardFrom(playableCards);
                 RumourCard card = CardManager.getInstance().getByName(cardName);

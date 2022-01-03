@@ -24,6 +24,8 @@ public final class GUI implements IOInterface {
     private final JTextArea info;
     private JFrame popup;
 
+    boolean gameStarted = false;
+
     public GUI() {
         CardManager.getInstance().addPropertyChangeListener(new CardManagerListener(this));
 
@@ -34,7 +36,7 @@ public final class GUI implements IOInterface {
         action = new JPanel();
         info = new JTextArea();
 
-        players.setLayout(new GridLayout(3, 2, 5, 5));
+        players.setLayout(new FlowLayout());
 
         currentPlayer.setLayout(new BoxLayout(currentPlayer, BoxLayout.Y_AXIS));
         currentPlayer.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -64,6 +66,9 @@ public final class GUI implements IOInterface {
 
             players.add(playerView);
         }
+
+        displayGameInfos();
+        gameStarted = true;
     }
 
     public void createCardViews() {
@@ -94,7 +99,7 @@ public final class GUI implements IOInterface {
             discardedLabel.setFont(discardedLabel.getFont().deriveFont(20F));
 
             JPanel cards = new JPanel();
-            cards.setLayout(new FlowLayout());
+            cards.setLayout(new GridLayout(3, 2, 2, 2));
 
             for (String cardName : discardedCards) {
                 RumourCard card = cManager.getByName(cardName);
@@ -102,7 +107,7 @@ public final class GUI implements IOInterface {
             }
 
             discarded.add(discardedLabel, BorderLayout.NORTH);
-            discarded.add(cards);
+            discarded.add(cards, BorderLayout.CENTER);
         }
 
         discarded.invalidate();
@@ -119,6 +124,9 @@ public final class GUI implements IOInterface {
     public void clear() {
         if (popup != null)
             popup.dispose();
+
+        if (gameStarted)
+            return;
 
         JPanel panel = new JPanel();
 
@@ -164,6 +172,11 @@ public final class GUI implements IOInterface {
 
     @Override
     public void displayGameInfos() {
+        if (gameStarted) {
+            frame.pack();
+            return;
+        }
+
         JPanel panel = new JPanel();
         BorderLayout layout = new BorderLayout();
 
@@ -175,10 +188,10 @@ public final class GUI implements IOInterface {
         infoScroll.setPreferredSize(new Dimension(400, 100));
 
         panel.add(infoScroll, BorderLayout.SOUTH);
-        panel.add(action, BorderLayout.EAST);
-        panel.add(currentPlayer, BorderLayout.WEST);
-        panel.add(players, BorderLayout.CENTER);
-        panel.add(discarded, BorderLayout.NORTH);
+        panel.add(action, BorderLayout.WEST);
+        panel.add(currentPlayer, BorderLayout.CENTER);
+        panel.add(players, BorderLayout.NORTH);
+        panel.add(discarded, BorderLayout.EAST);
 
         frame.setMinimumSize(new Dimension(1300, 800));
         switchPanel(panel);
@@ -208,6 +221,7 @@ public final class GUI implements IOInterface {
         }
 
         currentPlayer.add(name);
+        currentPlayer.add(message);
         currentPlayer.add(hand);
 
         currentPlayer.invalidate();
@@ -216,8 +230,7 @@ public final class GUI implements IOInterface {
 
     @Override
     public void printInfo(String msg) {
-        info.setText(msg);
-        frame.pack();
+        info.setText(info.getText() + "\n" + msg);
     }
 
     @Override
@@ -249,7 +262,7 @@ public final class GUI implements IOInterface {
     public String readName(int playerNum) {
         JPanel panel = new JPanel();
         JLabel label = new JLabel("Enter the name of the player " + playerNum + ":");
-        JTextArea text = new JTextArea("Player " + playerNum);
+        JTextField text = new JTextField("Player " + playerNum);
         JButton button = new JButton("OK");
 
         button.addActionListener(e -> IOController.getInstance().read("name", text.getText()));

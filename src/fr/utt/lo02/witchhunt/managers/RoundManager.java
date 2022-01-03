@@ -232,11 +232,11 @@ public final class RoundManager {
                 sb.append(" is the winner !");
             }
 
-            IOController.getInstance().printInfo(sb.toString());
+            IOController.getInstance().pause(sb.toString());
             System.exit(0);
         } else {
             // no winner yet, play a new round
-            IOController.getInstance().printInfo("There is no winner yet, a new round will start.");
+            IOController.getInstance().pause("There is no winner yet, a new round will start.");
             startNewRound();
         }
     }

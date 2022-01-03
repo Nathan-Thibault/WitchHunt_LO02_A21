@@ -11,8 +11,6 @@ import fr.utt.lo02.witchhunt.player.strategy.respond.RevealIfVillager;
 import fr.utt.lo02.witchhunt.player.strategy.turn.AlwaysAccuse;
 
 import java.util.HashMap;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
 
 public class WitchHunt {
 
@@ -35,7 +33,9 @@ public class WitchHunt {
 
         CardManager.getInstance().createCards();
         PlayerManager.getInstance().shufflePlayers();
+
         IOController.getInstance().startGame();
+
         RoundManager.getInstance().startNewRound();
     }
 
