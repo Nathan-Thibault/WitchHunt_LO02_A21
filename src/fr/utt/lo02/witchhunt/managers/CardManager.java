@@ -168,6 +168,7 @@ public final class CardManager {
         theInquisition.addWitchAction(takeTurn);
         theInquisition.addHuntAction(new ChooseNextPlayer("unrevealed"));
         theInquisition.addHuntAction(new LookAtIdentity());
+        theInquisition.addHuntCondition(revealed);
         allRumourCards.put("The Inquisition", theInquisition.build());
 
         RumourCardBuilder toad = new RumourCardBuilder("Toad");
