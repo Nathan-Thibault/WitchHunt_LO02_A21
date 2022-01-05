@@ -15,6 +15,8 @@ public interface IOInterface {
 
     int readIntBetween(int min, int max, String msg);
 
+    boolean yesOrNo(String yesMsg, String noMsg, String msg);
+
     String readName(int playerNum);
 
     <T> T readFromSet(Set<T> list, String msg);

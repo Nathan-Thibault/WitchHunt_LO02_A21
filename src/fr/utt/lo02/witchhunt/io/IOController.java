@@ -120,6 +120,20 @@ public final class IOController implements IOInterface {
     }
 
     @Override
+    public boolean yesOrNo(String yesMsg, String noMsg, String msg) {
+        for (IOInterface ioInterface : interfaces) {
+            if (ioInterface instanceof GUI)
+                SwingUtilities.invokeLater(() -> ioInterface.yesOrNo(yesMsg, noMsg, msg));
+            else
+                ioInterface.yesOrNo(yesMsg, noMsg, msg);
+        }
+
+        startWaiting();
+        clear();
+        return (boolean) readValues.get("boolean");
+    }
+
+    @Override
     public String readName(int playerNum) {
         for (IOInterface ioInterface : interfaces) {
             if (ioInterface instanceof GUI)

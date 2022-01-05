@@ -1,6 +1,6 @@
-package fr.utt.lo02.witchhunt.io;
+package fr.utt.lo02.witchhunt.io.view;
 
-import fr.utt.lo02.witchhunt.Identity;
+import fr.utt.lo02.witchhunt.player.Identity;
 import fr.utt.lo02.witchhunt.card.Card;
 import fr.utt.lo02.witchhunt.card.IdentityCard;
 import fr.utt.lo02.witchhunt.card.RumourCard;
@@ -63,18 +63,17 @@ public final class CardView extends JButton {
         setMargin(new Insets(2, 2, 2, 2));
 
         //popup with card in bigger size when clicking on it
-        JButton parent = this;
         addActionListener(e -> {
             BufferedImage img = revealed ? imgFront : imgBack;
             Image resizedImg = img.getScaledInstance(img.getWidth() * 600 / img.getHeight(), 600, Image.SCALE_SMOOTH);
-            JOptionPane.showMessageDialog(parent, new ImageIcon(resizedImg));
+            JOptionPane.showMessageDialog(null, new ImageIcon(resizedImg));
         });
 
         update(card.isRevealed());
     }
 
     //copy a CardView
-    public CardView(CardView model, int height){
+    public CardView(CardView model, int height) {
         this.imgFront = model.imgFront;
         this.revealed = model.revealed;
 

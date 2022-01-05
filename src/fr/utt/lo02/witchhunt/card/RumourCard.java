@@ -2,7 +2,7 @@ package fr.utt.lo02.witchhunt.card;
 
 import fr.utt.lo02.witchhunt.card.effect.CardEffect;
 import fr.utt.lo02.witchhunt.card.effect.EffectType;
-import fr.utt.lo02.witchhunt.io.CardView;
+import fr.utt.lo02.witchhunt.io.view.CardView;
 import fr.utt.lo02.witchhunt.io.IOController;
 
 import java.util.Objects;
@@ -76,7 +76,7 @@ public final class RumourCard extends Card {
      * @param accuser    name of the player who accused the possessor of the card
      */
     public void playWitchEffect(String callerName, String accuser) {
-        IOController.getInstance().printInfo(callerName.concat(" plays ").concat(name).concat(":\n").concat(witchEffectDescription()));
+        IOController.getInstance().printInfo(callerName + " plays " + name + " witch effect.");
         setRevealed(true);
         witchEffect.play(callerName, accuser);
     }
@@ -89,7 +89,7 @@ public final class RumourCard extends Card {
      * @param callerName name of the player who posses the card
      */
     public void playHuntEffect(String callerName) {
-        IOController.getInstance().printInfo(callerName.concat(" plays ").concat(name).concat(":\n").concat(huntEffectDescription()));
+        IOController.getInstance().printInfo(callerName + " plays " + name + " hunt effect.");
         setRevealed(true);
         huntEffect.play(callerName);
     }

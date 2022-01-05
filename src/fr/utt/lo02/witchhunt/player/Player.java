@@ -1,6 +1,5 @@
 package fr.utt.lo02.witchhunt.player;
 
-import fr.utt.lo02.witchhunt.Identity;
 import fr.utt.lo02.witchhunt.managers.RoundManager;
 import fr.utt.lo02.witchhunt.managers.CardManager;
 import fr.utt.lo02.witchhunt.card.IdentityCard;
@@ -44,16 +43,14 @@ public abstract class Player {
 
     public abstract String choosePlayerFrom(Set<String> listOfPlayerNames);
 
-    public void revealIdentity() {
-        IOController io = IOController.getInstance();
-
+    public void revealIdentity(boolean showMessage) {
         identityCard.setRevealed(true);
-        if (identityCard.getIdentity() == Identity.WITCH) {
-            io.pause(name.concat(" was a Witch."));
+
+        if (identityCard.getIdentity() == Identity.WITCH)
             PlayerManager.getInstance().eliminate(name);
-        } else {
-            io.pause(name.concat(" is a Villager."));
-        }
+
+        if (showMessage)
+            IOController.getInstance().pause(name + " is a " + identityCard.getIdentity() + ".");
     }
 
     public void revealIdentity(String accuser) {

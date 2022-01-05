@@ -36,8 +36,8 @@ public final class MustAccuse extends Action {
         if (possibleTargets.size() > 1)//if there is at least two unrevealed players, target can choose someone else than caller
             possibleTargets.remove(callerName);
 
-        IOController.getInstance().printInfo(target + " you are forced to accuse someone else than " + callerName);
-        //TODO: use something else than io.printInfo
+        IOController.getInstance().playerInfos(target, "You are forced to accuse someone else than " + callerName + ".");
+
         String targetOfTarget = pManager.getByName(target).choosePlayerFrom(possibleTargets);
         rManager.accuse(target, targetOfTarget);
     }

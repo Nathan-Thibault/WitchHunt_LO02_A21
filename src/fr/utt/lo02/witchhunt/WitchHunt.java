@@ -12,7 +12,7 @@ import fr.utt.lo02.witchhunt.player.strategy.turn.AlwaysAccuse;
 
 import java.util.HashMap;
 
-public class WitchHunt {
+public final class WitchHunt {
 
     private static boolean test;
 
@@ -54,10 +54,10 @@ public class WitchHunt {
         int a = io.readIntBetween(Math.max(3 - p, 0), 6 - p, "Now, choose the number of artificial players you want.");
 
         if (a > 0) {
-            int chooseStrat = io.readIntBetween(0, 1,
-                    "Do you want to choose the strategies of the artificial players ?\n0 -> yes\n1 -> no, choose them at random");
+            boolean chooseStrat = io.yesOrNo("Yes", "No, choose them at random",
+                    "Do you want to choose the strategies of the artificial players ?");
 
-            if (chooseStrat == 0) {
+            if (chooseStrat) {
                 for (int i = 0; i < a; i++) {
                     io.printInfo("Choose strategies for artificial player ".concat(Integer.toString(i)));
 

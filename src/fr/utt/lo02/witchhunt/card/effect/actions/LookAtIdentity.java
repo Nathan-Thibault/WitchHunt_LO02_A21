@@ -1,6 +1,6 @@
 package fr.utt.lo02.witchhunt.card.effect.actions;
 
-import fr.utt.lo02.witchhunt.Identity;
+import fr.utt.lo02.witchhunt.player.Identity;
 import fr.utt.lo02.witchhunt.card.effect.CardEffect;
 import fr.utt.lo02.witchhunt.io.IOController;
 import fr.utt.lo02.witchhunt.player.ArtificialPlayer;
@@ -32,7 +32,6 @@ public final class LookAtIdentity extends Action {
         if (caller instanceof ArtificialPlayer) {
             ((ArtificialPlayer) caller).savePlayerIdentity(target, targetIdentity);
         } else {
-            //TODO: message only for current player
             io.pause(effect.getTarget() + " is a " + targetIdentity);
         }
     }

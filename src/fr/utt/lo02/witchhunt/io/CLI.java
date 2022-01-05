@@ -1,6 +1,8 @@
 package fr.utt.lo02.witchhunt.io;
 
 import fr.utt.lo02.witchhunt.WitchHunt;
+import fr.utt.lo02.witchhunt.io.IOController;
+import fr.utt.lo02.witchhunt.io.IOInterface;
 import fr.utt.lo02.witchhunt.managers.CardManager;
 import fr.utt.lo02.witchhunt.card.IdentityCard;
 import fr.utt.lo02.witchhunt.player.PhysicalPlayer;
@@ -76,10 +78,8 @@ public final class CLI implements IOInterface {
         thread.start();
     }
 
-    public void displayGameInfos() {
+    public void appendGameInfos(StringBuilder sb) {
         PlayerManager pManager = PlayerManager.getInstance();
-
-        StringBuilder sb = new StringBuilder();
 
         sb.append("List of the players:\n");
         for (String pName : pManager.getAllPlayers()) {
@@ -91,7 +91,10 @@ public final class CLI implements IOInterface {
             sb.append(pName);
             //identity
             sb.append(" [Identity: ");
-            sb.append(ic.isRevealed() ? ic.getIdentity() : "Unrevealed");
+            if (ic != null)
+                sb.append(ic.isRevealed() ? ic.getIdentity() : "Unrevealed");
+            else
+                sb.append("not yet chosen");
             //score
             sb.append(", Score: ");
             sb.append(p.getScore());
@@ -112,23 +115,24 @@ public final class CLI implements IOInterface {
 
     @Override
     public void playerInfos(String playerName, String msg) {
-        displayGameInfos();
-
         StringBuilder sb = new StringBuilder();
+        PhysicalPlayer player = (PhysicalPlayer) PlayerManager.getInstance().getByName(playerName);
+
+        appendGameInfos(sb);
+        player.appendCards(sb);
+
+        sb.append("To ");
         sb.append(playerName);
-        sb.append("\n");
+        sb.append(" -> ");
         sb.append(msg);
         sb.append("\n\n");
-
-        PhysicalPlayer player = (PhysicalPlayer) PlayerManager.getInstance().getByName(playerName);
-        player.appendCards(sb);
 
         System.out.println(sb);
     }
 
     @Override
     public void printInfo(String msg) {
-        System.out.println(msg);
+        System.out.println("To all -> ".concat(msg).concat("\n"));
     }
 
     @Override
@@ -137,6 +141,14 @@ public final class CLI implements IOInterface {
         intBetween(min, max, result -> IOController.getInstance().read("int", result));
 
         return 0;
+    }
+
+    @Override
+    public boolean yesOrNo(String yesMsg, String noMsg, String msg) {
+        System.out.println(msg + "\n0 -> " + noMsg + "\n1 -> " + yesMsg);
+        intBetween(0, 1, result -> IOController.getInstance().read("boolean", result == 1));
+
+        return false;
     }
 
     @Override

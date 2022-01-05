@@ -1,6 +1,5 @@
 package fr.utt.lo02.witchhunt.player;
 
-import fr.utt.lo02.witchhunt.Identity;
 import fr.utt.lo02.witchhunt.managers.RoundManager;
 import fr.utt.lo02.witchhunt.managers.CardManager;
 import fr.utt.lo02.witchhunt.card.RumourCard;

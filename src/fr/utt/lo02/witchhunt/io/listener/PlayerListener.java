@@ -1,6 +1,7 @@
-package fr.utt.lo02.witchhunt.io;
+package fr.utt.lo02.witchhunt.io.listener;
 
 import fr.utt.lo02.witchhunt.card.IdentityCard;
+import fr.utt.lo02.witchhunt.io.view.PlayerView;
 
 import javax.swing.SwingUtilities;
 import java.beans.PropertyChangeEvent;

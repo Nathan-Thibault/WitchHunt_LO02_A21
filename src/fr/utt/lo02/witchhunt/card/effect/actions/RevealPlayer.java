@@ -1,6 +1,6 @@
 package fr.utt.lo02.witchhunt.card.effect.actions;
 
-import fr.utt.lo02.witchhunt.Identity;
+import fr.utt.lo02.witchhunt.player.Identity;
 import fr.utt.lo02.witchhunt.managers.RoundManager;
 import fr.utt.lo02.witchhunt.io.IOController;
 import fr.utt.lo02.witchhunt.player.Player;
@@ -36,17 +36,32 @@ public final class RevealPlayer extends Action {
         String targetName = caller.choosePlayerFrom(possibleTargets);
         Player target = pManager.getByName(targetName);
 
-        target.getIdentityCard().setRevealed(true);
+        target.revealIdentity(false);
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(targetName);
+        sb.append(" is a ");
+        sb.append(target.getIdentityCard().getIdentity());
+        sb.append(".\n");
+        sb.append(callerName);
+
+        String nextPlayer;
         if (target.getIdentityCard().getIdentity().equals(Identity.WITCH)) {
+            sb.append(" gains two points and takes next turn.");
+
             caller.addToScore(2);
-            target.revealIdentity();
-            IOController.getInstance().printInfo(callerName.concat(" gains two points and takes next turn."));
-            RoundManager.getInstance().setIndexAtPlayer(callerName);
+            nextPlayer = callerName;
         } else {
+            sb.append(" loses two points and ");
+            sb.append(targetName);
+            sb.append(" takes next turn.");
+
             caller.addToScore(-2);
-            IOController.getInstance().printInfo(callerName.concat(" loses two points and ").concat(targetName).concat(" takes next turn."));
-            RoundManager.getInstance().setIndexAtPlayer(targetName);
+            nextPlayer = targetName;
         }
+
+        IOController.getInstance().pause(sb.toString());
+        RoundManager.getInstance().setIndexAtPlayer(nextPlayer);
     }
 
     @Override

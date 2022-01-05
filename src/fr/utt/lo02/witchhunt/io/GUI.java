@@ -1,6 +1,11 @@
 package fr.utt.lo02.witchhunt.io;
 
 import fr.utt.lo02.witchhunt.card.RumourCard;
+import fr.utt.lo02.witchhunt.io.listener.CardListener;
+import fr.utt.lo02.witchhunt.io.listener.CardManagerListener;
+import fr.utt.lo02.witchhunt.io.listener.PlayerListener;
+import fr.utt.lo02.witchhunt.io.view.CardView;
+import fr.utt.lo02.witchhunt.io.view.PlayerView;
 import fr.utt.lo02.witchhunt.managers.CardManager;
 import fr.utt.lo02.witchhunt.managers.PlayerManager;
 import fr.utt.lo02.witchhunt.player.Player;
@@ -40,8 +45,9 @@ public final class GUI implements IOInterface {
 
         currentPlayer.setLayout(new BoxLayout(currentPlayer, BoxLayout.Y_AXIS));
         currentPlayer.setAlignmentX(Component.LEFT_ALIGNMENT);
+        currentPlayer.setBorder(new LineBorder(new Color(175, 0, 50)));
 
-        discarded.setLayout(new BorderLayout());
+        discarded.setLayout(new BorderLayout(1, 20));
 
         action.setLayout(new BorderLayout(1, 20));
 
@@ -64,20 +70,29 @@ public final class GUI implements IOInterface {
             players.add(playerView);
         }
 
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout(20, 20));
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BorderLayout(20, 20));
 
         JScrollPane infoScroll = new JScrollPane(info);
         infoScroll.setPreferredSize(new Dimension(400, 100));
 
-        panel.add(infoScroll, BorderLayout.SOUTH);
-        panel.add(action, BorderLayout.WEST);
-        panel.add(currentPlayer, BorderLayout.CENTER);
-        panel.add(players, BorderLayout.NORTH);
-        panel.add(discarded, BorderLayout.EAST);
+        JPanel northPanel = new JPanel();
+        JLabel playersLabel = new JLabel("All players :");
+        playersLabel.setFont(playersLabel.getFont().deriveFont(20F));
 
-        frame.setMinimumSize(new Dimension(1300, 800));
-        switchPanel(panel);
+        northPanel.setLayout(new BoxLayout(northPanel, BoxLayout.Y_AXIS));
+        northPanel.add(playersLabel);
+        northPanel.add(players);
+
+        mainPanel.add(infoScroll, BorderLayout.SOUTH);
+        mainPanel.add(action, BorderLayout.WEST);
+        mainPanel.add(currentPlayer, BorderLayout.CENTER);
+        mainPanel.add(northPanel, BorderLayout.NORTH);
+        mainPanel.add(discarded, BorderLayout.EAST);
+
+        switchPanel(mainPanel);
+
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         gameStarted = true;
     }
@@ -98,16 +113,13 @@ public final class GUI implements IOInterface {
     public void updateDiscarded(HashSet<String> discardedCards) {
         discarded.removeAll();
 
-        if (discardedCards.isEmpty()) {
-            JLabel discardedLabel = new JLabel("There is no discarded cards.");
-            discardedLabel.setFont(discardedLabel.getFont().deriveFont(20F));
+        JLabel discardedLabel = new JLabel("There's no discarded cards.");
+        discardedLabel.setFont(discardedLabel.getFont().deriveFont(20F));
 
-            discarded.add(discardedLabel, BorderLayout.NORTH);
-        } else {
+        if (!discardedCards.isEmpty()) {
             CardManager cManager = CardManager.getInstance();
 
-            JLabel discardedLabel = new JLabel("Discarded cards:");
-            discardedLabel.setFont(discardedLabel.getFont().deriveFont(20F));
+            discardedLabel.setText("Discarded cards:");
 
             JPanel cards = new JPanel();
             cards.setLayout(new GridLayout(3, 2, 2, 2));
@@ -117,16 +129,19 @@ public final class GUI implements IOInterface {
                 cards.add(card.getCardView());
             }
 
-            discarded.add(discardedLabel, BorderLayout.NORTH);
-            discarded.add(cards, BorderLayout.CENTER);
+            discarded.add(cards, BorderLayout.SOUTH);
         }
 
+        discarded.add(discardedLabel, BorderLayout.CENTER);
         discarded.invalidate();
         discarded.validate();
+
+        SwingUtilities.updateComponentTreeUI(frame);
     }
 
     private void switchPanel(JPanel panel) {
         frame.setContentPane(panel);
+        SwingUtilities.updateComponentTreeUI(frame);
         frame.pack();
         frame.setLocationRelativeTo(null);
     }
@@ -201,10 +216,10 @@ public final class GUI implements IOInterface {
 
         for (String cardName : PlayerManager.getInstance().getByName(playerName).getHand()) {
             CardView original = cManager.getByName(cardName).getCardView();
-            CardView cardView = new CardView(original, 200);
-            cardView.update(true);
+            CardView cardViewCopy = new CardView(original, 200);
+            cardViewCopy.update(true);
 
-            hand.add(cardView);
+            hand.add(cardViewCopy);
         }
 
         currentPlayer.add(name);
@@ -213,6 +228,8 @@ public final class GUI implements IOInterface {
 
         currentPlayer.invalidate();
         currentPlayer.validate();
+
+        SwingUtilities.updateComponentTreeUI(frame);
     }
 
     @Override
@@ -221,9 +238,9 @@ public final class GUI implements IOInterface {
     }
 
     @Override
-    public int readIntBetween(int min, int max, String message) {
+    public int readIntBetween(int min, int max, String msg) {
         JPanel panel = new JPanel();
-        JLabel label = new JLabel(message);
+        JLabel label = new JLabel(msg);
         JSlider slider = new JSlider(JSlider.HORIZONTAL, min, max, min);
         JButton button = new JButton("OK");
 
@@ -241,6 +258,26 @@ public final class GUI implements IOInterface {
         switchPanel(panel);
 
         return 0;
+    }
+
+    @Override
+    public boolean yesOrNo(String yesMsg, String noMsg, String msg) {
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel(msg);
+        JButton noButton = new JButton(noMsg);
+        JButton yesButton = new JButton(yesMsg);
+
+        noButton.addActionListener(e -> IOController.getInstance().read("boolean", false));
+        yesButton.addActionListener(e -> IOController.getInstance().read("boolean", true));
+
+        panel.setLayout(new BorderLayout(10, 20));
+        panel.add(label, BorderLayout.NORTH);
+        panel.add(yesButton, BorderLayout.CENTER);
+        panel.add(noButton, BorderLayout.WEST);
+
+        switchPanel(panel);
+
+        return false;
     }
 
     @Override
@@ -280,6 +317,11 @@ public final class GUI implements IOInterface {
         action.add(button, BorderLayout.SOUTH);
         action.invalidate();
         action.validate();
+
+        if (!gameStarted)
+            switchPanel(action);
+        else
+            SwingUtilities.updateComponentTreeUI(frame);
 
         return null;
     }

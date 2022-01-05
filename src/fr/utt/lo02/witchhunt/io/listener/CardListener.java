@@ -1,4 +1,6 @@
-package fr.utt.lo02.witchhunt.io;
+package fr.utt.lo02.witchhunt.io.listener;
+
+import fr.utt.lo02.witchhunt.io.view.CardView;
 
 import javax.swing.SwingUtilities;
 import java.beans.PropertyChangeEvent;

@@ -1,4 +1,4 @@
-package fr.utt.lo02.witchhunt;
+package fr.utt.lo02.witchhunt.player;
 
 public enum Identity {
     VILLAGER("Villager"),

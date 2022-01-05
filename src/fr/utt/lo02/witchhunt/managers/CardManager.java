@@ -50,7 +50,7 @@ public final class CardManager {
     /**
      * Set containing the names of the discarded cards.
      */
-    private HashSet<String> discardedCards = new HashSet<>();
+    private HashSet<String> discardedCards;
     /**
      * Shuffled list containing the names of cards to be dealt.
      * <p>
