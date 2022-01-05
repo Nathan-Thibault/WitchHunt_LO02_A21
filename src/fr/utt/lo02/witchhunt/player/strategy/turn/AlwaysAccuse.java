@@ -1,21 +1,10 @@
 package fr.utt.lo02.witchhunt.player.strategy.turn;
 
-import fr.utt.lo02.witchhunt.managers.RoundManager;
-import fr.utt.lo02.witchhunt.player.Player;
-import fr.utt.lo02.witchhunt.managers.PlayerManager;
-
-import java.util.Set;
+import fr.utt.lo02.witchhunt.player.ArtificialPlayer;
 
 public final class AlwaysAccuse implements TurnStrategy {
     @Override
-    public void playTurn(String callerName) {
-        PlayerManager pManager = PlayerManager.getInstance();
-        Player caller = pManager.getByName(callerName);
-
-        Set<String> possibleTargets = pManager.getUnrevealedPlayers();
-        possibleTargets.remove(callerName);//player can't choose himself
-
-        String target = caller.choosePlayerFrom(possibleTargets);
-        RoundManager.getInstance().accuse(callerName, target);
+    public void playTurn(ArtificialPlayer caller) {
+        caller.accuseSomeone();
     }
 }

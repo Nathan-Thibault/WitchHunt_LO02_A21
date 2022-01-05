@@ -109,9 +109,9 @@ public final class PlayerManager {
         List<String> list = new ArrayList<>(players.keySet());
         Collections.shuffle(list);
 
-        LinkedHashMap<String, Player> shuffleMap = new LinkedHashMap<>();
-        list.forEach(k -> shuffleMap.put(k, players.get(k)));
-        players = shuffleMap;
+        LinkedHashMap<String, Player> shuffledMap = new LinkedHashMap<>(list.size());
+        list.forEach(k -> shuffledMap.put(k, players.get(k)));
+        players = shuffledMap;
     }
 
     /**
