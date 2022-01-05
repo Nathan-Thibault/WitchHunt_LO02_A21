@@ -1,8 +1,6 @@
 package fr.utt.lo02.witchhunt.io;
 
 import fr.utt.lo02.witchhunt.WitchHunt;
-import fr.utt.lo02.witchhunt.io.IOController;
-import fr.utt.lo02.witchhunt.io.IOInterface;
 import fr.utt.lo02.witchhunt.managers.CardManager;
 import fr.utt.lo02.witchhunt.card.IdentityCard;
 import fr.utt.lo02.witchhunt.player.PhysicalPlayer;
@@ -18,6 +16,7 @@ import java.util.function.Consumer;
 public final class CLI implements IOInterface {
 
     private final boolean windowsConsole;
+    private final Scanner sc = new Scanner(System.in);
     private Thread thread = null;
 
     public CLI() {
@@ -30,8 +29,8 @@ public final class CLI implements IOInterface {
 
         if (WitchHunt.isTest())
             System.out.println("\n---\n\n");
-        else
-            resetScreen();
+        //else
+        //resetScreen();
     }
 
     @Override
@@ -67,13 +66,15 @@ public final class CLI implements IOInterface {
                 while (System.in.available() < 1) {
                     Thread.sleep(200);
                 }
-                System.in.read();
+
+                sc.nextLine();
+
+                IOController.getInstance().stopWaiting();
             } catch (InterruptedException ignored) {
                 //sleep interrupted
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            IOController.getInstance().stopWaiting();
         });
         thread.start();
     }
@@ -156,15 +157,23 @@ public final class CLI implements IOInterface {
         if (thread != null) thread.interrupt();
 
         thread = new Thread(() -> {
-            Scanner sc = new Scanner(System.in);
-
             System.out.println("Enter the name of the player " + playerNum + ":");
 
             try {
+                //blocks until input data is available, i.e. until enter is pressed
                 while (System.in.available() < 1) {
                     Thread.sleep(200);
                 }
-                IOController.getInstance().read("name", sc.nextLine());
+
+                String s = sc.nextLine().trim();
+                System.out.println("\"" + s + "\"");
+                if (s.isEmpty()) {
+                    String playerName = "Player " + playerNum;
+                    System.out.println(playerName);
+                    IOController.getInstance().read("name", playerName);
+                } else {
+                    IOController.getInstance().read("name", s);
+                }
             } catch (InterruptedException ignored) {
                 //sleep interrupted
             } catch (IOException e) {
@@ -202,12 +211,12 @@ public final class CLI implements IOInterface {
         thread = new Thread(() -> {
             String message = "Please enter an integer between " + min + " and " + max + " :";
 
-            Scanner sc = new Scanner(System.in);
             try {
                 Integer result = null;
                 while (result == null) {
                     System.out.println(message);
 
+                    //blocks until input data is available, i.e. until enter is pressed
                     while (System.in.available() < 1) {
                         Thread.sleep(200);
                     }
@@ -220,9 +229,10 @@ public final class CLI implements IOInterface {
                         } else {
                             onDone.accept(result);
                         }
-                    } else if (sc.hasNext()) {
-                        System.out.println(sc.next().concat(" is not an integer."));
+                    } else {
+                        System.out.println("Not an integer.");
                     }
+                    sc.nextLine();
                 }
             } catch (InterruptedException ignored) {
                 //sleep interrupted
