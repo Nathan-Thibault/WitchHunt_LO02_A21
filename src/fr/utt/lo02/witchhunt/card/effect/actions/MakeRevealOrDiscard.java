@@ -36,8 +36,12 @@ public final class MakeRevealOrDiscard extends Action {
         PlayerManager pManager = PlayerManager.getInstance();
 
         Player caller = pManager.getByName(callerName);
+
         Set<String> possibleTargets = pManager.getUnrevealedPlayers();
         possibleTargets.remove(callerName);
+        //remove the player with the "immune" card against the one playing this action if not null
+        possibleTargets.remove((String) args.get("protectedPlayer"));
+
         String targetName = caller.choosePlayerFrom(possibleTargets);
         Player target = pManager.getByName(targetName);
 
@@ -89,6 +93,7 @@ public final class MakeRevealOrDiscard extends Action {
 
     @Override
     public boolean isExecutable(String callerName, HashMap<String, Object> args) {
+        //TODO: maybe it isn't always true here
         return true;
     }
 }
