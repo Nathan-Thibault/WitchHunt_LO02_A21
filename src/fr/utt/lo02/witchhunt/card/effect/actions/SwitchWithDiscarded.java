@@ -21,12 +21,12 @@ public final class SwitchWithDiscarded extends Action {
         CardManager cManager = CardManager.getInstance();
         Player caller = PlayerManager.getInstance().getByName(callerName);
 
-        String card = caller.chooseCardFrom(cManager.getDiscardedCards());
+        String cardName = caller.chooseCardFrom(cManager.getDiscardedCards());
 
-        cManager.takeFromDiscarded(card);
-        caller.getOwnedCards().add(card);
+        cManager.takeFromDiscarded(cardName);
+        caller.addToOwnedCards(cardName);
         //only Back Cat card has this action, hence the following code
-        caller.getOwnedCards().remove("Black Cat");
+        caller.removeFromOwnedCards("Black Cat");
         cManager.discard("Black Cat");
     }
 

@@ -1,5 +1,6 @@
 package fr.utt.lo02.witchhunt.io;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
@@ -9,12 +10,19 @@ public final class IOController implements IOInterface {
     private static IOController instance;
 
     private final ArrayList<IOInterface> interfaces = new ArrayList<>();
-
     private final HashMap<String, Object> readValues = new HashMap<>();
-    private volatile boolean waiting = false;
+
+    private volatile boolean waiting;
 
     private IOController() {
-        interfaces.add(new CommandLineInterface());
+        waiting = true;
+        SwingUtilities.invokeLater(() -> {
+            interfaces.add(new CLI());
+            waiting = false;
+        });
+
+        while (waiting) Thread.onSpinWait();
+        interfaces.add(new GUI());
     }
 
     public static IOController getInstance() {
@@ -25,6 +33,7 @@ public final class IOController implements IOInterface {
     }
 
     public void stopWaiting() {
+        clear();
         waiting = false;
     }
 
@@ -43,14 +52,20 @@ public final class IOController implements IOInterface {
     @Override
     public void clear() {
         for (IOInterface ioInterface : interfaces) {
-            ioInterface.clear();
+            if (ioInterface instanceof GUI)
+                SwingUtilities.invokeLater(ioInterface::clear);
+            else
+                ioInterface.clear();
         }
     }
 
     @Override
     public void titleScreen() {
         for (IOInterface ioInterface : interfaces) {
-            new Thread(ioInterface::titleScreen).start();
+            if (ioInterface instanceof GUI)
+                SwingUtilities.invokeLater(ioInterface::titleScreen);
+            else
+                ioInterface.titleScreen();
         }
 
         startWaiting();
@@ -58,40 +73,45 @@ public final class IOController implements IOInterface {
     }
 
     @Override
-    public void pause() {
-        for(IOInterface ioInterface: interfaces){
-            new Thread(ioInterface::pause).start();
-        }
-
-        startWaiting();
-        clear();
-    }
-
-    @Override
-    public void displayGameInfos() {
+    public void pause(String msg) {
         for (IOInterface ioInterface : interfaces) {
-            ioInterface.displayGameInfos();
+            if (ioInterface instanceof GUI)
+                SwingUtilities.invokeLater(() -> ioInterface.pause(msg));
+            else
+                ioInterface.pause(msg);
+        }
+
+        startWaiting();
+        clear();
+    }
+
+    @Override
+    public void playerInfos(String playerName, String msg) {
+        for (IOInterface ioInterface : interfaces) {
+            if (ioInterface instanceof GUI)
+                SwingUtilities.invokeLater(() -> ioInterface.playerInfos(playerName, msg));
+            else
+                ioInterface.playerInfos(playerName, msg);
         }
     }
 
     @Override
     public void printInfo(String msg) {
         for (IOInterface ioInterface : interfaces) {
-            ioInterface.printInfo(msg);
+            if (ioInterface instanceof GUI)
+                SwingUtilities.invokeLater(() -> ioInterface.printInfo(msg));
+            else
+                ioInterface.printInfo(msg);
         }
     }
 
     @Override
-    public void printError(String msg) {
+    public int readIntBetween(int min, int max, String msg) {
         for (IOInterface ioInterface : interfaces) {
-            ioInterface.printError(msg);
-        }
-    }
-
-    @Override
-    public int readIntBetween(int min, int max) {
-        for (IOInterface ioInterface : interfaces) {
-            new Thread(() -> ioInterface.readIntBetween(min, max)).start();
+            if (ioInterface instanceof GUI)
+                SwingUtilities.invokeLater(() -> ioInterface.readIntBetween(min, max, msg));
+            else
+                ioInterface.readIntBetween(min, max, msg);
         }
 
         startWaiting();
@@ -100,15 +120,59 @@ public final class IOController implements IOInterface {
     }
 
     @Override
-    public <T> T readFromSet(Set<T> set) {
+    public boolean yesOrNo(String yesMsg, String noMsg, String msg) {
         for (IOInterface ioInterface : interfaces) {
-            new Thread(() -> ioInterface.readFromSet(set)).start();
+            if (ioInterface instanceof GUI)
+                SwingUtilities.invokeLater(() -> ioInterface.yesOrNo(yesMsg, noMsg, msg));
+            else
+                ioInterface.yesOrNo(yesMsg, noMsg, msg);
+        }
+
+        startWaiting();
+        clear();
+        return (boolean) readValues.get("boolean");
+    }
+
+    @Override
+    public String readName(int playerNum) {
+        for (IOInterface ioInterface : interfaces) {
+            if (ioInterface instanceof GUI)
+                SwingUtilities.invokeLater(() -> ioInterface.readName(playerNum));
+            else
+                ioInterface.readName(playerNum);
         }
 
         startWaiting();
         clear();
 
-        @SuppressWarnings("unchecked") final T from_list = (T) readValues.get("from_list");
-        return from_list;
+        return (String) readValues.get("name");
+    }
+
+    @Override
+    public <T> T readFromSet(Set<T> set, String msg) {
+        for (IOInterface ioInterface : interfaces) {
+            if (ioInterface instanceof GUI)
+                SwingUtilities.invokeLater(() -> ioInterface.readFromSet(set, msg));
+            else
+                ioInterface.readFromSet(set, msg);
+        }
+
+        startWaiting();
+        clear();
+
+        @SuppressWarnings("unchecked") final T from_set = (T) readValues.get("from_set");
+        return from_set;
+    }
+
+    public void startGame() {
+        waiting = true;
+        for (IOInterface ioInterface : interfaces) {
+            if (ioInterface instanceof GUI)
+                SwingUtilities.invokeLater(() -> {
+                    ((GUI) ioInterface).startGame();
+                    waiting = false;
+                });
+        }
+        while (waiting) Thread.onSpinWait();
     }
 }

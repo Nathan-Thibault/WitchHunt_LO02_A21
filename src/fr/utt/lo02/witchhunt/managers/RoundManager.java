@@ -1,6 +1,6 @@
 package fr.utt.lo02.witchhunt.managers;
 
-import fr.utt.lo02.witchhunt.Identity;
+import fr.utt.lo02.witchhunt.player.Identity;
 import fr.utt.lo02.witchhunt.WitchHunt;
 import fr.utt.lo02.witchhunt.io.IOController;
 import fr.utt.lo02.witchhunt.player.ArtificialPlayer;
@@ -37,7 +37,8 @@ public final class RoundManager {
     /**
      * Constructor.
      */
-    private RoundManager() {}
+    private RoundManager() {
+    }
 
     /**
      * Gets the unique instance of <b>RoundManager</b>.
@@ -68,7 +69,7 @@ public final class RoundManager {
         PlayerManager.getInstance().resetAll();
 
         roundCount++;
-        IOController.getInstance().printInfo("Round ".concat(String.valueOf(roundCount)).concat(" starts !"));
+        IOController.getInstance().printInfo("Round " + roundCount + " starts !");
 
         identityRound();
 
@@ -111,6 +112,7 @@ public final class RoundManager {
      * @see Player#respondAccusation(String)
      */
     public void accuse(String accuser, String target) {
+        IOController.getInstance().printInfo(accuser + " accuses " + target + " of being a Which.");
         PlayerManager.getInstance().getByName(target).respondAccusation(accuser);
     }
 
@@ -155,14 +157,11 @@ public final class RoundManager {
         Player lastUnrevealed = pManager.getByName(lastUnrevealedName);
         Identity identity = lastUnrevealed.getIdentityCard().getIdentity();
 
-        lastUnrevealed.revealIdentity();
+        lastUnrevealed.revealIdentity(false);
         lastUnrevealed.addToScore(identity.equals(Identity.WITCH) ? 2 : 1);
 
-        IOController.getInstance().printInfo(startingPlayer
-                .concat(" was the last player unrevealed. He was a ")
-                .concat(identity.toString())
-                .concat(" so he gains ")
-                .concat(identity.equals(Identity.WITCH) ? "two points." : "one point."));
+        IOController.getInstance().pause(startingPlayer + " was the last player unrevealed. He was a "
+                + identity + " so he gains " + (identity.equals(Identity.WITCH) ? "two points." : "one point."));
 
         checkForWinner();
     }
@@ -234,11 +233,11 @@ public final class RoundManager {
                 sb.append(" is the winner !");
             }
 
-            IOController.getInstance().printInfo(sb.toString());
+            IOController.getInstance().pause(sb.toString());
             System.exit(0);
         } else {
             // no winner yet, play a new round
-            IOController.getInstance().printInfo("There is no winner yet, a new round will start.");
+            IOController.getInstance().pause("There is no winner yet, a new round will start.");
             startNewRound();
         }
     }

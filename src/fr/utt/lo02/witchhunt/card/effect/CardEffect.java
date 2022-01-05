@@ -160,20 +160,29 @@ public final class CardEffect {
         StringBuilder sb = new StringBuilder();
 
         for (Action action : actions) {
-            sb.append("> ");
-            sb.append(action.getDescription());
-            sb.append("\n");
+            sb.append("    > ");
+            appendActionOrCondition(sb, action.getDescription());
         }
 
         if (conditions != null) {
-            sb.append("* Condition(s):\n");
+            sb.append("    * Condition(s):\n");
             for (Condition condition : conditions) {
-                sb.append(condition.getDescription());
-                sb.append("\n");
+                appendActionOrCondition(sb, condition.getDescription());
             }
         }
 
         return sb.toString();
+    }
+
+    private void appendActionOrCondition(StringBuilder sb, String s) {
+        String[] lines = s.split("\n");
+        sb.append(lines[0]);
+        sb.append("\n");
+        for (int i = 1; i < lines.length; i++) {
+            sb.append("      ");
+            sb.append(lines[i]);
+            sb.append("\n");
+        }
     }
 
     /**

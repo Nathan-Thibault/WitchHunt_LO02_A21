@@ -1,6 +1,6 @@
 package fr.utt.lo02.witchhunt.card.effect.actions;
 
-import fr.utt.lo02.witchhunt.Identity;
+import fr.utt.lo02.witchhunt.player.Identity;
 import fr.utt.lo02.witchhunt.managers.RoundManager;
 import fr.utt.lo02.witchhunt.managers.CardManager;
 import fr.utt.lo02.witchhunt.io.IOController;
@@ -34,8 +34,6 @@ public final class MakeRevealOrDiscard extends Action {
     @Override
     public void execute(String callerName, HashMap<String, Object> args) {
         PlayerManager pManager = PlayerManager.getInstance();
-        RoundManager rManager = RoundManager.getInstance();
-        IOController io = IOController.getInstance();
 
         Player caller = pManager.getByName(callerName);
         Set<String> possibleTargets = pManager.getUnrevealedPlayers();
@@ -51,25 +49,41 @@ public final class MakeRevealOrDiscard extends Action {
         }
 
         if (b) {
-            target.revealIdentity();
+            target.revealIdentity(false);
+
+            StringBuilder sb = new StringBuilder();
+            sb.append(targetName);
+            sb.append(" is a ");
+            sb.append(target.getIdentityCard().getIdentity());
+            sb.append(".\n");
+            sb.append(callerName);
+
+            String nextPlayer;
             if (target.getIdentityCard().getIdentity().equals(Identity.VILLAGER)) {
-                io.printInfo(callerName + " loses a point and " + targetName + " takes next turn.");
+                sb.append(" loses a point and ");
+                sb.append(targetName);
+                sb.append(" takes next turn.");
+
                 caller.addToScore(-1);
-                rManager.setIndexAtPlayer(targetName);
+                nextPlayer = targetName;
             } else {
-                io.printInfo(callerName.concat(" gains a point and takes next turn."));
+                sb.append(" gains a point and takes next turn.");
+
                 caller.addToScore(1);
-                rManager.setIndexAtPlayer(callerName);
+                nextPlayer = callerName;
             }
+
+            IOController.getInstance().pause(sb.toString());
+            RoundManager.getInstance().setIndexAtPlayer(nextPlayer);
         } else {
-            String card = target.chooseCardFrom(target.getHand());
+            String cardName = target.chooseCardFrom(target.getHand());
 
-            io.printInfo(targetName + "  discarded " + card + ". He takes next turn.");
+            IOController.getInstance().pause(targetName + "  discarded " + cardName + ". He takes next turn.");
 
-            target.getOwnedCards().remove(card);
-            CardManager.getInstance().discard(card);
+            target.removeFromOwnedCards(cardName);
+            CardManager.getInstance().discard(cardName);
 
-            rManager.setIndexAtPlayer(targetName);
+            RoundManager.getInstance().setIndexAtPlayer(targetName);
         }
     }
 

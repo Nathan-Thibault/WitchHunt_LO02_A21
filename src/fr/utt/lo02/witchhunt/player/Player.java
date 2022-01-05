@@ -1,6 +1,5 @@
 package fr.utt.lo02.witchhunt.player;
 
-import fr.utt.lo02.witchhunt.Identity;
 import fr.utt.lo02.witchhunt.managers.RoundManager;
 import fr.utt.lo02.witchhunt.managers.CardManager;
 import fr.utt.lo02.witchhunt.card.IdentityCard;
@@ -9,34 +8,49 @@ import fr.utt.lo02.witchhunt.card.effect.EffectType;
 import fr.utt.lo02.witchhunt.io.IOController;
 import fr.utt.lo02.witchhunt.managers.PlayerManager;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 public abstract class Player {
-
     protected final String name;
-    protected int score;
+    private int score;
+    private HashSet<String> ownedCards;
     protected IdentityCard identityCard;
-    protected HashSet<String> ownedCards;
+    private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 
     public Player(String name) throws NullPointerException {
         this.name = Objects.requireNonNull(name, "Player constructor: name can't be null.");
+
         identityCard = null;
         score = 0;
     }
 
-    public void revealIdentity() {
-        IOController io = IOController.getInstance();
+    public abstract void playTurn();
 
+    public abstract void respondAccusation(String accuser);
+
+    public abstract void chooseIdentity();
+
+    /**
+     * @return true to reveal and false to discard
+     */
+    public abstract boolean chooseToRevealOrDiscard();
+
+    public abstract String chooseCardFrom(Set<String> listOfCardNames);
+
+    public abstract String choosePlayerFrom(Set<String> listOfPlayerNames);
+
+    public void revealIdentity(boolean showMessage) {
         identityCard.setRevealed(true);
-        if (identityCard.getIdentity() == Identity.WITCH) {
-            io.printInfo(name.concat(" was a witch."));
+
+        if (identityCard.getIdentity() == Identity.WITCH)
             PlayerManager.getInstance().eliminate(name);
-        } else {
-            io.printInfo(name.concat(" is a villager."));
-        }
-        io.pause();
+
+        if (showMessage)
+            IOController.getInstance().pause(name + " is a " + identityCard.getIdentity() + ".");
     }
 
     public void revealIdentity(String accuser) {
@@ -45,32 +59,33 @@ public abstract class Player {
         IOController io = IOController.getInstance();
 
         identityCard.setRevealed(true);
-        io.printInfo(name + " was a " + identityCard.getIdentity() + "!");
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(name);
 
         if (identityCard.getIdentity() == Identity.WITCH) {
             pManager.getByName(accuser).addToScore(1);
             pManager.eliminate(name);
-            io.printInfo(name + " is out of the game until the end of the round.\n" + accuser + " gains one point and takes another turn.");
+
+            sb.append(" was a Witch!\n");
+            sb.append(name);
+            sb.append(" is out of the game until the end of the round.\n");
+            sb.append(accuser);
+            sb.append(" gains one point and takes another turn.");
+
             rManager.setIndexAtPlayer(accuser);
         } else {
-            io.printInfo(accuser + " gains no point and " + name + " takes next turn.");
+            sb.append(" is a Villager.\n");
+            sb.append(accuser);
+            sb.append(" gains no point and ");
+            sb.append(name);
+            sb.append(" takes next turn.");
+
             rManager.setIndexAtPlayer(name);
         }
 
-        io.pause();
+        io.pause(sb.toString());
         rManager.next();
-    }
-
-    public void setIdentity(Identity identity) {
-        identityCard = new IdentityCard(identity);
-    }
-
-    public IdentityCard getIdentityCard() {
-        return identityCard;
-    }
-
-    public HashSet<String> getHand() {
-        return getRevealedCards(false);
     }
 
     public HashSet<String> getPlayableCards(EffectType type, String accuser) {
@@ -91,16 +106,8 @@ public abstract class Player {
         return cards;
     }
 
-    public HashSet<String> getPlayableCards() {
-        return getPlayableCards(EffectType.HUNT, null);
-    }
-
-    public HashSet<String> getPlayableCards(String accuser) {
-        return getPlayableCards(EffectType.WITCH, accuser);
-    }
-
-    public HashSet<String> getOwnedCards() {
-        return ownedCards;
+    public HashSet<String> getHand() {
+        return getRevealedCards(false);
     }
 
     public HashSet<String> getRevealedCards() {
@@ -122,34 +129,77 @@ public abstract class Player {
     }
 
     public void reset() {
-        identityCard = null;
-        ownedCards = CardManager.getInstance().dealHand();
+        setIdentityCard(null);
+        setOwnedCards(CardManager.getInstance().dealHand());
     }
 
-    public String getName() {
-        return name;
+    public HashSet<String> getPlayableCards() {
+        return getPlayableCards(EffectType.HUNT, null);
+    }
+
+    public HashSet<String> getPlayableCards(String accuser) {
+        return getPlayableCards(EffectType.WITCH, accuser);
+    }
+
+    public void removeFromOwnedCards(String nameOfCardToRemove) {
+        HashSet<String> newOwnedCards = getOwnedCards();
+        newOwnedCards.remove(nameOfCardToRemove);
+        setOwnedCards(newOwnedCards);
+    }
+
+    public void addToOwnedCards(String nameOfCardToAdd) {
+        HashSet<String> newOwnedCards = getOwnedCards();
+        newOwnedCards.add(nameOfCardToAdd);
+        setOwnedCards(newOwnedCards);
+    }
+
+    public HashSet<String> getOwnedCards() {
+        return new HashSet<>(ownedCards);
+    }
+
+    private void setOwnedCards(HashSet<String> newOwnedCards) {
+        HashSet<String> oldOwnedCards = ownedCards;
+        ownedCards = newOwnedCards;
+        pcs.firePropertyChange("ownedCards", oldOwnedCards, ownedCards);
     }
 
     public void addToScore(int addend) {
-        score += addend;
+        setScore(score + addend);
     }
 
     public int getScore() {
         return score;
     }
 
-    public abstract void playTurn();
+    public void setScore(int newScore) {
+        int oldScore = score;
+        score = newScore;
+        pcs.firePropertyChange("score", oldScore, score);
+    }
 
-    public abstract void respondAccusation(String accuser);
+    public void setIdentity(Identity identity) {
+        setIdentityCard(new IdentityCard(identity));
+    }
 
-    public abstract void chooseIdentity();
+    public IdentityCard getIdentityCard() {
+        return identityCard;
+    }
 
-    /**
-     * @return true to reveal and false to discard
-     */
-    public abstract boolean chooseToRevealOrDiscard();
+    public void setIdentityCard(IdentityCard newIdentityCard) {
+        IdentityCard oldIdentityCard = identityCard;
+        identityCard = newIdentityCard;
+        pcs.firePropertyChange("identityCard", oldIdentityCard, identityCard);
+    }
 
-    public abstract String chooseCardFrom(Set<String> listOfCardNames);
+    public String getName() {
+        return name;
+    }
 
-    public abstract String choosePlayerFrom(Set<String> listOfPlayerNames);
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        pcs.addPropertyChangeListener(listener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        pcs.removePropertyChangeListener(listener);
+    }
 }

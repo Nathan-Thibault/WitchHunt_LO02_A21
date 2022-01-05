@@ -2,6 +2,7 @@ package fr.utt.lo02.witchhunt.card;
 
 import fr.utt.lo02.witchhunt.card.effect.CardEffect;
 import fr.utt.lo02.witchhunt.card.effect.EffectType;
+import fr.utt.lo02.witchhunt.io.view.CardView;
 import fr.utt.lo02.witchhunt.io.IOController;
 
 import java.util.Objects;
@@ -29,6 +30,8 @@ public final class RumourCard extends Card {
      * Name of another <b>RumourCard</b> this one can't get chosen by if revealed.
      */
     private final String cantGetChosenBy;
+
+    private CardView cardView = null;
 
     /**
      * Constructs a new <b>RumourCard</b>.
@@ -73,7 +76,7 @@ public final class RumourCard extends Card {
      * @param accuser    name of the player who accused the possessor of the card
      */
     public void playWitchEffect(String callerName, String accuser) {
-        IOController.getInstance().printInfo(callerName.concat(" plays ").concat(name).concat(":\n").concat(witchEffectDescription()));
+        IOController.getInstance().printInfo(callerName + " plays " + name + " witch effect.");
         setRevealed(true);
         witchEffect.play(callerName, accuser);
     }
@@ -86,7 +89,7 @@ public final class RumourCard extends Card {
      * @param callerName name of the player who posses the card
      */
     public void playHuntEffect(String callerName) {
-        IOController.getInstance().printInfo(callerName.concat(" plays ").concat(name).concat(":\n").concat(huntEffectDescription()));
+        IOController.getInstance().printInfo(callerName + " plays " + name + " hunt effect.");
         setRevealed(true);
         huntEffect.play(callerName);
     }
@@ -140,7 +143,7 @@ public final class RumourCard extends Card {
     private String effectDescription(boolean witch) {
         StringBuilder sb = new StringBuilder();
         if (cantGetChosenBy != null) {
-            sb.append("* While revealed, you cannot be chosen by the ");
+            sb.append("    o While revealed, you cannot be chosen by the ");
             sb.append(cantGetChosenBy);
             sb.append(".\n");
         }
@@ -160,5 +163,17 @@ public final class RumourCard extends Card {
         if (revealed)
             return cantGetChosenBy;
         return null;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public CardView getCardView() {
+        return cardView;
+    }
+
+    public void setCardView(CardView cardView) {
+        this.cardView = cardView;
     }
 }

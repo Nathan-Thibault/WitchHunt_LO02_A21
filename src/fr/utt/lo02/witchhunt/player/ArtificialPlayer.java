@@ -1,6 +1,5 @@
 package fr.utt.lo02.witchhunt.player;
 
-import fr.utt.lo02.witchhunt.Identity;
 import fr.utt.lo02.witchhunt.Utils;
 import fr.utt.lo02.witchhunt.player.strategy.Strategy;
 import fr.utt.lo02.witchhunt.player.strategy.identity.IdentityStrategy;

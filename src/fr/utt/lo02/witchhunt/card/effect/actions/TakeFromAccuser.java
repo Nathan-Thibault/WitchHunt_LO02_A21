@@ -25,10 +25,11 @@ public final class TakeFromAccuser extends Action {
         String accuserName = (String) Objects.requireNonNull(args.get("accuserName"), "TakeFromAccuser : missing argument accuserName");
         Player accuser = pManager.getByName(accuserName);
 
-        IOController.getInstance().printInfo(callerName + " choose a card from the hand of " + accuserName + ".");
-        String card = caller.chooseCardFrom(accuser.getHand());
-        accuser.getOwnedCards().remove(card);
-        caller.getOwnedCards().add(card);
+        IOController.getInstance().playerInfos(callerName, "Choose a card from the hand of " + accuserName + ".");
+
+        String cardName = caller.chooseCardFrom(accuser.getHand());
+        accuser.removeFromOwnedCards(cardName);
+        caller.addToOwnedCards(cardName);
     }
 
     @Override

@@ -3,32 +3,34 @@ package fr.utt.lo02.witchhunt.io;
 import fr.utt.lo02.witchhunt.WitchHunt;
 import fr.utt.lo02.witchhunt.managers.CardManager;
 import fr.utt.lo02.witchhunt.card.IdentityCard;
+import fr.utt.lo02.witchhunt.player.PhysicalPlayer;
 import fr.utt.lo02.witchhunt.player.Player;
 import fr.utt.lo02.witchhunt.managers.PlayerManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.function.Consumer;
 
-public final class CommandLineInterface implements IOInterface {
+public final class CLI implements IOInterface {
 
     private final boolean windowsConsole;
-    private boolean waiting;
+    private final Scanner sc = new Scanner(System.in);
+    private Thread thread = null;
 
-    public CommandLineInterface() {
+    public CLI() {
         windowsConsole = System.console() != null && System.getProperty("os.name").contains("Windows");
     }
 
     @Override
     public void clear() {
-        waiting = false;
+        if (thread != null) thread.interrupt();
 
         if (WitchHunt.isTest())
             System.out.println("\n---\n\n");
-        else
-            resetScreen();
+        //else
+        //resetScreen();
     }
 
     @Override
@@ -49,25 +51,36 @@ public final class CommandLineInterface implements IOInterface {
 
                 """);
 
-        pause();
+        pause("");
     }
 
     @Override
-    public void pause() {
-        System.out.println("Press enter to continue.");
-        try {
-            System.in.read();//blocks until input data is available, i.e. until enter is pressed
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        IOController.getInstance().stopWaiting();
+    public void pause(String msg) {
+        System.out.println(msg);
+
+        if (thread != null) thread.interrupt();
+        thread = new Thread(() -> {
+            System.out.println("Press enter to continue.");
+            try {
+                //blocks until input data is available, i.e. until enter is pressed
+                while (System.in.available() < 1) {
+                    Thread.sleep(200);
+                }
+
+                sc.nextLine();
+
+                IOController.getInstance().stopWaiting();
+            } catch (InterruptedException ignored) {
+                //sleep interrupted
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        thread.start();
     }
 
-    @Override
-    public void displayGameInfos() {
+    public void appendGameInfos(StringBuilder sb) {
         PlayerManager pManager = PlayerManager.getInstance();
-
-        StringBuilder sb = new StringBuilder();
 
         sb.append("List of the players:\n");
         for (String pName : pManager.getAllPlayers()) {
@@ -79,7 +92,10 @@ public final class CommandLineInterface implements IOInterface {
             sb.append(pName);
             //identity
             sb.append(" [Identity: ");
-            sb.append(ic.isRevealed() ? ic.getIdentity() : "Unrevealed");
+            if (ic != null)
+                sb.append(ic.isRevealed() ? ic.getIdentity() : "Unrevealed");
+            else
+                sb.append("not yet chosen");
             //score
             sb.append(", Score: ");
             sb.append(p.getScore());
@@ -99,24 +115,80 @@ public final class CommandLineInterface implements IOInterface {
     }
 
     @Override
+    public void playerInfos(String playerName, String msg) {
+        StringBuilder sb = new StringBuilder();
+        PhysicalPlayer player = (PhysicalPlayer) PlayerManager.getInstance().getByName(playerName);
+
+        appendGameInfos(sb);
+        player.appendCards(sb);
+
+        sb.append("To ");
+        sb.append(playerName);
+        sb.append(" -> ");
+        sb.append(msg);
+        sb.append("\n\n");
+
+        System.out.println(sb);
+    }
+
+    @Override
     public void printInfo(String msg) {
+        System.out.println("To all -> ".concat(msg).concat("\n"));
+    }
+
+    @Override
+    public int readIntBetween(int min, int max, String msg) {
         System.out.println(msg);
-    }
-
-    @Override
-    public void printError(String msg) {
-        System.err.println(msg);
-    }
-
-    @Override
-    public int readIntBetween(int min, int max) {
-        IOController.getInstance().read("int", intBetween(min, max));
+        intBetween(min, max, result -> IOController.getInstance().read("int", result));
 
         return 0;
     }
 
     @Override
-    public <T> T readFromSet(Set<T> set) {
+    public boolean yesOrNo(String yesMsg, String noMsg, String msg) {
+        System.out.println(msg + "\n0 -> " + noMsg + "\n1 -> " + yesMsg);
+        intBetween(0, 1, result -> IOController.getInstance().read("boolean", result == 1));
+
+        return false;
+    }
+
+    @Override
+    public String readName(int playerNum) {
+        if (thread != null) thread.interrupt();
+
+        thread = new Thread(() -> {
+            System.out.println("Enter the name of the player " + playerNum + ":");
+
+            try {
+                //blocks until input data is available, i.e. until enter is pressed
+                while (System.in.available() < 1) {
+                    Thread.sleep(200);
+                }
+
+                String s = sc.nextLine().trim();
+                System.out.println("\"" + s + "\"");
+                if (s.isEmpty()) {
+                    String playerName = "Player " + playerNum;
+                    System.out.println(playerName);
+                    IOController.getInstance().read("name", playerName);
+                } else {
+                    IOController.getInstance().read("name", s);
+                }
+            } catch (InterruptedException ignored) {
+                //sleep interrupted
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        thread.start();
+
+        return null;
+    }
+
+    @Override
+    public <T> T readFromSet(Set<T> set, String msg) {
+        System.out.println(msg);
+
         ArrayList<T> list = new ArrayList<>(set);
         StringBuilder listOfOptions = new StringBuilder();
 
@@ -128,37 +200,47 @@ public final class CommandLineInterface implements IOInterface {
         }
         System.out.print(listOfOptions);
 
-        int code = intBetween(0, list.size() - 1);
-        IOController.getInstance().read("from_list", list.get(code));
+        intBetween(0, list.size() - 1, result -> IOController.getInstance().read("from_set", list.get(result)));
 
         return null;
     }
 
-    private int intBetween(int min, int max) throws NullPointerException {
-        String message = "Please enter an integer between "
-                .concat(Integer.toString(min))
-                .concat(" and ")
-                .concat(Integer.toString(max))
-                .concat(" :");
+    private void intBetween(int min, int max, Consumer<Integer> onDone) {
+        if (thread != null) thread.interrupt();
 
-        Scanner sc = new Scanner(System.in);
+        thread = new Thread(() -> {
+            String message = "Please enter an integer between " + min + " and " + max + " :";
 
-        Integer result = null;
-        waiting = true;
-        while (waiting && result == null) {
-            System.out.println(message);
-            if (sc.hasNextInt()) {
-                result = sc.nextInt();
-                if (result < min || result > max) {
-                    System.out.println(result.toString().concat(" is out of range."));
-                    result = null;
+            try {
+                Integer result = null;
+                while (result == null) {
+                    System.out.println(message);
+
+                    //blocks until input data is available, i.e. until enter is pressed
+                    while (System.in.available() < 1) {
+                        Thread.sleep(200);
+                    }
+
+                    if (sc.hasNextInt()) {
+                        result = sc.nextInt();
+                        if (result < min || result > max) {
+                            System.out.println(result.toString().concat(" is out of range."));
+                            result = null;
+                        } else {
+                            onDone.accept(result);
+                        }
+                    } else {
+                        System.out.println("Not an integer.");
+                    }
+                    sc.nextLine();
                 }
-            } else if (sc.hasNext()) {
-                System.out.println(sc.next().concat(" is not an integer."));
+            } catch (InterruptedException ignored) {
+                //sleep interrupted
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        }
-
-        return Objects.requireNonNull(result);
+        });
+        thread.start();
     }
 
     private void resetScreen() {

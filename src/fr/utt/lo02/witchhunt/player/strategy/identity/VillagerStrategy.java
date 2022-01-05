@@ -1,6 +1,6 @@
 package fr.utt.lo02.witchhunt.player.strategy.identity;
 
-import fr.utt.lo02.witchhunt.Identity;
+import fr.utt.lo02.witchhunt.player.Identity;
 
 public final class VillagerStrategy implements IdentityStrategy{
     @Override

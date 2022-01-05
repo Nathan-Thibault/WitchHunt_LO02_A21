@@ -1,6 +1,6 @@
 package fr.utt.lo02.witchhunt.card.effect.actions;
 
-import fr.utt.lo02.witchhunt.Identity;
+import fr.utt.lo02.witchhunt.player.Identity;
 import fr.utt.lo02.witchhunt.managers.RoundManager;
 import fr.utt.lo02.witchhunt.player.Player;
 import fr.utt.lo02.witchhunt.managers.PlayerManager;
@@ -27,7 +27,7 @@ public final class Reveal extends Action {
         PlayerManager pManager = PlayerManager.getInstance();
         Player caller = pManager.getByName(callerName);
 
-        caller.revealIdentity();
+        caller.revealIdentity(true);
 
         if (caller.getIdentityCard().getIdentity().equals(Identity.VILLAGER)) {
             Set<String> possibleTargets = pManager.getInGamePlayers();

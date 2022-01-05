@@ -24,16 +24,16 @@ public final class TakeAnyRevealed extends Action {
         Set<String> revealedCards = CardManager.getInstance().getRevealedNonDiscardedCards();
 
         //remove caller cards since he has to chose from another player
-        for (String card : caller.getOwnedCards()) {
-            revealedCards.remove(card);
+        for (String cardName : caller.getOwnedCards()) {
+            revealedCards.remove(cardName);
         }
 
         String card = caller.chooseCardFrom(revealedCards);
         Player owner = Objects.requireNonNull(PlayerManager.getInstance().getOwnerOf(card));
 
-        owner.getOwnedCards().remove(card);
+        owner.removeFromOwnedCards(card);
         CardManager.getInstance().getByName(card).setRevealed(false);
-        caller.getOwnedCards().add(card);
+        caller.addToOwnedCards(card);
     }
 
     @Override
