@@ -19,9 +19,23 @@ import java.util.Objects;
  * The class offers methods to check if the <b>CardEffect</b> is playable and methods to play it.
  */
 public final class CardEffect {
+    /**
+     * Type of this effect.
+     *
+     * @see EffectType
+     */
     private final EffectType type;
+    /**
+     * List of actions constituting this effect.
+     */
     private final ArrayList<Action> actions;
+    /**
+     * List of conditions constituting this effect.
+     */
     private final ArrayList<Condition> conditions;
+    /**
+     * Name of the {@link fr.utt.lo02.witchhunt.card.RumourCard} containing this effect.
+     */
     private final String ownerCard;
 
     /**
@@ -161,23 +175,34 @@ public final class CardEffect {
 
         for (Action action : actions) {
             sb.append("    > ");
-            appendActionOrCondition(sb, action.getDescription());
+            appendWithWS(sb, action.getDescription());
         }
 
         if (conditions != null) {
             sb.append("    * Condition(s):\n");
             for (Condition condition : conditions) {
-                appendActionOrCondition(sb, condition.getDescription());
+                appendWithWS(sb, condition.getDescription());
             }
         }
 
         return sb.toString();
     }
 
-    private void appendActionOrCondition(StringBuilder sb, String s) {
+    /**
+     * Modifies then appends the specified string to the specified {@link StringBuilder}.
+     * <p>
+     * Appends each lines, except the first one, of the specified string
+     * to the {@link StringBuilder} with a certain amount of white space before it.
+     *
+     * @param sb the builder to append the string to
+     * @param s  the string to append to the builder
+     */
+    private void appendWithWS(StringBuilder sb, String s) {
         String[] lines = s.split("\n");
+
         sb.append(lines[0]);
         sb.append("\n");
+
         for (int i = 1; i < lines.length; i++) {
             sb.append("      ");
             sb.append(lines[i]);

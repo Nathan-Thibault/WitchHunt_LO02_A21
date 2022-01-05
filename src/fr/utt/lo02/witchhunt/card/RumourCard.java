@@ -31,6 +31,9 @@ public final class RumourCard extends Card {
      */
     private final String cantGetChosenBy;
 
+    /**
+     * View of the <b>RumourCard</b> on the graphical interface.
+     */
     private CardView cardView = null;
 
     /**
@@ -165,14 +168,29 @@ public final class RumourCard extends Card {
         return null;
     }
 
+    /**
+     * Gets the name of this <b>RumourCard</b>.
+     *
+     * @return the name of the card
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Gets the {@link CardView} corresponding to this <b>RumourCard</b>.
+     *
+     * @return the {@link CardView}
+     */
     public CardView getCardView() {
         return cardView;
     }
 
+    /**
+     * Sets the {@link CardView} corresponding to this <b>RumourCard</b>.
+     *
+     * @param cardView the {@link CardView} to set to this card
+     */
     public void setCardView(CardView cardView) {
         this.cardView = cardView;
     }

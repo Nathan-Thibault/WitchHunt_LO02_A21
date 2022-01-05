@@ -28,11 +28,11 @@ import java.util.Map;
  * it is a singleton because they should not be duplicated.
  * Moreover, being a singleton allows access to it from anywhere in the project, which is needed.
  * <p>
- * <b>CardManager</b> provides methods:
+ * <b>CardManager</b> provides, among others, methods to:
  * <ul>
- *     <li>to get cards whether they are revealed or not, discarded or not, etc.</li>
- *     <li>to discard and take discarded cards</li>
- *     <li>to deal cards</li>
+ *     <li>get cards whether they are revealed or not, discarded or not, etc.</li>
+ *     <li>discard and take discarded cards</li>
+ *     <li>deal cards</li>
  * </ul>
  */
 public final class CardManager {
@@ -65,9 +65,16 @@ public final class CardManager {
      * and then used in {@link CardManager#dealHand()}.
      */
     private int numberOfCardsPerPlayer;
-
+    /**
+     * Indicates if the cards are created or not.
+     * <p>
+     * If <code>true</code>, they are created.
+     */
     private boolean cardsCreated = false;
 
+    /**
+     * @see PropertyChangeSupport
+     */
     private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 
     /**
@@ -186,6 +193,11 @@ public final class CardManager {
         pcs.firePropertyChange("cardsCreated", false, true);
     }
 
+    /**
+     * Gets a {@link HashSet} containing all cards name.
+     *
+     * @return the set containing all cards name.
+     */
     public HashSet<String> getAll() {
         return new HashSet<>(allRumourCards.keySet());
     }
@@ -311,6 +323,11 @@ public final class CardManager {
         return new HashSet<>(discardedCards);
     }
 
+    /**
+     * Sets the discarded cards set as the specified set.
+     *
+     * @param newDiscardedCards the new set containing the names of discarded cards
+     */
     private void setDiscardedCards(HashSet<String> newDiscardedCards) {
         HashSet<String> oldDiscardedCards = discardedCards;
         discardedCards = newDiscardedCards;

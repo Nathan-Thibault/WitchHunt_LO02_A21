@@ -14,6 +14,9 @@ public abstract class Card {
      */
     protected boolean revealed;
 
+    /**
+     * @see PropertyChangeSupport
+     */
     private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 
     /**
@@ -43,6 +46,9 @@ public abstract class Card {
         pcs.firePropertyChange("revealed", oldRevealed, revealed);
     }
 
+    /**
+     * @see PropertyChangeSupport#addPropertyChangeListener(PropertyChangeListener)
+     */
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         pcs.addPropertyChangeListener(listener);
     }
