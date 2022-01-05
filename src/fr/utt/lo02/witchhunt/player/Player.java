@@ -185,7 +185,7 @@ public abstract class Player {
         return identityCard;
     }
 
-    public void setIdentityCard(IdentityCard newIdentityCard) {
+    private void setIdentityCard(IdentityCard newIdentityCard) {
         IdentityCard oldIdentityCard = identityCard;
         identityCard = newIdentityCard;
         pcs.firePropertyChange("identityCard", oldIdentityCard, identityCard);
@@ -197,9 +197,5 @@ public abstract class Player {
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         pcs.addPropertyChangeListener(listener);
-    }
-
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
-        pcs.removePropertyChangeListener(listener);
     }
 }

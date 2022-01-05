@@ -94,7 +94,7 @@ public final class CardManager {
      * Builds all the cards and put them in {@link CardManager#allRumourCards}.
      */
     public void createCards() {
-        if (isCardsCreated())
+        if (cardsCreated)
             return;
 
         Action chooseNext = new ChooseNextPlayer(null);
@@ -182,7 +182,8 @@ public final class CardManager {
         wart.addCantGetChosenBy("Ducking Stool");
         allRumourCards.put("Wart", wart.build());
 
-        setCardsCreated(true);
+        cardsCreated = true;
+        pcs.firePropertyChange("cardsCreated", false, true);
     }
 
     public HashSet<String> getAll() {
@@ -316,21 +317,10 @@ public final class CardManager {
         pcs.firePropertyChange("discardedCards", oldDiscardedCards, discardedCards);
     }
 
-    public boolean isCardsCreated() {
-        return cardsCreated;
-    }
-
-    private void setCardsCreated(boolean newCardsCreated) {
-        boolean oldCardsCreated = cardsCreated;
-        cardsCreated = newCardsCreated;
-        pcs.firePropertyChange("cardsCreated", oldCardsCreated, cardsCreated);
-    }
-
+    /**
+     * @see PropertyChangeSupport#addPropertyChangeListener(PropertyChangeListener)
+     */
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         pcs.addPropertyChangeListener(listener);
-    }
-
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
-        pcs.removePropertyChangeListener(listener);
     }
 }
