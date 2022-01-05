@@ -301,6 +301,7 @@ public final class GUI implements IOInterface {
 
     @Override
     public <T> T readFromSet(Set<T> set, String msg) {
+        msg = "<html>" + msg.replace("\n", "<br>") + "</html>";
         JLabel label = new JLabel(msg);
         label.setFont(label.getFont().deriveFont(15F));
         @SuppressWarnings("unchecked")

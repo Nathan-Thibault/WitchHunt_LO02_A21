@@ -12,6 +12,11 @@ import fr.utt.lo02.witchhunt.player.strategy.turn.AlwaysAccuse;
 
 import java.util.HashMap;
 
+/**
+ * Class containing the main, whose only-purpose is to create a game of WitchHunt.
+ *
+ * <img src="./doc-files/WitchHunt-Rules-v1.0.jpg">
+ */
 public final class WitchHunt {
 
     private static boolean test;
@@ -59,12 +64,12 @@ public final class WitchHunt {
 
             if (chooseStrat) {
                 for (int i = 0; i < a; i++) {
-                    io.printInfo("Choose strategies for artificial player ".concat(Integer.toString(i)));
-
                     HashMap<Strategy.StrategyType, Class<? extends Strategy>> strategies = new HashMap<>();
 
                     for (Strategy.StrategyType sType : Strategy.StrategyType.values()) {
-                        StrategyEnum sEnum = io.readFromSet(StrategyEnum.getAllOfType(sType), "Select a strategy from the list bellow for the " + sType.getName() + ":");
+                        StrategyEnum sEnum = io.readFromSet(StrategyEnum.getAllOfType(sType),
+                                "Choose strategies for artificial player " + i +
+                                        ".\nSelect a strategy from the list bellow for the " + sType.getName() + ":");
 
                         strategies.put(sType, sEnum.getStrategyClass());
                     }
