@@ -1,5 +1,8 @@
 package fr.utt.lo02.witchhunt.player.strategy;
 
+/**
+ * Identifies strategies for an {@link fr.utt.lo02.witchhunt.player.ArtificialPlayer} to use.
+ */
 public interface Strategy {
     enum StrategyType {
         IDENTITY("identity strategy"),
