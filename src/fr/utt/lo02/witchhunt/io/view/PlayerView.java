@@ -5,12 +5,10 @@ import fr.utt.lo02.witchhunt.io.listener.CardListener;
 import fr.utt.lo02.witchhunt.managers.CardManager;
 import fr.utt.lo02.witchhunt.player.Player;
 
-import javax.swing.JPanel;
-import javax.swing.JLabel;
+import javax.swing.*;
 import java.awt.FlowLayout;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import javax.swing.BoxLayout;
 import javax.swing.border.LineBorder;
 import java.util.HashSet;
 

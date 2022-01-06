@@ -129,10 +129,10 @@ public final class GUI implements IOInterface {
                 cards.add(card.getCardView());
             }
 
-            discarded.add(cards, BorderLayout.SOUTH);
+            discarded.add(cards, BorderLayout.CENTER);
         }
 
-        discarded.add(discardedLabel, BorderLayout.CENTER);
+        discarded.add(discardedLabel, BorderLayout.NORTH);
         discarded.invalidate();
         discarded.validate();
 
@@ -148,19 +148,10 @@ public final class GUI implements IOInterface {
 
     @Override
     public void clear() {
-        if (popup != null)
+        if (popup != null) {
             popup.dispose();
-
-        if (gameStarted)
-            return;
-
-        JPanel panel = new JPanel();
-
-        JLabel l = new JLabel("Nothing to display for now.");
-        panel.add(l);
-
-        frame.setMinimumSize(new Dimension(300, 75));
-        switchPanel(panel);
+            popup = null;
+        }
     }
 
     @Override
@@ -172,8 +163,6 @@ public final class GUI implements IOInterface {
             BufferedImage img = ImageIO.read(Objects.requireNonNull(getClass().getResource("/resources/images/title_screen.png")));
             ImageIcon imgIcon = new ImageIcon(img);
             button.setIcon(imgIcon);
-
-            panel.setSize(img.getWidth(), img.getHeight());
         } catch (NullPointerException | IOException e) {
             e.printStackTrace();
         }
@@ -193,7 +182,8 @@ public final class GUI implements IOInterface {
         popup = new JFrame();
         JOptionPane.showMessageDialog(popup, msg, "WitchHunt", JOptionPane.INFORMATION_MESSAGE);
 
-        IOController.getInstance().stopWaiting();//executed only after JOptionPane is closed
+        //executed only after JOptionPane is closed
+        if (popup != null) IOController.getInstance().stopWaiting();
     }
 
     @Override
@@ -204,11 +194,9 @@ public final class GUI implements IOInterface {
 
         JLabel name = new JLabel(playerName);
         name.setFont(name.getFont().deriveFont(30F));
-        name.setHorizontalAlignment(SwingConstants.CENTER);
 
         JLabel message = new JLabel();
         message.setFont(message.getFont().deriveFont(15F));
-        message.setHorizontalAlignment(SwingConstants.CENTER);
         message.setText(msg);
 
         JPanel hand = new JPanel();
