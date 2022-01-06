@@ -38,21 +38,26 @@ public final class MakeRevealOrDiscard extends Action {
         Player caller = pManager.getByName(callerName);
 
         Set<String> possibleTargets = pManager.getUnrevealedPlayers();
-        possibleTargets.remove(callerName);
+
+        possibleTargets.addAll(pManager.getPlayersWithHand());//add players with hand
+        possibleTargets.remove(callerName);//player can't choose himself
         //remove the player with the "immune" card against the one playing this action if not null
         possibleTargets.remove((String) args.get("protectedPlayer"));
 
         String targetName = caller.choosePlayerFrom(possibleTargets);
         Player target = pManager.getByName(targetName);
 
-        boolean b;
+        boolean reveal;
+        //note that it's not possible to have a player revealed with no hands in possible targets
         if (target.getHand().isEmpty()) {//target has no cards in hand, they must reveal
-            b = true;
-        } else {
-            b = target.chooseToRevealOrDiscard();
+            reveal = true;
+        } else if (target.getIdentityCard().isRevealed()) {//target is revealed, they must discard
+            reveal = false;
+        } else {//target has cards and isn't revealed, they have a choice
+            reveal = target.chooseToRevealOrDiscard();
         }
 
-        if (b) {
+        if (reveal) {
             target.revealIdentity(false);
 
             StringBuilder sb = new StringBuilder();
@@ -93,7 +98,15 @@ public final class MakeRevealOrDiscard extends Action {
 
     @Override
     public boolean isExecutable(String callerName, HashMap<String, Object> args) {
-        //TODO: maybe it isn't always true here
-        return true;
+        PlayerManager pManager = PlayerManager.getInstance();
+
+        Set<String> possibleTargets = pManager.getUnrevealedPlayers();
+
+        possibleTargets.addAll(pManager.getPlayersWithHand());//add players with hand
+        possibleTargets.remove(callerName);//player can't choose himself
+        //remove the player with the "immune" card against the one playing this action if not null
+        possibleTargets.remove((String) args.get("protectedPlayer"));
+
+        return !possibleTargets.isEmpty();
     }
 }
