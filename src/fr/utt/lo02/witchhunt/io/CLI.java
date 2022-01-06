@@ -29,8 +29,8 @@ public final class CLI implements IOInterface {
 
         if (WitchHunt.isTest())
             System.out.println("\n---\n\n");
-        //else
-        //resetScreen();
+        else
+            resetScreen();
     }
 
     @Override
@@ -110,8 +110,6 @@ public final class CLI implements IOInterface {
         //list of discarded cards if any
         formatSet(sb, "\nList of discarded cards:\n    ", CardManager.getInstance().getDiscardedCards());
         sb.append("\n");
-
-        System.out.println(sb);
     }
 
     @Override

@@ -5,7 +5,7 @@ import fr.utt.lo02.witchhunt.player.ArtificialPlayer;
 
 import java.util.Set;
 
-public class PlayHunt implements TurnStrategy {
+public final class PlayHunt implements TurnStrategy {
     @Override
     public void playTurn(ArtificialPlayer caller) {
         tryToPlayHunt(caller);
