@@ -1,4 +1,4 @@
-package fr.utt.lo02.witchhunt.card.effect.conditions;
+package fr.utt.lo02.witchhunt.card.effect;
 
 import fr.utt.lo02.witchhunt.player.Player;
 

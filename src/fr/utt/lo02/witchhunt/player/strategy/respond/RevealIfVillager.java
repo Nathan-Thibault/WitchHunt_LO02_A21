@@ -2,6 +2,7 @@ package fr.utt.lo02.witchhunt.player.strategy.respond;
 
 import fr.utt.lo02.witchhunt.player.Identity;
 import fr.utt.lo02.witchhunt.player.ArtificialPlayer;
+import fr.utt.lo02.witchhunt.player.strategy.RespondStrategy;
 
 public final class RevealIfVillager implements RespondStrategy {
     @Override

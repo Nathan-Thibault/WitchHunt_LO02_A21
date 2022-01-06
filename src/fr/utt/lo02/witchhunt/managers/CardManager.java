@@ -4,8 +4,9 @@ import com.sun.jdi.ClassNotPreparedException;
 import fr.utt.lo02.witchhunt.Utils;
 import fr.utt.lo02.witchhunt.card.RumourCard;
 import fr.utt.lo02.witchhunt.card.RumourCardBuilder;
+import fr.utt.lo02.witchhunt.card.effect.Action;
 import fr.utt.lo02.witchhunt.card.effect.actions.*;
-import fr.utt.lo02.witchhunt.card.effect.conditions.Condition;
+import fr.utt.lo02.witchhunt.card.effect.Condition;
 import fr.utt.lo02.witchhunt.card.effect.conditions.RevealedARumourCard;
 import fr.utt.lo02.witchhunt.card.effect.conditions.RevealedAsVillager;
 

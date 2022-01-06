@@ -1,6 +1,7 @@
 package fr.utt.lo02.witchhunt.card.effect.actions;
 
 import fr.utt.lo02.witchhunt.Utils;
+import fr.utt.lo02.witchhunt.card.effect.Action;
 import fr.utt.lo02.witchhunt.card.effect.CardEffect;
 import fr.utt.lo02.witchhunt.player.Player;
 import fr.utt.lo02.witchhunt.managers.PlayerManager;

@@ -2,6 +2,7 @@ package fr.utt.lo02.witchhunt.player.strategy.turn;
 
 import fr.utt.lo02.witchhunt.managers.CardManager;
 import fr.utt.lo02.witchhunt.player.ArtificialPlayer;
+import fr.utt.lo02.witchhunt.player.strategy.TurnStrategy;
 
 import java.util.Set;
 

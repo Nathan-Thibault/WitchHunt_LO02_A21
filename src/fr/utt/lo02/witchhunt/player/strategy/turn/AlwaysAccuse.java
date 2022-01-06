@@ -1,6 +1,7 @@
 package fr.utt.lo02.witchhunt.player.strategy.turn;
 
 import fr.utt.lo02.witchhunt.player.ArtificialPlayer;
+import fr.utt.lo02.witchhunt.player.strategy.TurnStrategy;
 
 public final class AlwaysAccuse implements TurnStrategy {
     @Override

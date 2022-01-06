@@ -4,9 +4,9 @@ import fr.utt.lo02.witchhunt.Utils;
 import fr.utt.lo02.witchhunt.managers.PlayerManager;
 import fr.utt.lo02.witchhunt.managers.RoundManager;
 import fr.utt.lo02.witchhunt.player.strategy.Strategy;
-import fr.utt.lo02.witchhunt.player.strategy.identity.IdentityStrategy;
-import fr.utt.lo02.witchhunt.player.strategy.respond.RespondStrategy;
-import fr.utt.lo02.witchhunt.player.strategy.turn.TurnStrategy;
+import fr.utt.lo02.witchhunt.player.strategy.IdentityStrategy;
+import fr.utt.lo02.witchhunt.player.strategy.RespondStrategy;
+import fr.utt.lo02.witchhunt.player.strategy.TurnStrategy;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
