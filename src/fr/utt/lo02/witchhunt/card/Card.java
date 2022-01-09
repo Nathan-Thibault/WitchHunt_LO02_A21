@@ -4,7 +4,9 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 /**
- * Extending this class allows a common behavior to all cards. A card is either hidden (face down) or revealed.
+ * Extending this class allows a common behavior to all cards.
+ * <p>
+ * A card is either hidden (face down) or revealed.
  */
 public abstract class Card {
     /**
