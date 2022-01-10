@@ -9,7 +9,19 @@ import fr.utt.lo02.witchhunt.managers.PlayerManager;
 import java.util.EnumSet;
 import java.util.Set;
 
+/**
+ * A <b>PhysicalPlayer</b> is a {@link Player} that acts based on user input.
+ * <p>
+ * This class basically only just implements abstract methods of {@link Player}.
+ * Each works approximately the same way, which is,
+ * building a list of actions the player can do and make the user choose one.
+ */
 public final class PhysicalPlayer extends Player {
+    /**
+     * Constructor.
+     *
+     * @param name unique name representing the player
+     */
     public PhysicalPlayer(String name) {
         super(name);
     }
@@ -109,6 +121,12 @@ public final class PhysicalPlayer extends Player {
         return IOController.getInstance().readFromSet(setOfPlayerNames, name.concat(" choose a player from the list bellow:"));
     }
 
+    /**
+     * Appends to the specified {@link StringBuilder} the list of the cards
+     * and their full description owned by the <b>PhysicalPlayer</b>.
+     *
+     * @param sb the string builder to append to
+     */
     public void appendCards(StringBuilder sb) {
         Set<String> ownedCards = getOwnedCards();
 
@@ -134,30 +152,35 @@ public final class PhysicalPlayer extends Player {
         }
     }
 
-    enum PlayerAction {
+    /**
+     * Actions the user must choose to take during a turn or during responding an accusation.
+     * <p>
+     * A <b>PlayerAction</b> as a description and is either a turn action or a response action.
+     * So this enumeration provides a method to get all the turn or response actions.
+     */
+    private enum PlayerAction {
         ACCUSE("Accuse another player", false),
         PLAY_HUNT("Play a hunt effect", false),
         PLAY_WITCH("Play a witch effect", true),
         REVEAL("Reveal your identity", true);
 
         private final String description;
-        private final boolean respondAction;
+        private final boolean responseAction;
 
-        PlayerAction(String description, boolean respondAction) {
+        PlayerAction(String description, boolean responseAction) {
             this.description = description;
-            this.respondAction = respondAction;
+            this.responseAction = responseAction;
         }
 
         public static Set<PlayerAction> getActions(boolean respondAction) {
             EnumSet<PlayerAction> actions = EnumSet.allOf(PlayerAction.class);
 
-            actions.removeIf(pa -> respondAction != pa.isRespondAction());
+            actions.removeIf(pa -> respondAction != pa.isResponseAction());
             return actions;
         }
 
-
-        public boolean isRespondAction() {
-            return respondAction;
+        public boolean isResponseAction() {
+            return responseAction;
         }
 
         @Override
