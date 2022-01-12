@@ -16,7 +16,16 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.Objects;
 
+/**
+ * A <b>CardView</b> is a graphical representation of a {@link Card}.
+ * <p>
+ * To stay updated when the {@link Card} it's representing changes,
+ * it must be combined with a {@link fr.utt.lo02.witchhunt.io.listener.CardListener}.
+ */
 public final class CardView extends JButton {
+    /**
+     * Image for the back of a card.
+     */
     private static BufferedImage imgBack;
 
     static {
@@ -28,11 +37,28 @@ public final class CardView extends JButton {
         }
     }
 
+    /**
+     * Image for the front of the card.
+     */
     private BufferedImage imgFront;
+    /**
+     * Icon representing the front of the card.
+     */
     private ImageIcon frontFace;
+    /**
+     * Icon representing the back of the card.
+     */
     private ImageIcon backFace;
+    /**
+     * Tells if the card is revealed or not.
+     */
     private boolean revealed;
 
+    /**
+     * Constructor.
+     *
+     * @param card the card to make a graphical representation of
+     */
     public CardView(Card card) {
         super();
         String cardName;
@@ -72,7 +98,12 @@ public final class CardView extends JButton {
         update(card.isRevealed());
     }
 
-    //copy a CardView
+    /**
+     * Copies an existing <b>CardView</b> but modify the height of the icons.
+     *
+     * @param model  the card view to copy
+     * @param height the new height of the icons
+     */
     public CardView(CardView model, int height) {
         this.imgFront = model.imgFront;
         this.revealed = model.revealed;
@@ -94,6 +125,11 @@ public final class CardView extends JButton {
         });
     }
 
+    /**
+     * Updates the view with the specified state.
+     *
+     * @param revealed <code>true</code> to show the front icon, <code>false</code> to show the back icon
+     */
     public void update(boolean revealed) {
         this.revealed = revealed;
         setIcon(revealed ? frontFace : backFace);

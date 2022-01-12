@@ -5,15 +5,31 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
+/**
+ * The <b>IOController</b> class controls and coordinate every user interfaces.
+ */
 public final class IOController implements IOInterface {
-
+    /**
+     * Unique instance of <b>IOController</b>.
+     */
     private static IOController instance;
 
+    /**
+     * List of all interfaces of the game.
+     */
     private final ArrayList<IOInterface> interfaces = new ArrayList<>();
+    /**
+     * Temporarily stores the inputted values.
+     */
     private final HashMap<String, Object> readValues = new HashMap<>();
-
+    /**
+     * Tells if the game is waiting for a user input.
+     */
     private volatile boolean waiting;
 
+    /**
+     * Constructor to be called only once.
+     */
     private IOController() {
         waiting = true;
         SwingUtilities.invokeLater(() -> {
@@ -25,6 +41,11 @@ public final class IOController implements IOInterface {
         interfaces.add(new GUI());
     }
 
+    /**
+     * Gets the unique instance of <b>IOController</b>.
+     *
+     * @return the instance
+     */
     public static IOController getInstance() {
         if (instance == null) {
             instance = new IOController();
@@ -32,16 +53,34 @@ public final class IOController implements IOInterface {
         return instance;
     }
 
+    /**
+     * Stops waiting for user input.
+     */
     public void stopWaiting() {
         clear();
         waiting = false;
     }
 
+    /**
+     * Reads an inputted value.
+     *
+     * @param key   string identifying what the value is for
+     *              <ul>
+     *              <li>"int" -> {@link IOInterface#readIntBetween(int, int, String)}</li>
+     *              <li>"boolean" -> {@link IOInterface#yesOrNo(String, String, String)}</li>
+     *              <li>"name" -> {@link IOInterface#readName(int)}</li>
+     *              <li>"from_set" -> {@link IOInterface#readFromSet(Set, String)}</li>
+     *              </ul>
+     * @param value value inputted
+     */
     public void read(String key, Object value) {
         readValues.put(key, value);
         stopWaiting();
     }
 
+    /**
+     * Starts waiting for an input.
+     */
     private void startWaiting() {
         waiting = true;
         readValues.clear();
@@ -164,6 +203,9 @@ public final class IOController implements IOInterface {
         return from_set;
     }
 
+    /**
+     * Calls the {@link GUI#startGame()} method of every GUI.
+     */
     public void startGame() {
         waiting = true;
         for (IOInterface ioInterface : interfaces) {

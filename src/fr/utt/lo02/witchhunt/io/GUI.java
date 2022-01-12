@@ -20,17 +20,46 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * The Graphical User Interface is an implementation of {@link IOInterface} with {@link javax.swing}.
+ */
 public final class GUI implements IOInterface {
+    /**
+     * Main frame of the <b>GUI</b>.
+     */
     private final JFrame frame;
+    /**
+     * Panel with the information about the currently playing player.
+     */
     private final JPanel currentPlayer;
+    /**
+     * Panel with the know information of all players.
+     */
     private final JPanel players;
+    /**
+     * Panel for discarded cards.
+     */
     private final JPanel discarded;
+    /**
+     * Panel in which user input is demanded.
+     */
     private final JPanel action;
+    /**
+     * Text area with various game information.
+     */
     private final JTextArea info;
+    /**
+     * Temporary frame used to make popups.
+     */
     private JFrame popup;
+    /**
+     * Tells if the game is started.
+     */
+    private boolean gameStarted = false;
 
-    boolean gameStarted = false;
-
+    /**
+     * Constructor.
+     */
     public GUI() {
         CardManager.getInstance().addPropertyChangeListener(new CardManagerListener(this));
 
@@ -59,7 +88,10 @@ public final class GUI implements IOInterface {
         frame.setVisible(true);
     }
 
-    public void startGame() {//TODO: do that more properly
+    /**
+     * Initializes the <b>GUI</b>.
+     */
+    public void startGame() {
         PlayerManager pManager = PlayerManager.getInstance();
         for (String pName : pManager.getAllPlayers()) {
             Player p = pManager.getByName(pName);
@@ -97,6 +129,9 @@ public final class GUI implements IOInterface {
         gameStarted = true;
     }
 
+    /**
+     * Creates a {@link CardView} for each rumour cards.
+     */
     public void createCardViews() {
         CardManager cManager = CardManager.getInstance();
 
@@ -110,6 +145,11 @@ public final class GUI implements IOInterface {
         }
     }
 
+    /**
+     * Updates the panel that displays the discarded cards.
+     *
+     * @param discardedCards new set of discarded cards
+     */
     public void updateDiscarded(HashSet<String> discardedCards) {
         discarded.removeAll();
 
@@ -139,6 +179,11 @@ public final class GUI implements IOInterface {
         SwingUtilities.updateComponentTreeUI(frame);
     }
 
+    /**
+     * Changes the displayed panel to the specified panel.
+     *
+     * @param panel the panel to display
+     */
     private void switchPanel(JPanel panel) {
         frame.setContentPane(panel);
         SwingUtilities.updateComponentTreeUI(frame);

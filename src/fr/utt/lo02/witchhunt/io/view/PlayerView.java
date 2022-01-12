@@ -12,12 +12,31 @@ import java.awt.Color;
 import javax.swing.border.LineBorder;
 import java.util.HashSet;
 
+/**
+ * A <b>PlayerView</b> is a graphical representation of a {@link Player}.
+ * <p>
+ * To stay updated when the {@link Player} it's representing changes,
+ * it must be combined with a {@link fr.utt.lo02.witchhunt.io.listener.PlayerListener}.
+ */
 public final class PlayerView extends JPanel {
-
+    /**
+     * Label to display the score.
+     */
     private final JLabel scoreLabel;
+    /**
+     * Panel containing the representation of the identity card.
+     */
     private final JPanel identity;
+    /**
+     * Panel containing the representation of the owned cards.
+     */
     private final JPanel cards;
 
+    /**
+     * Constructor.
+     *
+     * @param player the player to make a graphical representation of
+     */
     public PlayerView(Player player) {
         super();
         identity = new JPanel();
@@ -53,6 +72,11 @@ public final class PlayerView extends JPanel {
         setBorder(new LineBorder(new Color(125, 125, 125)));
     }
 
+    /**
+     * Updates the representation of the identity card of the <b>PlayerView</b>.
+     *
+     * @param identityCard new identity card
+     */
     public void updateIdentityCard(IdentityCard identityCard) {
         identity.removeAll();
         if (identityCard != null) {
@@ -68,6 +92,11 @@ public final class PlayerView extends JPanel {
         identity.validate();
     }
 
+    /**
+     * Updates the representation of the owned cards of the <b>PlayerView</b>.
+     *
+     * @param ownedCards new set of the names of owned cards
+     */
     public void updateOwnedCards(HashSet<String> ownedCards) {
         CardManager cManager = CardManager.getInstance();
 
@@ -79,6 +108,11 @@ public final class PlayerView extends JPanel {
         cards.validate();
     }
 
+    /**
+     * Updates the display for the score of the <b>PlayerView</b>.
+     *
+     * @param score new score
+     */
     public void updateScore(int score) {
         scoreLabel.setText("Score: " + score);
     }

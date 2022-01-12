@@ -13,12 +13,26 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.function.Consumer;
 
+/**
+ * The Command Line Interface is an implementation of {@link IOInterface} for the console.
+ */
 public final class CLI implements IOInterface {
-
+    /**
+     * Tells whether the console is a Windows one.
+     */
     private final boolean windowsConsole;
+    /**
+     * Scanner for user input.
+     */
     private final Scanner sc = new Scanner(System.in);
+    /**
+     * Thread in witch the input is done.
+     */
     private Thread thread = null;
 
+    /**
+     * Constructor.
+     */
     public CLI() {
         windowsConsole = System.console() != null && System.getProperty("os.name").contains("Windows");
     }
@@ -203,6 +217,13 @@ public final class CLI implements IOInterface {
         return null;
     }
 
+    /**
+     * Asks the user for an integer between the specified minimum and maximum.
+     *
+     * @param min    minimum input accepted
+     * @param max    maximum input accepted
+     * @param onDone what to do with the input
+     */
     private void intBetween(int min, int max, Consumer<Integer> onDone) {
         if (thread != null) thread.interrupt();
 
@@ -241,6 +262,9 @@ public final class CLI implements IOInterface {
         thread.start();
     }
 
+    /**
+     * Clears the screen.
+     */
     private void resetScreen() {
         try {
             if (windowsConsole) {
@@ -258,11 +282,18 @@ public final class CLI implements IOInterface {
         }
     }
 
-    private void formatSet(StringBuilder sb, String msg, Set<String> list) {
-        if (!list.isEmpty()) {
+    /**
+     * Appends to the specified string builder the given message and the given set after formatting it.
+     *
+     * @param sb  the string builder to append to
+     * @param msg the message to append
+     * @param set the set to append
+     */
+    private void formatSet(StringBuilder sb, String msg, Set<String> set) {
+        if (!set.isEmpty()) {
             sb.append(msg);
             sb.append("{");
-            for (String str : list) {
+            for (String str : set) {
                 sb.append(str);
                 sb.append(", ");
             }
