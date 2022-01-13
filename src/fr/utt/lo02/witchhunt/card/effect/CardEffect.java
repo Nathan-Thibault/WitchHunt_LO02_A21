@@ -38,7 +38,6 @@ public final class CardEffect {
 
     /**
      * Name of the player targeted by the <b>CardEffect</b>.
-     * <p>
      */
     private String targetName;
 

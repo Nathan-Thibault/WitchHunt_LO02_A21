@@ -42,7 +42,7 @@ public final class RumourCard extends Card {
      * @param name            unique name used to identify the card
      * @param witchEffect     the {@link CardEffect} of type {@link EffectType#WITCH}
      * @param huntEffect      the {@link CardEffect} of type {@link EffectType#HUNT}
-     * @param cantGetChosenBy name of another <b>RumourCard</b>, see {@link RumourCard#getCantGetChosenBy()
+     * @param cantGetChosenBy name of another <b>RumourCard</b>, see {@link RumourCard#getCantGetChosenBy()}
      * @throws NullPointerException     if the name, the witchEffect or the huntEffect is <code>null</code>
      * @throws IllegalArgumentException if the {@link EffectType} isn't corresponding for witchEffect or huntEffect
      */

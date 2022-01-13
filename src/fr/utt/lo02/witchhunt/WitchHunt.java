@@ -14,13 +14,21 @@ import java.util.HashMap;
 
 /**
  * Class containing the main, whose only-purpose is to create a game of WitchHunt.
- *
- * <img src="./doc-files/WitchHunt-Rules-v1.0.jpg">
  */
 public final class WitchHunt {
-
+    /**
+     * Saves if the game started is in test mode.
+     */
     private static boolean test;
 
+    /**
+     * Starts a new game of WitchHunt.
+     *
+     * @param args possible arguments :
+     *             <ul>
+     *             <li>-test : the game will be started in test mode</li>
+     *             </ul>
+     */
     public static void main(String[] args) {
         test = false;
 
@@ -44,6 +52,16 @@ public final class WitchHunt {
         RoundManager.getInstance().startNewRound();
     }
 
+    /**
+     * Creates players for the game.
+     * <p>
+     * Asks the user:
+     * <ul>
+     *     <li>how many players of each type</li>
+     *     <li>names of the physical players</li>
+     *     <li>strategies of the artificial players</li>
+     * </ul>
+     */
     private static void createPlayers() {
         IOController io = IOController.getInstance();
 
@@ -101,6 +119,12 @@ public final class WitchHunt {
         io.pause(sb.toString());
     }
 
+    /**
+     * Creates physical players <i>Pierre</i>, <i>Paul</i>, <i>Jacques</i> and two artificial players.
+     *
+     * @see fr.utt.lo02.witchhunt.player.PhysicalPlayer
+     * @see fr.utt.lo02.witchhunt.player.ArtificialPlayer
+     */
     private static void createTestGame() {
         PlayerManager pManager = PlayerManager.getInstance();
 
@@ -117,6 +141,11 @@ public final class WitchHunt {
         pManager.createArtificialPlayer(strategies);
     }
 
+    /**
+     * Tells whether the game is in test mode.
+     *
+     * @return <code>true</code> if the game is in test mode, <code>false</code> otherwise
+     */
     public static boolean isTest() {
         return test;
     }
