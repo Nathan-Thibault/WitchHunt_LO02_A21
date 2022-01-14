@@ -1,2 +1,2 @@
-# prototype_lo02
-Prototype of the game Witch Hunt, the project of LO02
+# WitchHunt
+Game of [Witch Hunt by GoodLittleGames](http://www.goodlittlegames.co.uk/games/09-witch-hunt.html) in Java, with a console interface and a rudimentary GUI.
